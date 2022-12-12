@@ -17,7 +17,7 @@ our database (a json file) of books. To start doing python stuff,
 make sure you use a virtual environment via
 
 ```bash
-cd python
+cd database
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt -r requirements-dev.txt
