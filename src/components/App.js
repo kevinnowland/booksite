@@ -16,16 +16,24 @@ class App extends React.Component {
           "Sevent Stories Press",
           "Ugly Duckling Presse",
         ],
+        "Columbus": [
+          "Two Dollar Radio",
+        ],
       },
     };
   }
 
   render() {
     return (
-      <PublisherList 
-        city={Object.keys(this.state.publishers)[0]}
-        publishers={this.state.publishers[Object.keys(this.state.publishers)[0]]}
-      />
+      <div>
+      {Object.entries(this.state.publishers).map(([k, v]) => {
+          return (
+            <div key={k} style={{display: 'block'}}>
+            <PublisherList key={k} city={k} publishers={v} />
+            </div>
+          );
+      })}
+      </div>
     )
   }
 }
