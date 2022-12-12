@@ -6,6 +6,12 @@ from humps import camelize
 from pydantic import BaseModel
 
 
+class CamelModel(BaseModel):
+    class Config:
+        alias_generator = camelize
+        allow_population_by_field_name = True
+
+
 class GenreEnum(Enum):
     FANTASY = "fantasy"
     SHORT_STORY = "short story"
@@ -18,27 +24,39 @@ class LocationTypeEnum(Enum):
     ONLINE_BOOKSTORE = "bookstore (online)"
 
 
-class Location(BaseModel):
+class Location(CamelModel):
     country: str
     region: str
     city: str
 
 
-class PublisherInfo(BaseModel):
+class PublisherInfo(CamelModel):
     name: str
     parent_name: str
     location: Location
 
 
-class PurchaseInfo(BaseModel):
+class PurchaseInfo(CamelModel):
     date: date
     location_type: LocationTypeEnum
     location: Union[Location, str]
 
 
-class Book(BaseModel):
+class GenderEnum(Enum):
+    MALE = "male"
+    FEMALE = "female"
+    OTHER = "other"
+
+
+class AuthorInfo(CamelModel):
+    name: str
+    birth_year: Optional[int]
+    gender: GenderEnum
+
+
+class Book(CamelModel):
     title: str
-    author: str
+    author_info: AuthorInfo
     language: str
     original_language: str
     published_year: int
@@ -48,10 +66,6 @@ class Book(BaseModel):
     publisher_info: PublisherInfo
     purchase_info: PurchaseInfo
 
-    class Config:
-        alias_generator = camelize
-        allow_population_by_field_name = True
 
-
-class Books(BaseModel):
+class Books(CamelModel):
     books: list[Book]

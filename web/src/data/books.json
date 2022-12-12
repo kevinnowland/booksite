@@ -2,7 +2,11 @@
   "books": [
     {
       "title": "L'accroisement mathématique du plaisir",
-      "author": "Catherine Dufour",
+      "author_info": {
+        "name": "Catherine Dufour",
+        "birth_year": 1966,
+        "gender": "female"
+      },
       "language": "French",
       "originalLanguage": "French",
       "publishedYear": 2009,
