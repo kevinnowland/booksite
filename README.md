@@ -20,7 +20,7 @@ make sure you use a virtual environment via
 cd python
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.txt -r requirements-dev.txt
 ```
 
 ## Run the website
