@@ -1,0 +1,34 @@
+div.publisherList {
+  display: inline-block;
+}
+
+ul.publisherList {
+  margin: 0px;
+  padding: 0px;
+}
+
+li.city {
+  font-weight: bold;
+  font-size: 1.3em;
+}
+
+li.publisher {
+  list-style: none;
+
+  font-style: italic;
+  font-size: 0.8em;
+
+  margin: 0px;
+  padding-left: 5px;
+}
+
+div.extraList li.arrow {
+  text-align: center;
+}
+
+li.arrow div {
+  font-size: 0.5em;
+  display: inline;
+  padding-left: 5px;
+  padding-right: 5px;
+}
