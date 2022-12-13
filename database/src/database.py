@@ -9,8 +9,8 @@ from enum import EnumMeta
 
 from sqlalchemy.engine.base import Engine
 
-from data_types import (FormatEnum, GenderEnum, GenreEnum, PurchaseLocationTypeEnum,
-                        SubGenreEnum)
+from .data_types import (FormatEnum, GenderEnum, GenreEnum,
+                         PurchaseLocationTypeEnum, SubGenreEnum)
 
 
 def _execute(sql: str, engine: Engine):
