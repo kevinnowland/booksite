@@ -12,13 +12,36 @@ class CamelModel(BaseModel):
         allow_population_by_field_name = True
 
 
+class GenderEnum(Enum):
+    FEMALE = "female"
+    MALE = "male"
+    NON_BINARY = "non binary"
+
+
 class GenreEnum(Enum):
-    FANTASY = "fantasy"
-    SHORT_STORY = "short story"
+    FICTION = "fiction"
+    NON_FICTION = "non-fiction"
+    POETRY = "poetry"
+
+
+class SubGenreEnum(Enum):
     SCI_FI = "sci fi"
+    FANTASY = "fantasy"
+    MEMOIR = "memoir"
+    BIOGRAPHY = "biography"
+    HISTORY = "history"
+    HISTORICAL_FICTION = "historical fiction"
+    OTHER = "other"
+    TEXT_BOOK = "text book"
 
 
-class LocationTypeEnum(Enum):
+class FormatEnum(Enum):
+    LONG = "long"
+    MEDIUM = "medium"
+    MULTIPLE_SHORT = "multiple short"
+
+
+class PurchaseLocationTypeEnum(Enum):
     WEBSITE = "website"
     BOOSKTORE = "bookstore"
     ONLINE_BOOKSTORE = "bookstore (online)"
@@ -30,25 +53,19 @@ class Location(CamelModel):
     city: str
 
 
-class PublisherInfo(CamelModel):
+class Publisher(CamelModel):
     name: str
     parent_name: str
     location: Location
 
 
-class PurchaseInfo(CamelModel):
+class Purchase(CamelModel):
     date: date
-    location_type: LocationTypeEnum
+    location_type: PurchaseLocationTypeEnum
     location: Union[Location, str]
 
 
-class GenderEnum(Enum):
-    MALE = "male"
-    FEMALE = "female"
-    OTHER = "other"
-
-
-class AuthorInfo(CamelModel):
+class Author(CamelModel):
     name: str
     birth_year: Optional[int]
     gender: GenderEnum
@@ -56,16 +73,17 @@ class AuthorInfo(CamelModel):
 
 class Book(CamelModel):
     title: str
-    author_info: AuthorInfo
+    authors: list[Author]
     language: str
+    translator: Optional[Author]
     original_language: str
     published_year: int
     genres: list[GenreEnum]
+    publisher: Publisher
+
+
+class ReadingListEntry(CamelModel):
+    books: Book
     stopped_reading_date: Optional[date]
     completed: bool
-    publisher_info: PublisherInfo
-    purchase_info: PurchaseInfo
-
-
-class Books(CamelModel):
-    books: list[Book]
+    purchase: Purchase
