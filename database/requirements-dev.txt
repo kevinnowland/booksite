@@ -3,3 +3,4 @@ flake8
 isort
 ipython
 mypy
+sqlalchemy-stubs

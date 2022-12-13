@@ -7,7 +7,6 @@
 """
 from enum import EnumMeta
 
-from sqlalchemy import create_engine
 from sqlalchemy.engine.base import Engine
 
 from data_types import (FormatEnum, GenderEnum, GenreEnum, PurchaseLocationTypeEnum,
