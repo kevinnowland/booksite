@@ -6,11 +6,15 @@
         and are prefixed with enum_
 """
 from enum import EnumMeta
+from typing import TypeVar
 
 from sqlalchemy.engine.base import Engine
 
 from .data_types import (FormatEnum, GenderEnum, GenreEnum,
                          PurchaseLocationTypeEnum, SubGenreEnum)
+
+
+E = TypeVar("E", bound=EnumMeta)
 
 
 def _execute(sql: str, engine: Engine):
@@ -31,12 +35,12 @@ def _create_table(create: str, insert: str, engine: Engine):
     _execute(insert, engine)
 
 
-def _create_enum_table(name: str, enum: EnumMeta, engine: Engine):
+def _create_enum_table(name: str, enum: E, engine: Engine):
     """create enum table named enum_name
 
     Arguments:
         name (str): name of the enum
-        enum (EnumMeta): a class which subclasses Enum
+        enum (E): a class which subclasses Enum
         engine (Engine): the engine to use
     """
     table_name = f"enum_{name}"
@@ -52,6 +56,7 @@ def _create_enum_table(name: str, enum: EnumMeta, engine: Engine):
         table_name, id_col, col
     )
 
+    # I do not know how to type hint Enums, apparently
     values = ",".join(f'({i+1}, "{e.value}")' for i, e in enumerate(enum))  # type: ignore  # noqa
     insert = """
     INSERT INTO {0} ({1}, {2})
