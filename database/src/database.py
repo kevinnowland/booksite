@@ -6,7 +6,8 @@
         and are prefixed with enum_
 """
 from enum import EnumMeta
-from typing import TypeVar
+from typing import Iterator, TypeVar
+from datetime import date, timedelta
 
 from sqlalchemy.engine.base import Engine
 
@@ -73,14 +74,21 @@ def create_author_table(engine: Engine):
     CREATE TABLE author (
         author_id INTEGER PRIMARY KEY,
         name TEXT NOT NULL UNIQUE,
-        birth_year INTEGER NULL,
-        gender_id INTEGER NUL NULL,
-        FOREIGN KEY (gender_id) REFERENCES gender(gender_id)
+        birth_year INTEGER NOT NULL,
+        gender_id INTEGER NOT NULL,
+        FOREIGN KEY (gender_id) REFERENCES gender(gender_id),
+        CONSTRAINT check_is_year CHECK(
+            (
+                birth_year >= 1000
+                AND birth_year < 2100
+            )
+            OR birth_year == 0
+        )
     );
     """
     insert = """
-    INSERT INTO author (author_id, name)
-    VALUES (0, "");
+    INSERT INTO author (author_id, name, gender_id, birth_year)
+    VALUES (0, "", 0, 0);
     """
     _create_table(create, insert, engine)
 
@@ -95,7 +103,7 @@ def create_author_list_table(engine: Engine):
     create = """
     CREATE TABLE author_list (
         author_list_id INTEGER PRIMARY KEY,
-        author_list TEXT NOT NULL
+        author_list TEXT NOT NULL UNIQUE
     );
     """
     insert = """
@@ -148,13 +156,14 @@ def create_publisher_table(engine: Engine):
         name TEXT NULL UNIQUE,
         parent_name TEXT NULL,
         city_id INTEGER NOT NULL,
+        is_independent INTEGER NOT NULL,
         FOREIGN KEY (city_id) REFERENCES city(city_id)
     );
     """
 
     insert = """
-    INSERT INTO publisher (publisher_id, city_id)
-    VALUES (0, 0);
+    INSERT INTO publisher (publisher_id, city_id, is_independent)
+    VALUES (0, 0, 0);
     """
     _create_table(create, insert, engine)
 
@@ -198,7 +207,14 @@ def create_book_table(engine: Engine):
         FOREIGN KEY (original_language_id) REFERENCES language(language_id),
         FOREIGN KEY (genre_id) REFERENCES genre(genre_id),
         FOREIGN KEY (subgenre_id) REFERENCES subgenre(subgenre_id),
-        FOREIGN KEY (format_id) REFERENCES format(format_id)
+        FOREIGN KEY (format_id) REFERENCES format(format_id),
+        CONSTRAINT check_pub_year CHECK(
+            (
+                published_year > 1000
+                AND published_year < 2100
+            )
+            OR published_year == 0
+        )
     );
     """
     insert = """
@@ -225,13 +241,16 @@ def create_reading_list_table(engine: Engine):
     CREATE TABLE reading_list (
         reading_list_id INTEGER PRIMARY KEY,
         book_id INTEGER NOT NULL UNIQUE,
+        stopped_reading_date TEXT NOT NULL,
+        is_read_completely INTEGER NOT NULL,
         purchase_location_type_id INTEGER NOT NULL,
         bookstore_name TEXT NULL,
         bookstore_city_id INTEGER NOT NULL,
         website TEXT NULL,
         FOREIGN KEY (book_id) REFERENCES book(book_id),
         FOREIGN KEY (purchase_location_type_id) REFERENCES enum_purchase_location_type (purchase_location_type_id),
-        FOREIGN KEY (bookstore_city_id) REFERENCES city(city_id)
+        FOREIGN KEY (bookstore_city_id) REFERENCES city(city_id),
+        CONSTRAINT valid_date CHECK(stopped_reading_date IS date(stopped_reading_date, '+0 days'))
     );
     """  # noqa
     _execute(create, engine)
