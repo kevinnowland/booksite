@@ -13,38 +13,38 @@ class CamelModel(BaseModel):
 
 
 class GenderEnum(Enum):
-    FEMALE = "female"
-    MALE = "male"
-    NON_BINARY = "non binary"
+    FEMALE = 1
+    MALE = 2
+    NON_BINARY = 3
 
 
 class GenreEnum(Enum):
-    FICTION = "fiction"
-    NON_FICTION = "non-fiction"
-    POETRY = "poetry"
+    FICTION = 1
+    NON_FICTION = 2
+    POETRY = 3
 
 
 class SubgenreEnum(Enum):
-    SCI_FI = "sci fi"
-    FANTASY = "fantasy"
-    MEMOIR = "memoir"
-    BIOGRAPHY = "biography"
-    HISTORY = "history"
-    HISTORICAL_FICTION = "historical fiction"
-    OTHER = "other"
-    TEXT_BOOK = "text book"
+    SCI_FI = 1
+    FANTASY = 2
+    MEMOIR = 3
+    BIOGRAPHY = 4
+    HISTORY = 5
+    HISTORICAL_FICTION = 6
+    OTHER = 7
+    TEXT_BOOK = 8
 
 
 class FormatEnum(Enum):
-    LONG = "long"
-    MEDIUM = "medium"
-    MULTIPLE_SHORT = "multiple short"
+    LONG = 1
+    MEDIUM = 2
+    MULTIPLE_SHORT = 3
 
 
 class PurchaseLocationTypeEnum(Enum):
-    WEBSITE = "website"
-    BOOSKTORE = "bookstore"
-    ONLINE_BOOKSTORE = "bookstore (online)"
+    WEBSITE = 1
+    BOOSKTORE = 2
+    ONLINE_BOOKSTORE = 3
 
 
 class Location(CamelModel):

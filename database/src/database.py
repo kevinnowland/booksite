@@ -91,7 +91,7 @@ def _create_enum_table(enum: E, engine: Engine):
     )
 
     # I do not know how to type hint Enums, apparently
-    values = ",".join(f'({i+1}, "{e.value}")' for i, e in enumerate(enum))  # type: ignore  # noqa
+    values = ",".join(f'({e.value}, "{e.name}")' for e in (enum))  # type: ignore
     insert = """
     INSERT INTO {0} ({1}, {2})
     VALUES (0, null),{3};
