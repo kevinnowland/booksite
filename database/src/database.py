@@ -10,11 +10,27 @@ from typing import TypeVar
 
 from sqlalchemy.engine.base import Engine
 
-from .data_types import (FormatEnum, GenderEnum, GenreEnum,  # type: ignore
-                         PurchaseLocationTypeEnum, SubGenreEnum)
-
+from .data_types import GenreEnum  # type: ignore
+from .data_types import (FormatEnum, GenderEnum, PurchaseLocationTypeEnum,
+                         SubGenreEnum)
 
 E = TypeVar("E", bound=EnumMeta)
+
+
+def _import_sql(table_name: str, statement: str) -> str:
+    """read in sql for the table
+
+    Arguments:
+        table_name (str): name of the table
+        statement (str): the statement type
+
+    Returns:
+        a string of sql
+    """
+    path = f"sql/{table_name}/{statement}.sql"
+    with open(path, "r") as f:
+        sql = f.read()
+    return sql
 
 
 def _execute(sql: str, engine: Engine):
@@ -23,16 +39,18 @@ def _execute(sql: str, engine: Engine):
         con.execute(sql)
 
 
-def _create_table(create: str, insert: str, engine: Engine):
-    """create a table
+def _import_and_execute(table_name: str, statement: str, engine: Engine):
+    """import the file and execute it
+
+    Assumes file named `sql/table_name/statement.sql` exists
 
     Arguments:
-        create (str): the creation sql statement
-        insert (str): the initial insert sql statement
+        table_name (str): the name of the table
+        statement (str): the statement type with coresponding file
         engine (Engine): the engine to use
     """
-    _execute(create, engine)
-    _execute(insert, engine)
+    sql = _import_sql(table_name, statement)
+    _execute(sql, engine)
 
 
 def _create_enum_table(name: str, enum: E, engine: Engine):
@@ -64,196 +82,36 @@ def _create_enum_table(name: str, enum: E, engine: Engine):
     """.format(
         table_name, id_col, col, values
     )
-    _create_table(create, insert, engine)
-
-
-def create_author_table(engine: Engine):
-    """create author dimension table"""
-    create = """
-    CREATE TABLE author (
-        author_id INTEGER PRIMARY KEY,
-        name TEXT NOT NULL UNIQUE,
-        birth_year INTEGER NOT NULL,
-        gender_id INTEGER NOT NULL,
-        FOREIGN KEY (gender_id) REFERENCES gender(gender_id),
-        CONSTRAINT check_is_year CHECK(
-            (
-                birth_year >= 1000
-                AND birth_year < 2100
-            )
-            OR birth_year == 0
-        )
-    );
-    """
-    insert = """
-    INSERT INTO author (author_id, name, gender_id, birth_year)
-    VALUES (0, "", 0, 0);
-    """
-    _create_table(create, insert, engine)
-
-
-def create_author_list_table(engine: Engine):
-    """create author list dimension table
-
-    values should be parsable by json_array and
-    all values should be foreign keys in the
-    author dimension table
-    """
-    create = """
-    CREATE TABLE author_list (
-        author_list_id INTEGER PRIMARY KEY,
-        author_list TEXT NOT NULL UNIQUE
-    );
-    """
-    insert = """
-    INSERT INTO author_list (author_list_id, author_list)
-    VALUES (0, "");
-    """
-    _create_table(create, insert, engine)
-
-
-def create_city_table(engine: Engine):
-    """create city dimension table"""
-    create = """
-    CREATE TABLE city (
-        city_id INTEGER PRIMARY KEY,
-        city TEXT NOT NULL,
-        region TEXT NOT NULL,
-        country TEXT NOT NULL,
-        UNIQUE(country, region, city)
-    );
-    """
-
-    insert = """
-    INSERT INTO city (city_id, city, region, country)
-    VALUES (0, "", "", "");
-    """
-    _create_table(create, insert, engine)
-
-
-def create_website_table(engine: Engine):
-    """create website dimension table"""
-    create = """
-    CREATE TABLE website (
-        website_id INTEGER PRIMARY KEY,
-        website TEXT NOT NULL UNIQUE
-    );
-    """
-
-    insert = """
-    INSERT INTO website (website_id, website)
-    VALUES (0, "");
-    """
-    _create_table(create, insert, engine)
-
-
-def create_publisher_table(engine: Engine):
-    """create publisher dimension table"""
-    create = """
-    CREATE TABLE publisher (
-        publisher_id INTEGER PRIMARY KEY,
-        name TEXT NULL UNIQUE,
-        parent_name TEXT NULL,
-        city_id INTEGER NOT NULL,
-        is_independent INTEGER NOT NULL,
-        FOREIGN KEY (city_id) REFERENCES city(city_id)
-    );
-    """
-
-    insert = """
-    INSERT INTO publisher (publisher_id, city_id, is_independent)
-    VALUES (0, 0, 0);
-    """
-    _create_table(create, insert, engine)
-
-
-def create_language_table(engine: Engine):
-    """create language dimension table"""
-    create = """
-    CREATE TABLE language (
-        language_id INTEGER PRIMARY KEY,
-        language TEXT NULL UNIQUE
-    );
-    """
-    insert = """
-    INSERT INTO language (language_id)
-    VALUES (0);
-    """
-    _create_table(create, insert, engine)
-
-
-def create_book_table(engine: Engine):
-    """create the book dimension table
-
-    Sorry to any books with multiple translators
-    and whatever else I'm simplifying...
-    """
-    create = """
-    CREATE TABLE book (
-        book_id INTEGER PRIMARY KEY,
-        title TEXT NOT NULL,
-        author_list_id INTEGER NOT NULL,
-        language_id INTGER NOT NULL,
-        translator_id INTEGER NOT NULL,
-        original_language_id INTEGER NOT NULL,
-        published_year INTEGER NOT NULL,
-        genre_id INTEGER NOT NULL,
-        subgenre_id INTEGER NOT NULL,
-        format_id INTEGER NOT NULL,
-        FOREIGN KEY (author_list_id) REFERENCES author_list(author_list_id),
-        FOREIGN KEY (language_id) REFERENCES language(language_id),
-        FOREIGN KEY (translator_id) REFERENCES author(author_id),
-        FOREIGN KEY (original_language_id) REFERENCES language(language_id),
-        FOREIGN KEY (genre_id) REFERENCES genre(genre_id),
-        FOREIGN KEY (subgenre_id) REFERENCES subgenre(subgenre_id),
-        FOREIGN KEY (format_id) REFERENCES format(format_id),
-        CONSTRAINT check_pub_year CHECK(
-            (
-                published_year > 1000
-                AND published_year < 2100
-            )
-            OR published_year == 0
-        )
-    );
-    """
-    insert = """
-    INSERT INTO book (
-        book_id,
-        title,
-        author_list_id,
-        language_id,
-        translator_id,
-        original_language_id,
-        published_year,
-        genre_id,
-        subgenre_id,
-        format_id
-    )
-    VALUES (0, "", 0, 0, 0, 0, 0, 0, 0, 0);
-    """
-    _create_table(create, insert, engine)
-
-
-def create_reading_list_table(engine: Engine):
-    """create reading list fact table"""
-    create = """
-    CREATE TABLE reading_list (
-        reading_list_id INTEGER PRIMARY KEY,
-        book_id INTEGER NOT NULL,
-        stopped_reading_date TEXT NOT NULL,
-        is_read_completely INTEGER NOT NULL,
-        purchase_location_type_id INTEGER NOT NULL,
-        bookstore_name TEXT NULL,
-        bookstore_city_id INTEGER NOT NULL,
-        website TEXT NULL,
-        FOREIGN KEY (book_id) REFERENCES book(book_id),
-        FOREIGN KEY (purchase_location_type_id) REFERENCES enum_purchase_location_type (purchase_location_type_id),
-        FOREIGN KEY (bookstore_city_id) REFERENCES city(city_id),
-        UNIQUE(book_id, stopped_reading_date),
-        CONSTRAINT valid_date CHECK(stopped_reading_date IS date(stopped_reading_date, '+0 days'))
-    );
-    """  # noqa
     _execute(create, engine)
+    _execute(insert, engine)
+
+
+def _create_dim_table(table_name: str, engine: Engine):
+    """create a dimension table
+
+    Assumes that we can import from
+        `sql/table_name/create.sql`
+        and `sql/table_name/insert.sql`
+
+    Arguments:
+        table_name (str): the name of the table
+        engine (Engine): the engine to use
+    """
+    for statement in ["create", "insert"]:
+        _import_and_execute(table_name, statement, engine)
+
+
+
+def _create_fact_table(table_name: str, engine: Engine):
+    """create reading list fact table
+
+    Assumes a file named `sql/table_name/create.sql` exists
+
+    Arguments:
+        table_name (str): the name of the table
+        engine (Engine): the engine to use
+    """
+    _import_and_execute(table_name, "create", engine)
 
 
 def setup_database(engine: Engine):
@@ -267,13 +125,17 @@ def setup_database(engine: Engine):
     _create_enum_table("purchase_location_type", PurchaseLocationTypeEnum, engine)
 
     # dimensions
-    create_author_table(engine)
-    create_author_list_table(engine)
-    create_city_table(engine)
-    create_website_table(engine)
-    create_publisher_table(engine)
-    create_language_table(engine)
-    create_book_table(engine)
+    dim_table_names = [
+        "author",
+        "author_list",
+        "city",
+        "website",
+        "publisher",
+        "language",
+        "book",
+    ]
+    for dim_table_name in dim_table_names:
+        _create_dim_table(dim_table_name, engine)
 
     # fact table
-    create_reading_list_table(engine)
+    _create_fact_table("reading_list", engine)
