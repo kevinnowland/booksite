@@ -6,12 +6,11 @@
         and are prefixed with enum_
 """
 from enum import EnumMeta
-from typing import Iterator, TypeVar
-from datetime import date, timedelta
+from typing import TypeVar
 
 from sqlalchemy.engine.base import Engine
 
-from .data_types import (FormatEnum, GenderEnum, GenreEnum,
+from .data_types import (FormatEnum, GenderEnum, GenreEnum,  # type: ignore
                          PurchaseLocationTypeEnum, SubGenreEnum)
 
 
@@ -240,7 +239,7 @@ def create_reading_list_table(engine: Engine):
     create = """
     CREATE TABLE reading_list (
         reading_list_id INTEGER PRIMARY KEY,
-        book_id INTEGER NOT NULL UNIQUE,
+        book_id INTEGER NOT NULL,
         stopped_reading_date TEXT NOT NULL,
         is_read_completely INTEGER NOT NULL,
         purchase_location_type_id INTEGER NOT NULL,
@@ -250,6 +249,7 @@ def create_reading_list_table(engine: Engine):
         FOREIGN KEY (book_id) REFERENCES book(book_id),
         FOREIGN KEY (purchase_location_type_id) REFERENCES enum_purchase_location_type (purchase_location_type_id),
         FOREIGN KEY (bookstore_city_id) REFERENCES city(city_id),
+        UNIQUE(book_id, stopped_reading_date),
         CONSTRAINT valid_date CHECK(stopped_reading_date IS date(stopped_reading_date, '+0 days'))
     );
     """  # noqa
