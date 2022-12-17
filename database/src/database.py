@@ -6,14 +6,15 @@
         and are prefixed with enum_
 """
 from enum import EnumMeta
-from typing import TypeVar
+from sqlite3 import IntegrityError
+from typing import Any, TypeVar
 
 from humps import decamelize
 from sqlalchemy.engine.base import Engine
 
 from .data_types import GenreEnum  # type: ignore
-from .data_types import (FormatEnum, GenderEnum, PurchaseLocationTypeEnum,
-                         SubgenreEnum)
+from .data_types import (Author, FormatEnum, GenderEnum,
+                         PurchaseLocationTypeEnum, SubgenreEnum)
 
 E = TypeVar("E", bound=EnumMeta)
 
@@ -127,6 +128,82 @@ def _create_fact_table(table_name: str, engine: Engine):
         engine (Engine): the engine to use
     """
     _import_and_execute(table_name, "create", engine)
+
+
+def _munge_sql_val(val: Any) -> str:
+    """munge python val into something fitting for sql"""
+    if type(val) == str:
+        return f"'{val}'"
+    else:
+        return val
+
+
+def _get_dim_id(
+    table_name: str, uk_cols: list[str], uk_vals: list[Any], engine: Engine
+) -> int:
+    """get id of entry in dimension table
+
+    Arguments:
+        table_name (str): name of the table
+        uk_cols (list[str]): list of cols in the unique constraint
+        uk_vals (list[Any]): the list of values for those cols in same order
+        engine (Engine): the engine to use
+
+    Returns:
+        id corresponding to the primary key
+    """
+    where = " AND ".join(
+        f"{uk_cols[i]} = {_munge_sql_val(uk_vals[i])}" for i in range(len(uk_cols))
+    )
+    sql = f"""
+    SELECT {table_name}_id
+    FROM {table_name}
+    WHERE {where};
+    """
+    results = engine.execute(sql)
+    return results.first()[0]  # type: ignore
+
+
+def _insert_into_dim(
+    table_name: str, uk_cols: list[str], engine: Engine, **data
+) -> int:
+    """attempt to insert into dimension table
+
+    Assumes file `sql/table_name/inset_template.sql`
+        exists
+
+    Arguments:
+        table_name (str): the table name
+        uk_cols (list[str]): list of col names in the unique constraint
+        engine (Engine): the engine to use
+        data: the data to insert
+
+    Returns:
+        id of the entry
+    """
+    raw_sql = _import_sql(table_name, "insert_template")
+    sql = raw_sql.format(**data)
+
+    try:
+        _execute(sql, engine)
+    except IntegrityError:
+        pass
+
+    uk_vals = [data[c] for c in uk_cols]
+    return _get_dim_id(table_name, uk_cols, uk_vals, engine)
+
+
+def _insert_into_author(author: Author, engine: Engine) -> int:
+    """insert an author into the author table and return its id"""
+    data = {
+        "name": author.name,
+        "birth_year": author.birth_year,
+        "gender_id": author.gender.value,
+    }
+    author_id = _insert_into_dim(
+        table_name="author", uk_cols=["name"], engine=engine, **data
+    )
+    return author_id
 
 
 def setup_database(engine: Engine):

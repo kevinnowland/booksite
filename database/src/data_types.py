@@ -67,7 +67,7 @@ class Purchase(CamelModel):
 
 class Author(CamelModel):
     name: str
-    birth_year: Optional[int]
+    birth_year: int
     gender: GenderEnum
 
 
