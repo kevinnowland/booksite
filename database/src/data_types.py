@@ -24,7 +24,7 @@ class GenreEnum(Enum):
     POETRY = "poetry"
 
 
-class SubGenreEnum(Enum):
+class SubgenreEnum(Enum):
     SCI_FI = "sci fi"
     FANTASY = "fantasy"
     MEMOIR = "memoir"

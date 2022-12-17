@@ -8,11 +8,12 @@
 from enum import EnumMeta
 from typing import TypeVar
 
+from humps import decamelize
 from sqlalchemy.engine.base import Engine
 
 from .data_types import GenreEnum  # type: ignore
 from .data_types import (FormatEnum, GenderEnum, PurchaseLocationTypeEnum,
-                         SubGenreEnum)
+                         SubgenreEnum)
 
 E = TypeVar("E", bound=EnumMeta)
 
@@ -53,14 +54,29 @@ def _import_and_execute(table_name: str, statement: str, engine: Engine):
     _execute(sql, engine)
 
 
-def _create_enum_table(name: str, enum: E, engine: Engine):
+def _parse_enum_name(enum: E) -> str:
+    """get table name from enum class
+
+    i.e., SomeThingEnum -> some_thing
+
+    Arguments:
+        enum (E): a class which subclasses Enum
+
+    Returns:
+        the corresponding table name str
+    """
+    raw_name = enum.__name__
+    return decamelize(raw_name[:-4])
+
+
+def _create_enum_table(enum: E, engine: Engine):
     """create enum table named enum_name
 
     Arguments:
-        name (str): name of the enum
         enum (E): a class which subclasses Enum
         engine (Engine): the engine to use
     """
+    name = _parse_enum_name(enum)
     table_name = f"enum_{name}"
     id_col = f"{name}_id"
     col = f"{name}"
@@ -101,7 +117,6 @@ def _create_dim_table(table_name: str, engine: Engine):
         _import_and_execute(table_name, statement, engine)
 
 
-
 def _create_fact_table(table_name: str, engine: Engine):
     """create reading list fact table
 
@@ -118,11 +133,15 @@ def setup_database(engine: Engine):
     """setup database using the engine"""
 
     # enums
-    _create_enum_table("gender", GenderEnum, engine)
-    _create_enum_table("genre", GenreEnum, engine)
-    _create_enum_table("subgenre", SubGenreEnum, engine)
-    _create_enum_table("format", FormatEnum, engine)
-    _create_enum_table("purchase_location_type", PurchaseLocationTypeEnum, engine)
+    enums = [
+        GenderEnum,
+        GenreEnum,
+        SubgenreEnum,
+        FormatEnum,
+        PurchaseLocationTypeEnum,
+    ]
+    for enum in enums:
+        _create_enum_table(enum, engine)
 
     # dimensions
     dim_table_names = [
