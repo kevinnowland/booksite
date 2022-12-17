@@ -164,9 +164,7 @@ def _get_dim_id(
     return results.first()[0]  # type: ignore
 
 
-def _insert_into_dim(
-    table_name: str, uk_cols: list[str], engine: Engine, **data
-) -> int:
+def _insert_into_dim(table_name: str, engine: Engine, **data):
     """attempt to insert into dimension table
 
     Assumes file `sql/table_name/inset_template.sql`
@@ -174,23 +172,12 @@ def _insert_into_dim(
 
     Arguments:
         table_name (str): the table name
-        uk_cols (list[str]): list of col names in the unique constraint
         engine (Engine): the engine to use
         data: the data to insert
-
-    Returns:
-        id of the entry
     """
     raw_sql = _import_sql(table_name, "insert_template")
     sql = raw_sql.format(**data)
-
-    try:
-        _execute(sql, engine)
-    except IntegrityError:
-        pass
-
-    uk_vals = [data[c] for c in uk_cols]
-    return _get_dim_id(table_name, uk_cols, uk_vals, engine)
+    _execute(sql, engine)
 
 
 def _insert_into_author(author: Author, engine: Engine) -> int:
@@ -200,9 +187,7 @@ def _insert_into_author(author: Author, engine: Engine) -> int:
         "birth_year": author.birth_year,
         "gender_id": author.gender.value,
     }
-    author_id = _insert_into_dim(
-        table_name="author", uk_cols=["name"], engine=engine, **data
-    )
+    author_id = _insert_into_dim(table_name="author", engine=engine, **data)
     return author_id
 
 
