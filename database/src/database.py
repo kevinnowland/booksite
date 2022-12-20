@@ -6,7 +6,8 @@
         and are prefixed with enum_
 """
 from enum import EnumMeta
-from typing import Any, TypeVar
+from typing import Any, Optional, TypeVar
+from datetime import date
 
 from humps import decamelize
 from sqlalchemy.engine.base import Engine
@@ -135,10 +136,10 @@ def _munge_sql_val(val: Any) -> str:
         return f"'{val}'"
     elif type(val) == bool:
         return "1" if val else "0"
-    elif type(val) == list and len(val) > 0 and type(val[0]) == int:
+    elif type(val) == list:
         return "'" + ",".join(str(i) for i in val) + "'"
-    elif type(val) == list and len(val) == 0:
-        return "''"
+    elif type(val) == date:
+        return f"'{str(val)}'"
     elif val is None:
         return "null"
     else:
@@ -171,7 +172,7 @@ def _get_dim_id(
     return results.first()[0]  # type: ignore
 
 
-def _insert_dim(table_name: str, engine: Engine, **data):
+def _insert_table(table_name: str, engine: Engine, **data):
     """attempt to insert into dimension table
 
     Assumes file `sql/table_name/inset_template.sql`
@@ -195,13 +196,13 @@ def _insert_author(name: str, birth_year: int, gender_id: int, engine: Engine):
         "birth_year": birth_year,
         "gender_id": gender_id,
     }
-    _insert_dim(table_name="author", engine=engine, **data)
+    _insert_table(table_name="author", engine=engine, **data)
 
 
 def _insert_author_list(author_ids: list[int], engine: Engine):
     """insert list of author ids into author list"""
     data = {"author_list": author_ids}
-    _insert_dim("author_list", engine, **data)
+    _insert_table("author_list", engine, **data)
 
 
 def _insert_city(city: str, region: str, country: str, engine: Engine):
@@ -211,19 +212,19 @@ def _insert_city(city: str, region: str, country: str, engine: Engine):
         "region": region,
         "country": country,
     }
-    _insert_dim("city", engine, **data)
+    _insert_table("city", engine, **data)
 
 
 def _insert_website(website: str, engine: Engine):
     """insert website into website table"""
     data = {"website": website}
-    _insert_dim("website", engine, **data)
+    _insert_table("website", engine, **data)
 
 
 def _insert_language(language: str, engine: Engine):
     """insert language into language table"""
     data = {"language": language}
-    _insert_dim("language", engine, **data)
+    _insert_table("language", engine, **data)
 
 
 def _insert_publisher(
@@ -236,7 +237,7 @@ def _insert_publisher(
         "city_id": city_id,
         "is_indepentent": is_independent,
     }
-    _insert_dim("publisher", engine, **data)
+    _insert_table("publisher", engine, **data)
 
 
 def _insert_book(
@@ -263,7 +264,30 @@ def _insert_book(
         "subgenre_id": subgenre_id,
         "format_id": format_id,
     }
-    _insert_dim("book", engine, **data)
+    _insert_table("book", engine, **data)
+
+
+def _insert_reading_list(
+    book_id: int,
+    stopped_reading_date: date,
+    is_read_completely: bool,
+    purchase_location_type_id: int,
+    bookstore_city_id: int,
+    engine: Engine,
+    bookstore_name: Optional[str] = None,
+    website: Optional[str] = None,
+):
+    """insert into reading list"""
+    data = {
+        "book_id": book_id,
+        "stopped_reading_date": stopped_reading_date,
+        "is_read_completely": is_read_completely,
+        "purchase_location_type_id": purchase_location_type_id,
+        "bookstore_city_id": bookstore_city_id,
+        "bookstore_name": bookstore_name,
+        "website": website,
+    }
+    _insert_table("reading_list", engine, **data)
 
 
 def setup_database(engine: Engine):
