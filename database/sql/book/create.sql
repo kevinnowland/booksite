@@ -2,7 +2,7 @@ CREATE TABLE book (
     book_id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
     author_list_id INTEGER NOT NULL,
-    language_id INTGER NOT NULL,
+    language_id INTEGER NOT NULL,
     translator_id INTEGER NOT NULL,
     original_language_id INTEGER NOT NULL,
     published_year INTEGER NOT NULL,
@@ -22,5 +22,6 @@ CREATE TABLE book (
             AND published_year < 2100
         )
         OR published_year == 0
-    )
+    ),
+    UNIQUE(title, author_list_id)
 );

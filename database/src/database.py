@@ -5,18 +5,22 @@
     enum tables are manually curated dimension tables
         and are prefixed with enum_
 """
+from datetime import date
 from enum import EnumMeta
 from typing import Any, Optional, TypeVar
-from datetime import date
 
 from humps import decamelize
 from sqlalchemy.engine.base import Engine
 
 from .data_types import GenreEnum  # type: ignore
-from .data_types import (FormatEnum, GenderEnum, Publisher,
+from .data_types import (Author, FormatEnum, GenderEnum, Publisher,
                          PurchaseLocationTypeEnum, SubgenreEnum)
 
 E = TypeVar("E", bound=EnumMeta)
+
+
+class DimensionValueNotFoundError(Exception):
+    pass
 
 
 def _import_sql(table_name: str, statement: str) -> str:
@@ -250,7 +254,7 @@ def _insert_book(
     genre_id: int,
     subgenre_id: int,
     format_id: int,
-    engine: Engine
+    engine: Engine,
 ):
     """insert book into book table"""
     data = {
@@ -319,3 +323,105 @@ def setup_database(engine: Engine):
 
     # fact table
     _create_fact_table("reading_list", engine)
+
+
+def insert_into_reading_list(
+    title: str,
+    authors: list[Author],
+    language: str,
+    original_language: str,
+    published_year: int,
+    genre: GenreEnum,
+    subgenre: SubgenreEnum,
+    book_format: FormatEnum,
+    stopped_reading_date: date,
+    is_read_completely: bool,
+    purchase_location_type: PurchaseLocationTypeEnum,
+    engine: Engine,
+    translator: Optional[Author] = None,
+    bookstore_name: Optional[str] = None,
+    bookstore_city: Optional[str] = None,
+    bookstore_region: Optional[str] = None,
+    bookstore_country: Optional[str] = None,
+    website: Optional[str] = None,
+):
+    """take raw values and insert into reading list and dimension tables"""
+    author_ids: list[int] = []
+    for i, author in enumerate(authors):
+        try:
+            author_id = _get_author_id(author.name, engine)
+        except DimensionValueNotFoundError:
+            _insert_author(
+                name=author.name,
+                birth_year=author.birth_year,
+                gender_id=author.gender.value,
+                engine=engine,
+            )
+            author_id = _get_author_id(author.name, engine)
+        author_ids.append(author_id)
+
+    author_list_id: int
+    try:
+        author_list_id = _get_author_list_id(author_ids, engine)
+    except DimensionValueNotFoundError:
+        _insert_author_list(author_ids, engine)
+        author_list_id = _get_author_list_id(author_ids, engine)
+
+    language_id: int
+    try:
+        language_id = _get_language_id(language, engine)
+    except DimensionValueNotFoundError:
+        _insert_language(language, engine)
+        language_id = _get_language_id(language, engine)
+
+    original_language_id: int
+    try:
+        original_language_id = _get_language_id(original_language, engine)
+    except DimensionValueNotFoundError:
+        _insert_language(language, engine)
+        original_language_id = _get_language_id(original_language, engine)
+
+    translator_id: int
+    if translator is None:
+        translator_id = 0
+    else:
+        try:
+            translator_id = _get_author_id(translator.name, engine)
+        except DimensionValueNotFoundError:
+            _insert_author(
+                translator.name, translator.birth_year, translator.gender.value, engine
+            )
+            translator_id = _get_author_id(translator.name, engine)
+
+    book_id: int
+    try:
+        book_id = _get_book_id(title, author_list_id, engine)
+    except DimensionValueNotFoundError:
+        _insert_book(
+            title=title,
+            author_list_id=author_list_id,
+            language_id=language_id,
+            translator_id=translator_id,
+            original_language_id=original_language_id,
+            published_year=published_year,
+            genre_id=genre.value,
+            subgenre_id=subgenre.value,
+            format_id=book_format.value,
+            engine=engine,
+        )
+        book_id = _get_book_id(title, author_list_id, engine)
+
+    bookstore_city_id = _get_city_id(
+        city=bookstore_city, region=bookstore_region, country=bookstore_country
+    )
+
+    raise NotImplementedError
+    _insert_reading_list(
+        book_id=book_id,
+        stopped_reading_date=stopped_reading_date,
+        is_read_completely=is_read_completely,
+        purchase_location_type_id=purchase_location_type.value,
+        bookstore_city_id=bookstore_city_id,
+        bookstore_name=bookstore_name,
+        website=website,
+    )
