@@ -47,7 +47,7 @@ class PurchaseLocationTypeEnum(Enum):
     ONLINE_BOOKSTORE = 3
 
 
-class Location(CamelModel):
+class City(CamelModel):
     country: str
     region: str
     city: str
@@ -56,13 +56,14 @@ class Location(CamelModel):
 class Publisher(CamelModel):
     name: str
     parent_name: str
-    location: Location
+    city: City
+    is_independent: bool
 
 
 class Purchase(CamelModel):
     date: date
     location_type: PurchaseLocationTypeEnum
-    location: Union[Location, str]
+    location: Union[City, str]
 
 
 class Author(CamelModel):

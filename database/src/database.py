@@ -6,14 +6,13 @@
         and are prefixed with enum_
 """
 from enum import EnumMeta
-from sqlite3 import IntegrityError
 from typing import Any, TypeVar
 
 from humps import decamelize
 from sqlalchemy.engine.base import Engine
 
 from .data_types import GenreEnum  # type: ignore
-from .data_types import (Author, FormatEnum, GenderEnum,
+from .data_types import (FormatEnum, GenderEnum, Publisher,
                          PurchaseLocationTypeEnum, SubgenreEnum)
 
 E = TypeVar("E", bound=EnumMeta)
@@ -134,6 +133,14 @@ def _munge_sql_val(val: Any) -> str:
     """munge python val into something fitting for sql"""
     if type(val) == str:
         return f"'{val}'"
+    elif type(val) == bool:
+        return "1" if val else "0"
+    elif type(val) == list and len(val) > 0 and type(val[0]) == int:
+        return "'" + ",".join(str(i) for i in val) + "'"
+    elif type(val) == list and len(val) == 0:
+        return "''"
+    elif val is None:
+        return "null"
     else:
         return val
 
@@ -164,7 +171,7 @@ def _get_dim_id(
     return results.first()[0]  # type: ignore
 
 
-def _insert_into_dim(table_name: str, engine: Engine, **data):
+def _insert_dim(table_name: str, engine: Engine, **data):
     """attempt to insert into dimension table
 
     Assumes file `sql/table_name/inset_template.sql`
@@ -176,19 +183,87 @@ def _insert_into_dim(table_name: str, engine: Engine, **data):
         data: the data to insert
     """
     raw_sql = _import_sql(table_name, "insert_template")
-    sql = raw_sql.format(**data)
+    munged_data = {k: _munge_sql_val(v) for k, v in data.items()}
+    sql = raw_sql.format(**munged_data)
     _execute(sql, engine)
 
 
-def _insert_into_author(author: Author, engine: Engine) -> int:
-    """insert an author into the author table and return its id"""
+def _insert_author(name: str, birth_year: int, gender_id: int, engine: Engine):
+    """insert an author into the author table"""
     data = {
-        "name": author.name,
-        "birth_year": author.birth_year,
-        "gender_id": author.gender.value,
+        "name": name,
+        "birth_year": birth_year,
+        "gender_id": gender_id,
     }
-    author_id = _insert_into_dim(table_name="author", engine=engine, **data)
-    return author_id
+    _insert_dim(table_name="author", engine=engine, **data)
+
+
+def _insert_author_list(author_ids: list[int], engine: Engine):
+    """insert list of author ids into author list"""
+    data = {"author_list": author_ids}
+    _insert_dim("author_list", engine, **data)
+
+
+def _insert_city(city: str, region: str, country: str, engine: Engine):
+    """insert city into city table"""
+    data = {
+        "city": city,
+        "region": region,
+        "country": country,
+    }
+    _insert_dim("city", engine, **data)
+
+
+def _insert_website(website: str, engine: Engine):
+    """insert website into website table"""
+    data = {"website": website}
+    _insert_dim("website", engine, **data)
+
+
+def _insert_language(language: str, engine: Engine):
+    """insert language into language table"""
+    data = {"language": language}
+    _insert_dim("language", engine, **data)
+
+
+def _insert_publisher(
+    name: str, parent_name: str, city_id: int, is_independent: bool, engine: Engine
+):
+    """insert publisher into publisher table"""
+    data = {
+        "name": name,
+        "parent_name": parent_name,
+        "city_id": city_id,
+        "is_indepentent": is_independent,
+    }
+    _insert_dim("publisher", engine, **data)
+
+
+def _insert_book(
+    title: str,
+    author_list_id: int,
+    language_id: int,
+    translator_id: int,
+    original_language_id: int,
+    published_year: int,
+    genre_id: int,
+    subgenre_id: int,
+    format_id: int,
+    engine: Engine
+):
+    """insert book into book table"""
+    data = {
+        "title": title,
+        "author_list_id": author_list_id,
+        "language_id": language_id,
+        "translator_id": translator_id,
+        "original_language_id": original_language_id,
+        "published_year": published_year,
+        "genre_id": genre_id,
+        "subgenre_id": subgenre_id,
+        "format_id": format_id,
+    }
+    _insert_dim("book", engine, **data)
 
 
 def setup_database(engine: Engine):
