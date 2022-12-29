@@ -12,19 +12,19 @@ class CamelModel(BaseModel):
         allow_population_by_field_name = True
 
 
-class GenderEnum(Enum):
+class GenderEnum(int, Enum):
     FEMALE = 1
     MALE = 2
     NON_BINARY = 3
 
 
-class GenreEnum(Enum):
+class GenreEnum(int, Enum):
     FICTION = 1
     NON_FICTION = 2
     POETRY = 3
 
 
-class SubgenreEnum(Enum):
+class SubgenreEnum(int, Enum):
     SCI_FI = 1
     FANTASY = 2
     MEMOIR = 3
@@ -35,13 +35,13 @@ class SubgenreEnum(Enum):
     TEXT_BOOK = 8
 
 
-class FormatEnum(Enum):
+class FormatEnum(int, Enum):
     LONG = 1
     MEDIUM = 2
     MULTIPLE_SHORT = 3
 
 
-class PurchaseLocationTypeEnum(Enum):
+class PurchaseLocationTypeEnum(int, Enum):
     WEBSITE = 1
     BOOSKTORE = 2
     ONLINE_BOOKSTORE = 3

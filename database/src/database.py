@@ -13,13 +13,17 @@ from humps import decamelize
 from sqlalchemy.engine.base import Engine
 
 from .data_types import GenreEnum  # type: ignore
-from .data_types import (Author, FormatEnum, GenderEnum, Publisher,
+from .data_types import (Author, FormatEnum, GenderEnum,
                          PurchaseLocationTypeEnum, SubgenreEnum)
 
 E = TypeVar("E", bound=EnumMeta)
 
 
 class DimensionValueNotFoundError(Exception):
+    pass
+
+
+class DimensionValueAlreadyExistsError(Exception):
     pass
 
 
