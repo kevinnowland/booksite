@@ -43,7 +43,7 @@ class FormatEnum(int, Enum):
 
 class PurchaseLocationTypeEnum(int, Enum):
     WEBSITE = 1
-    BOOSKTORE = 2
+    BOOKSTORE = 2
     ONLINE_BOOKSTORE = 3
 
 
