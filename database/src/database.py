@@ -23,10 +23,6 @@ class DimensionValueNotFoundError(Exception):
     pass
 
 
-class DimensionValueAlreadyExistsError(Exception):
-    pass
-
-
 def _import_sql(table_name: str, statement: str) -> str:
     """read in sql for the table
 
