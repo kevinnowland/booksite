@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys
 from argparse import ArgumentParser
+from datetime import date
 from enum import EnumMeta
 from time import sleep
 from typing import Optional, TypeVar
@@ -212,6 +213,23 @@ def prompt_book_id(engine: Engine) -> int:
     return book_id
 
 
+def prompt_stopped_reading_date() -> date:
+    """get stopped reading date"""
+    while True:
+        try:
+            print("\n")
+            date_string = animated_input(
+                "When did you stop reading the book? YYYY-MM-DD"
+            )
+            stopped_reading_date = date.fromisoformat(date_string)
+            break
+        except ValueError:
+            print("invalid date")
+            pass
+
+    return stopped_reading_date
+
+
 if __name__ == "__main__":
 
     parser = ArgumentParser()
@@ -222,3 +240,4 @@ if __name__ == "__main__":
 
     print("let's add a book to the reading list!\n\n")
     book_id = prompt_book_id(engine)
+    stopped_reading_date = prompt_stopped_reading_date()
