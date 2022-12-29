@@ -9,11 +9,13 @@ from typing import Optional, TypeVar
 from sqlalchemy import create_engine
 from sqlalchemy.engine.base import Engine
 
-from src.data_types import FormatEnum, GenderEnum, GenreEnum, SubgenreEnum
+from src.data_types import (FormatEnum, GenderEnum, GenreEnum,
+                            PurchaseLocationTypeEnum, SubgenreEnum)
 from src.database import (DimensionValueNotFoundError, _get_author_id,
                           _get_author_list_id, _get_book_id, _get_language_id,
-                          _insert_author, _insert_author_list, _insert_book,
-                          _insert_language, get_author_info_by_name)
+                          _get_website_id, _insert_author, _insert_author_list,
+                          _insert_book, _insert_language, _insert_website,
+                          get_author_info_by_name)
 
 
 def animated_print(text: str):
@@ -114,7 +116,7 @@ def prompt_author_ids(engine: Engine) -> list[int]:
         author_id = prompt_author_id(is_translator=False, engine=engine)
         author_ids.append(author_id)
 
-        if animated_input("add another author? (y/N)") != "y":
+        if animated_input("add another author? y/N") != "y":
             break
 
     if len(author_ids) > 0:
@@ -161,7 +163,7 @@ def prompt_book_id(engine: Engine) -> int:
         book_id = _get_book_id(title, author_list_id, engine)
         print("\n")
         animated_print("book already exists!")
-        confirmation = animated_input("confirm want to use existing book (y/N)")
+        confirmation = animated_input("confirm want to use existing book: y/N)")
         if confirmation.lower() == "y":
             return book_id
         else:
@@ -172,7 +174,7 @@ def prompt_book_id(engine: Engine) -> int:
         pass
 
     print("\n")
-    confirmation = animated_input("does the book have a translator? (y/N)")
+    confirmation = animated_input("does the book have a translator? y/N")
     if confirmation.lower() == "y":
         translator_id = prompt_author_id(is_translator=True, engine=engine)
 
@@ -230,6 +232,32 @@ def prompt_stopped_reading_date() -> date:
     return stopped_reading_date
 
 
+def prompt_bookstore_id(engine: Engine) -> int:
+    """get bookstore id via prompt"""
+    raise NotImplementedError
+
+
+def clean_website(website: str) -> str:
+    """clean website
+
+    e.g., https://www.indiebound.com -> indiebound.com
+    """
+    raise NotImplementedError
+
+
+def prompt_website_id(engine: Engine) -> int:
+    """get website id via prompt"""
+    raw_website = animated_input("enter website")
+    website = clean_website(raw_website)
+
+    try:
+        website_id = _get_website_id(website, engine)
+    except DimensionValueNotFoundError:
+        website_id = _insert_website(website, engine)
+
+    return website_id
+
+
 if __name__ == "__main__":
 
     parser = ArgumentParser()
@@ -241,3 +269,19 @@ if __name__ == "__main__":
     print("let's add a book to the reading list!\n\n")
     book_id = prompt_book_id(engine)
     stopped_reading_date = prompt_stopped_reading_date()
+    is_read_completely = animated_input("Did you finish the book? y/N").lower() == "y"
+    purchase_location_type_id = prompt_enum_id(
+        PurchaseLocationTypeEnum,
+        "From what type of establishment was the book purchased?",
+    )
+
+    bookstore_id: Optional[int] = None
+    website_id: Optional[int] = None
+
+    # TODO: rethink what we care about with bookstore vs online
+    if purchase_location_type_id == PurchaseLocationTypeEnum.BOOKSTORE:
+        bookstore_id = prompt_bookstore_id(engine)
+    elif purchase_location_type_id == PurchaseLocationTypeEnum.ONLINE_BOOKSTORE:
+        bookstore_id = prompt_bookstore_id(engine)
+    else:
+        website_id = prompt_website_id(engine)
