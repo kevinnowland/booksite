@@ -34,7 +34,7 @@ def animated_input(text: str) -> str:
 
 
 def confirm_prompt(prompt: str) -> bool:
-    return animated_input(prompt + " y/N").lower() == "y"
+    return animated_input(prompt + " y/N:").lower() == "y"
 
 
 E = TypeVar("E", bound=EnumMeta)
@@ -47,7 +47,7 @@ def prompt_enum_id(enum: E, prompt: str) -> int:
     """
     _id: Optional[int] = None
     options_text = "\n" + "\n".join(f"{e.value} - {e.name}" for e in enum)  # type: ignore  # noqa: E501
-    options_text += "\nenter number:"
+    options_text += "\nenter number: "
 
     while _id not in enum._value2member_map_.keys():
         animated_print(prompt)
