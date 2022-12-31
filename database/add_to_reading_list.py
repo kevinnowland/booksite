@@ -216,6 +216,7 @@ def prompt_book_id(engine: Engine) -> int:
     publisher_id = prompt_publisher_id(engine)
 
     print("\n")
+    translator_id = 0
     if confirm_prompt("does the book have a translator?"):
         translator_id = prompt_author_id(is_translator=True, engine=engine)
 
