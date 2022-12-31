@@ -160,9 +160,7 @@ def _get_dim_id(table_name: str, engine: Engine, **data) -> int:
     Returns:
         id corresponding to the primary key
     """
-    where = " AND ".join(
-        f"{k} = {_munge_sql_val(v)}" for k, v in data.items()
-    )
+    where = " AND ".join(f"{k} = {_munge_sql_val(v)}" for k, v in data.items())
     sql = f"""
     SELECT {table_name}_id
     FROM {table_name}
@@ -345,8 +343,9 @@ def get_book_id(title: str, author_list_id: int, engine: Engine) -> int:
     return _get_dim_id("book", engine, **data)
 
 
-def _get_bookstore_id() -> int:
-    raise NotImplementedError
+def get_bookstore_id(name: str, engine: Engine) -> int:
+    data = {"name": name}
+    return _get_dim_id("bookstore", engine, **data)
 
 
 def setup_database(engine: Engine):
