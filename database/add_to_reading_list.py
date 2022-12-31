@@ -153,10 +153,9 @@ def prompt_city_id(engine: Engine) -> int:
     try:
         city_id = _get_city_id(country, region, city, engine)
     except DimensionValueNotFoundError:
-        pass
+        _insert_city(country, region, city, engine)
+        city_id = _get_city_id(country, region, city, engine)
 
-    _insert_city(country, region, city, engine)
-    city_id = _get_city_id(country, region, city, engine)
     return city_id
 
 
@@ -170,13 +169,12 @@ def prompt_publisher_id(engine: Engine) -> int:
         animated_print("existing publisher found")
         return publisher_id
     except DimensionValueNotFoundError:
-        pass
+        animated_print("Where is the publisher located?")
+        city_id = prompt_city_id(engine)
+        is_independent = confirm_prompt("Is publisher independent?")
+        _insert_publisher(name, parent_name, city_id, is_independent, engine)
+        publisher_id = _get_publisher_id(name, parent_name, engine)
 
-    animated_print("Where is the publisher located?")
-    city_id = prompt_city_id(engine)
-    is_independent = confirm_prompt("Is publisher independent?")
-    _insert_publisher(name, parent_name, city_id, is_independent, engine)
-    publisher_id = _get_publisher_id(name, parent_name, engine)
     return publisher_id
 
 
