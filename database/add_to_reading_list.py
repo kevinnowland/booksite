@@ -254,7 +254,7 @@ def clean_website(website: str) -> str:
 
 def prompt_website_id(engine: Engine) -> int:
     """get website id via prompt"""
-    raw_website = animated_input("enter website")
+    raw_website = animated_input("enter website:")
     website = clean_website(raw_website)
 
     try:
