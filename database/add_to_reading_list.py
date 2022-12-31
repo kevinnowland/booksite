@@ -9,8 +9,7 @@ from typing import Optional, TypeVar
 from sqlalchemy import create_engine
 from sqlalchemy.engine.base import Engine
 
-from src.data_types import (FormatEnum, GenderEnum, GenreEnum,
-                            PurchaseLocationTypeEnum, SubgenreEnum)
+from src.data_types import FormatEnum, GenderEnum, GenreEnum, SubgenreEnum
 from src.database import (DimensionValueNotFoundError, _get_author_id,
                           _get_author_list_id, _get_book_id, _get_language_id,
                           _get_website_id, _insert_author, _insert_author_list,
@@ -32,6 +31,10 @@ def animated_input(text: str) -> str:
     return input(" ")
 
 
+def confirm_prompt(prompt: str) -> bool:
+    return animated_input(prompt + " y/N").lower() == "y"
+
+
 def prompt_raw_author_info(
     engine: Engine, is_translator: bool = False
 ) -> tuple[str, int, GenderEnum]:
@@ -45,8 +48,8 @@ def prompt_raw_author_info(
 
     try:
         name, birth_year, gender = get_author_info_by_name(name, engine)
-        text = f"Do you mean {name} - {birth_year} - {gender.name}?"
-        if "y" == animated_input(text).lower():
+        prompt = f"Do you mean {name} - {birth_year} - {gender.name}?"
+        if confirm_prompt(prompt):
             return name, birth_year, gender
         else:
             animated_print(f"okay, will continue asking about {writer_type}")
@@ -116,7 +119,7 @@ def prompt_author_ids(engine: Engine) -> list[int]:
         author_id = prompt_author_id(is_translator=False, engine=engine)
         author_ids.append(author_id)
 
-        if animated_input("add another author? y/N") != "y":
+        if not confirm_prompt("add another author?"):
             break
 
     if len(author_ids) > 0:
@@ -163,8 +166,7 @@ def prompt_book_id(engine: Engine) -> int:
         book_id = _get_book_id(title, author_list_id, engine)
         print("\n")
         animated_print("book already exists!")
-        confirmation = animated_input("confirm want to use existing book: y/N)")
-        if confirmation.lower() == "y":
+        if confirm_prompt("want to use existing book?"):
             return book_id
         else:
             animated_print("then try again")
@@ -174,8 +176,7 @@ def prompt_book_id(engine: Engine) -> int:
         pass
 
     print("\n")
-    confirmation = animated_input("does the book have a translator? y/N")
-    if confirmation.lower() == "y":
+    if confirm_prompt("does the book have a translator?"):
         translator_id = prompt_author_id(is_translator=True, engine=engine)
 
     print("\n")
@@ -269,19 +270,15 @@ if __name__ == "__main__":
     print("let's add a book to the reading list!\n\n")
     book_id = prompt_book_id(engine)
     stopped_reading_date = prompt_stopped_reading_date()
-    is_read_completely = animated_input("Did you finish the book? y/N").lower() == "y"
-    purchase_location_type_id = prompt_enum_id(
-        PurchaseLocationTypeEnum,
-        "From what type of establishment was the book purchased?",
-    )
+    is_read_completely = confirm_prompt("Did you finish the book?")
 
     bookstore_id: Optional[int] = None
     website_id: Optional[int] = None
 
-    # TODO: rethink what we care about with bookstore vs online
-    if purchase_location_type_id == PurchaseLocationTypeEnum.BOOKSTORE:
-        bookstore_id = prompt_bookstore_id(engine)
-    elif purchase_location_type_id == PurchaseLocationTypeEnum.ONLINE_BOOKSTORE:
-        bookstore_id = prompt_bookstore_id(engine)
-    else:
+    if confirm_prompt("Was the book purchased online?"):
         website_id = prompt_website_id(engine)
+
+        if confirm_prompt("Is this website associated with a bookstore?"):
+            bookstore_id = prompt_bookstore_id(engine)
+    else:
+        bookstore_id = prompt_bookstore_id(engine)
