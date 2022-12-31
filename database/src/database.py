@@ -283,21 +283,17 @@ def _insert_reading_list(
     book_id: int,
     stopped_reading_date: date,
     is_read_completely: bool,
-    purchase_location_type_id: int,
-    bookstore_city_id: int,
+    bookstore_id: int,
+    website_id: int,
     engine: Engine,
-    bookstore_name: Optional[str] = None,
-    website: Optional[str] = None,
 ):
     """insert into reading list"""
     data = {
         "book_id": book_id,
         "stopped_reading_date": stopped_reading_date,
         "is_read_completely": is_read_completely,
-        "purchase_location_type_id": purchase_location_type_id,
-        "bookstore_city_id": bookstore_city_id,
-        "bookstore_name": bookstore_name,
-        "website": website,
+        "bookstore_id": bookstore_id,
+        "website_id": website_id,
     }
     _insert_table("reading_list", engine, **data)
 
