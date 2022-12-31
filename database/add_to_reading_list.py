@@ -11,10 +11,12 @@ from sqlalchemy.engine.base import Engine
 
 from src.data_types import FormatEnum, GenderEnum, GenreEnum, SubgenreEnum
 from src.database import (DimensionValueNotFoundError, _get_author_id,
-                          _get_author_list_id, _get_book_id, _get_language_id,
-                          _get_website_id, _insert_author, _insert_author_list,
-                          _insert_book, _insert_language, _insert_reading_list,
-                          _insert_website, get_author_info_by_name)
+                          _get_author_list_id, _get_book_id, _get_bookstore_id,
+                          _get_city_id, _get_language_id, _get_website_id,
+                          _insert_author, _insert_author_list, _insert_book,
+                          _insert_bookstore, _insert_city, _insert_language,
+                          _insert_reading_list, _insert_website,
+                          get_author_info_by_name)
 
 
 def animated_print(text: str):
@@ -233,9 +235,37 @@ def prompt_stopped_reading_date() -> date:
     return stopped_reading_date
 
 
+def prompt_city_id(engine: Engine) -> int:
+    """get city id via prompt"""
+    country = animated_input("Country:")
+    region = animated_input("Region/State/Province:")
+    city = animated_input("City:")
+
+    try:
+        city_id = _get_city_id(country, region, city, engine)
+    except DimensionValueNotFoundError:
+        pass
+
+    _insert_city(country, region, city, engine)
+    city_id = _get_city_id(country, region, city, engine)
+    return city_id
+
+
 def prompt_bookstore_id(engine: Engine) -> int:
     """get bookstore id via prompt"""
-    raise NotImplementedError
+    name = animated_input("enter bookstore name:")
+
+    try:
+        bookstore_id = _get_bookstore_id(name, engine)
+    except DimensionValueNotFoundError:
+        pass
+
+    animated_print("Where is the bookstore located in?")
+    city_id = prompt_city_id(engine)
+
+    _insert_bookstore(name, city_id, engine)
+    bookstore_id = _get_bookstore_id(name, engine)
+    return bookstore_id
 
 
 def clean_website(website: str) -> str:
