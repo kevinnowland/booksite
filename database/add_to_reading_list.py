@@ -37,6 +37,31 @@ def confirm_prompt(prompt: str) -> bool:
     return animated_input(prompt + " y/N").lower() == "y"
 
 
+E = TypeVar("E", bound=EnumMeta)
+
+
+def prompt_enum_id(enum: E, prompt: str) -> int:
+    """get the id of a value in an enum
+
+    NOTE: assumes all enum values are integers
+    """
+    _id: Optional[int] = None
+    options_text = "\n" + "\n".join(f"{e.value} - {e.name}" for e in enum)  # type: ignore  # noqa: E501
+    options_text += "\nenter number:"
+
+    while _id not in enum._value2member_map_.keys():
+        animated_print(prompt)
+        try:
+            _id = int(input(options_text))
+        except ValueError:
+            pass
+
+    if type(_id) != int:
+        raise Exception(f"something went wrong, _id not int: {type(_id)}")
+
+    return _id
+
+
 def prompt_raw_author_info(
     engine: Engine, is_translator: bool = False
 ) -> tuple[str, int, GenderEnum]:
@@ -64,31 +89,6 @@ def prompt_raw_author_info(
         gender = GenderEnum._value2member_map_[gender_id]
 
     return name, birth_year, gender  # type: ignore
-
-
-E = TypeVar("E", bound=EnumMeta)
-
-
-def prompt_enum_id(enum: E, prompt: str) -> int:
-    """get the id of a value in an enum
-
-    NOTE: assumes all enum values are integers
-    """
-    _id: Optional[int] = None
-    options_text = "\n".join(f"{e.value} - {e.name}" for e in enum)  # type: ignore  # noqa: E501
-    options_text += "\nenter number:"
-
-    while _id not in enum._value2member_map_.keys():
-        animated_print(prompt)
-        try:
-            _id = int(input(options_text))
-        except ValueError:
-            pass
-
-    if type(_id) != int:
-        raise Exception(f"something went wrong, _id not int: {type(_id)}")
-
-    return _id
 
 
 def prompt_author_id(engine: Engine, is_translator: bool = False) -> int:
