@@ -86,5 +86,5 @@ class Book(CamelModel):
 class ReadingListEntry(CamelModel):
     books: Book
     stopped_reading_date: Optional[date]
-    completed: bool
+    is_read_completely: bool
     purchase: Purchase
