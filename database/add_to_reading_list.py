@@ -243,7 +243,13 @@ def clean_website(website: str) -> str:
 
     e.g., https://www.indiebound.com -> indiebound.com
     """
-    raise NotImplementedError
+    if "https://" == website[:8]:
+        website = website[8:]
+    if "www." == website[:4]:
+        website = website[4:]
+    if "/" in website:
+        website = website.split("/")[0]
+    return website
 
 
 def prompt_website_id(engine: Engine) -> int:
