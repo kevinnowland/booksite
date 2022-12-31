@@ -13,8 +13,8 @@ from src.data_types import FormatEnum, GenderEnum, GenreEnum, SubgenreEnum
 from src.database import (DimensionValueNotFoundError, _get_author_id,
                           _get_author_list_id, _get_book_id, _get_language_id,
                           _get_website_id, _insert_author, _insert_author_list,
-                          _insert_book, _insert_language, _insert_website,
-                          get_author_info_by_name)
+                          _insert_book, _insert_language, _insert_reading_list,
+                          _insert_website, get_author_info_by_name)
 
 
 def animated_print(text: str):
@@ -272,8 +272,8 @@ if __name__ == "__main__":
     stopped_reading_date = prompt_stopped_reading_date()
     is_read_completely = confirm_prompt("Did you finish the book?")
 
-    bookstore_id: Optional[int] = None
-    website_id: Optional[int] = None
+    bookstore_id: int = 0
+    website_id: int = 0
 
     if confirm_prompt("Was the book purchased online?"):
         website_id = prompt_website_id(engine)
@@ -282,3 +282,12 @@ if __name__ == "__main__":
             bookstore_id = prompt_bookstore_id(engine)
     else:
         bookstore_id = prompt_bookstore_id(engine)
+
+    _insert_reading_list(
+        book_id=book_id,
+        stopped_reading_date=stopped_reading_date,
+        is_read_completely=is_read_completely,
+        bookstore_id=bookstore_id,
+        website_id=website_id,
+        engine=engine,
+    )
