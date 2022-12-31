@@ -146,9 +146,9 @@ def prompt_author_list_id(engine: Engine) -> int:
 
 def prompt_city_id(engine: Engine) -> int:
     """get city id via prompt"""
-    country = animated_input("Country:")
-    region = animated_input("Region/State/Province:")
     city = animated_input("City:")
+    region = animated_input("Region/State/Province:")
+    country = animated_input("Country:")
 
     try:
         city_id = get_city_id(city, region, country, engine)
