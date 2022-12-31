@@ -7,7 +7,7 @@
 """
 from datetime import date
 from enum import EnumMeta
-from typing import Any, Optional, TypeVar
+from typing import Any, TypeVar
 
 from humps import decamelize
 from sqlalchemy.engine.base import Engine
@@ -195,7 +195,7 @@ def _insert_table(table_name: str, engine: Engine, **data):
     _execute(sql, engine)
 
 
-def _insert_author(name: str, birth_year: int, gender_id: int, engine: Engine):
+def insert_author(name: str, birth_year: int, gender_id: int, engine: Engine):
     """insert an author into the author table"""
     data = {
         "name": name,
@@ -205,13 +205,13 @@ def _insert_author(name: str, birth_year: int, gender_id: int, engine: Engine):
     _insert_table(table_name="author", engine=engine, **data)
 
 
-def _insert_author_list(author_ids: list[int], engine: Engine):
+def insert_author_list(author_ids: list[int], engine: Engine):
     """insert list of author ids into author list"""
     data = {"author_list": author_ids}
     _insert_table("author_list", engine, **data)
 
 
-def _insert_city(city: str, region: str, country: str, engine: Engine):
+def insert_city(city: str, region: str, country: str, engine: Engine):
     """insert city into city table"""
     data = {
         "city": city,
@@ -221,19 +221,19 @@ def _insert_city(city: str, region: str, country: str, engine: Engine):
     _insert_table("city", engine, **data)
 
 
-def _insert_website(website: str, engine: Engine):
+def insert_website(website: str, engine: Engine):
     """insert website into website table"""
     data = {"website": website}
     _insert_table("website", engine, **data)
 
 
-def _insert_language(language: str, engine: Engine):
+def insert_language(language: str, engine: Engine):
     """insert language into language table"""
     data = {"language": language}
     _insert_table("language", engine, **data)
 
 
-def _insert_publisher(
+def insert_publisher(
     name: str, parent_name: str, city_id: int, is_independent: bool, engine: Engine
 ):
     """insert publisher into publisher table"""
@@ -246,7 +246,7 @@ def _insert_publisher(
     _insert_table("publisher", engine, **data)
 
 
-def _insert_book(
+def insert_book(
     title: str,
     author_list_id: int,
     publisher_id: int,
@@ -275,7 +275,7 @@ def _insert_book(
     _insert_table("book", engine, **data)
 
 
-def _insert_bookstore(name: str, city_id: int, engine: Engine):
+def insert_bookstore(name: str, city_id: int, engine: Engine):
     """insert bookstore into bookstore table"""
     data = {
         "name": name,
@@ -284,7 +284,7 @@ def _insert_bookstore(name: str, city_id: int, engine: Engine):
     _insert_table("bookstore", engine, **data)
 
 
-def _insert_reading_list(
+def insert_reading_list(
     book_id: int,
     stopped_reading_date: date,
     is_read_completely: bool,
@@ -303,17 +303,17 @@ def _insert_reading_list(
     _insert_table("reading_list", engine, **data)
 
 
-def _get_author_id(name: str, engine: Engine) -> int:
+def get_author_id(name: str, engine: Engine) -> int:
     data = {"name": name}
     return _get_dim_id("author", engine, **data)
 
 
-def _get_author_list_id(author_ids: list[int], engine: Engine) -> int:
+def get_author_list_id(author_ids: list[int], engine: Engine) -> int:
     data = {"author_list": author_ids}
     return _get_dim_id("author_list", engine, **data)
 
 
-def _get_city_id(city: str, region: str, country: str, engine: Engine) -> int:
+def get_city_id(city: str, region: str, country: str, engine: Engine) -> int:
     data = {
         "city": city,
         "region": region,
@@ -322,22 +322,22 @@ def _get_city_id(city: str, region: str, country: str, engine: Engine) -> int:
     return _get_dim_id("city", engine, **data)
 
 
-def _get_website_id(website: str, engine: Engine) -> int:
+def get_website_id(website: str, engine: Engine) -> int:
     data = {"website": website}
     return _get_dim_id("website", engine, **data)
 
 
-def _get_language_id(language: str, engine: Engine) -> int:
+def get_language_id(language: str, engine: Engine) -> int:
     data = {"language": language}
     return _get_dim_id("language", engine, **data)
 
 
-def _get_publisher_id(name: str, parent_name: str, engine: Engine) -> int:
+def get_publisher_id(name: str, parent_name: str, engine: Engine) -> int:
     data = {"name": name, "parent_name": parent_name}
     return _get_dim_id("publisher", engine, **data)
 
 
-def _get_book_id(title: str, author_list_id: int, engine: Engine) -> int:
+def get_book_id(title: str, author_list_id: int, engine: Engine) -> int:
     data = {
         "title": title,
         "author_list_id": author_list_id,
