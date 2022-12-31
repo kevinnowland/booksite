@@ -213,7 +213,7 @@ def prompt_book_id(engine: Engine) -> int:
         pass
 
     print("\n")
-    publisher_id = prompt_publisher(engine)
+    publisher_id = prompt_publisher_id(engine)
 
     print("\n")
     if confirm_prompt("does the book have a translator?"):
