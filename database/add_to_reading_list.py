@@ -220,7 +220,7 @@ def prompt_book_id(engine: Engine) -> int:
         translator_id = prompt_author_id(is_translator=True, engine=engine)
 
     print("\n")
-    prompt = "What was the primary language you READ the book?"
+    prompt = "What was the primary language you READ the book in?"
     language_id = prompt_language_id(prompt, engine)
 
     print("\n")
