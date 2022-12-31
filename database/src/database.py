@@ -238,7 +238,7 @@ def _insert_publisher(
         "name": name,
         "parent_name": parent_name,
         "city_id": city_id,
-        "is_indepentent": is_independent,
+        "is_independent": is_independent,
     }
     _insert_table("publisher", engine, **data)
 
