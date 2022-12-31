@@ -169,7 +169,7 @@ def prompt_publisher_id(engine: Engine) -> int:
         animated_print("existing publisher found")
         return publisher_id
     except DimensionValueNotFoundError:
-        animated_print("Where is the publisher located?")
+        animated_print("Where is the publisher located?\n")
         city_id = prompt_city_id(engine)
         is_independent = confirm_prompt("Is publisher independent?")
         insert_publisher(name, parent_name, city_id, is_independent, engine)
@@ -283,7 +283,7 @@ def prompt_bookstore_id(engine: Engine) -> int:
     except DimensionValueNotFoundError:
         pass
 
-    animated_print("Where is the bookstore located?")
+    animated_print("Where is the bookstore located?\n")
     city_id = prompt_city_id(engine)
 
     insert_bookstore(name, city_id, engine)
@@ -326,7 +326,7 @@ if __name__ == "__main__":
 
     engine = create_engine("sqlite:///" + args.path)
 
-    print("let's add a book to the reading list!\n\n")
+    print("\nLet's add a book to the reading list!\n")
     book_id = prompt_book_id(engine)
     stopped_reading_date = prompt_stopped_reading_date()
     is_read_completely = confirm_prompt("Did you finish the book?")
