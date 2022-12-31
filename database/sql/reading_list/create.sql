@@ -3,13 +3,11 @@ CREATE TABLE reading_list (
     book_id INTEGER NOT NULL,
     stopped_reading_date TEXT NOT NULL,
     is_read_completely INTEGER NOT NULL,
-    purchase_location_type_id INTEGER NOT NULL,
-    bookstore_name TEXT NULL,
-    bookstore_city_id INTEGER NOT NULL,
-    website TEXT NULL,
+    bookstore_id INTEGER NOT NULL,
+    website_id INTEGER NOT NULL,
     FOREIGN KEY (book_id) REFERENCES book(book_id),
-    FOREIGN KEY (purchase_location_type_id) REFERENCES enum_purchase_location_type (purchase_location_type_id),
-    FOREIGN KEY (bookstore_city_id) REFERENCES city(city_id),
+    FOREIGN KEY (bookstore_id) REFERENCES bookstore(bookstore_id),
+    FOREIGN KEY (website_id) REFERENCES website(website_id),
     UNIQUE(book_id, stopped_reading_date),
     CONSTRAINT valid_date CHECK(stopped_reading_date IS date(stopped_reading_date, '+0 days'))
 );

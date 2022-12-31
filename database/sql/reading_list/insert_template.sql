@@ -4,9 +4,8 @@ INSERT INTO reading_list
   stopped_reading_date,
   is_read_completely,
   purchase_location_type_id,
-  bookstore_name,
-  bookstore_city_id,
-  website
+  bookstore_id,
+  website_id
 )
 VALUES
 (
@@ -14,7 +13,6 @@ VALUES
   {stopped_reading_date},
   {is_read_completely},
   {purchase_location_type_id},
-  {bookstore_name},
-  {bookstore_city_id},
-  {website}
-)
+  {bookstore_id},
+  {website_id}
+);
