@@ -176,6 +176,38 @@ def _get_dim_id(table_name: str, engine: Engine, **data) -> int:
     return results[0][0]
 
 
+def _get_dim_values(
+    table_name: str, cols: list[str], engine: Engine, **data
+) -> dict[str, Any]:
+    """get row by unique values in dimension table
+
+    Arguments:
+        table_name (str): name of the table
+        cols: list[str]: the columns to return
+        engine (Engine): the engine to use
+        data: columns and values for columns for columns in a unique key
+
+    Returns:
+        dict mapping the column name to the returned value
+    """
+    columns = ", ".join(cols)
+    where = " AND ".join(f"{k} = {_munge_sql_val(v)}" for k, v in data.items())
+    sql = f"""
+    SELECT {columns}
+    FROM {table_name}
+    WHERE {where};
+    """
+    results = engine.execute(sql).all()  # type: ignore
+
+    if len(results) == 0:
+        raise DimensionValueNotFoundError
+    elif len(results) > 1:
+        raise Exception("should only get one result back...")
+
+    row = results[0]
+    return {cols[i]: row[i] for i in range(len(cols))}
+
+
 def _insert_table(table_name: str, engine: Engine, **data):
     """attempt to insert into dimension table
 
@@ -304,6 +336,11 @@ def insert_reading_list(
 def get_author_id(name: str, engine: Engine) -> int:
     data = {"name": name}
     return _get_dim_id("author", engine, **data)
+
+
+def get_author(name: str, cols: list[str], engine: Engine) -> dict[str, Any]:
+    data = {"name": name}
+    return _get_dim_values("author", cols, engine, **data)
 
 
 def get_author_list_id(author_ids: list[int], engine: Engine) -> int:
