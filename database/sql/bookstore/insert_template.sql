@@ -5,6 +5,6 @@ INSERT INTO bookstore (
 VALUES
   (
     {name},
-    {city_id},
+    {city_id}
   )
 ;

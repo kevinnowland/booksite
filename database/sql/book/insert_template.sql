@@ -7,7 +7,7 @@ INSERT INTO book (
   published_year,
   genre_id,
   subgenre_id,
-  format_id,
+  format_id
 )
 values
   (
@@ -19,6 +19,6 @@ values
     {published_year},
     {genre_id},
     {subgenre_id},
-    {format_id},
+    {format_id}
   )
 ;
