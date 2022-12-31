@@ -153,8 +153,8 @@ def prompt_city_id(engine: Engine) -> int:
     try:
         city_id = get_city_id(city, region, country, engine)
     except DimensionValueNotFoundError:
-        insert_city(city, country, region, engine)
-        city_id = get_city_id(city, country, region, engine)
+        insert_city(city, region, country, engine)
+        city_id = get_city_id(city, region, country, engine)
 
     return city_id
 
