@@ -10,14 +10,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine.base import Engine
 
 from src.data_types import FormatEnum, GenderEnum, GenreEnum, SubgenreEnum
-from src.database import (DimensionValueNotFoundError, get_author_id,
-                          get_author_info_by_name, get_author_list_id,
-                          get_book_id, get_bookstore_id, get_city_id,
-                          get_language_id, get_publisher_id, get_website_id,
-                          insert_author, insert_author_list, insert_book,
-                          insert_bookstore, insert_city, insert_language,
-                          insert_publisher, insert_reading_list,
-                          insert_website)
+from src.database import (DimensionValueNotFoundError, get_author,
+                          get_author_id, get_author_list_id, get_book_id,
+                          get_bookstore_id, get_city_id, get_language_id,
+                          get_publisher_id, get_website_id, insert_author,
+                          insert_author_list, insert_book, insert_bookstore,
+                          insert_city, insert_language, insert_publisher,
+                          insert_reading_list, insert_website)
 
 
 def animated_print(text: str):
@@ -50,20 +49,21 @@ def prompt_raw_author_info(
     name = animated_input(f"{writer_type} name:")
 
     try:
-        name, birth_year, gender = get_author_info_by_name(name, engine)
+        author_info = get_author(name, ["name", "birth_year", "gender_id"], engine)
+        name = author_info["name"]
+        birth_year = author_info["birth_year"]
+        gender = GenderEnum._value2member_map_[author_info["gender_id"]]
         prompt = f"Do you mean {name} - {birth_year} - {gender.name}?"
         if confirm_prompt(prompt):
-            return name, birth_year, gender
+            return name, birth_year, gender  # type: ignore
         else:
             animated_print(f"okay, will continue asking about {writer_type}")
     except DimensionValueNotFoundError:
-        pass
+        birth_year = int(animated_input(f"{writer_type} birth year:"))
+        gender_id = prompt_enum_id(GenderEnum, f"What is the {writer_type}'s gender?")
+        gender = GenderEnum._value2member_map_[gender_id]
 
-    birth_year = int(animated_input(f"{writer_type} birth year:"))
-    gender_id = prompt_enum_id(GenderEnum, f"What is the {writer_type}'s gender?")
-    gender = GenderEnum._value2member_map_[gender_id]
-
-    return name, birth_year, gender
+    return name, birth_year, gender  # type: ignore
 
 
 E = TypeVar("E", bound=EnumMeta)
