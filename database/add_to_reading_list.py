@@ -153,7 +153,7 @@ def prompt_city_id(engine: Engine) -> int:
     try:
         city_id = get_city_id(city, region, country, engine)
     except DimensionValueNotFoundError:
-        insert_city(city, region, country, engine)
+        insert_city(city, region, country,  engine)
         city_id = get_city_id(city, region, country, engine)
 
     return city_id
@@ -279,14 +279,14 @@ def prompt_bookstore_id(engine: Engine) -> int:
 
     try:
         bookstore_id = get_bookstore_id(name, engine)
+        animated_print("using existing bookstore")
     except DimensionValueNotFoundError:
-        pass
+        animated_print("Where is the bookstore located?\n")
+        city_id = prompt_city_id(engine)
 
-    animated_print("Where is the bookstore located?\n")
-    city_id = prompt_city_id(engine)
+        insert_bookstore(name, city_id, engine)
+        bookstore_id = get_bookstore_id(name, engine)
 
-    insert_bookstore(name, city_id, engine)
-    bookstore_id = get_bookstore_id(name, engine)
     return bookstore_id
 
 
