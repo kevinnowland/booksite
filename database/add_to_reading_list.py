@@ -151,10 +151,10 @@ def prompt_city_id(engine: Engine) -> int:
     city = animated_input("City:")
 
     try:
-        city_id = _get_city_id(country, region, city, engine)
+        city_id = _get_city_id(city, region, country, engine)
     except DimensionValueNotFoundError:
-        _insert_city(country, region, city, engine)
-        city_id = _get_city_id(country, region, city, engine)
+        _insert_city(city, country, region, engine)
+        city_id = _get_city_id(city, country, region, engine)
 
     return city_id
 
