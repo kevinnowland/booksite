@@ -149,30 +149,33 @@ def _munge_sql_val(val: Any) -> str:
         return val
 
 
-def _get_dim_id(
-    table_name: str, uk_cols: list[str], uk_vals: list[Any], engine: Engine
-) -> int:
+def _get_dim_id(table_name: str, engine: Engine, **data) -> int:
     """get id of entry in dimension table
 
     Arguments:
         table_name (str): name of the table
-        uk_cols (list[str]): list of cols in the unique constraint
-        uk_vals (list[Any]): the list of values for those cols in same order
         engine (Engine): the engine to use
+        data: columns and values for columns for columns in a unique key
 
     Returns:
         id corresponding to the primary key
     """
     where = " AND ".join(
-        f"{uk_cols[i]} = {_munge_sql_val(uk_vals[i])}" for i in range(len(uk_cols))
+        f"{k} = {_munge_sql_val(v)}" for k, v in data.items()
     )
     sql = f"""
     SELECT {table_name}_id
     FROM {table_name}
     WHERE {where};
     """
-    results = engine.execute(sql)
-    return results.first()[0]  # type: ignore
+    results = engine.execute(sql).all()  # type: ignore
+
+    if len(results) == 0:
+        raise DimensionValueNotFoundError
+    elif len(results) > 1:
+        raise Exception("should only get one result back...")
+
+    return results[0][0]
 
 
 def _insert_table(table_name: str, engine: Engine, **data):
@@ -298,6 +301,52 @@ def _insert_reading_list(
         "website_id": website_id,
     }
     _insert_table("reading_list", engine, **data)
+
+
+def _get_author_id(name: str, engine: Engine) -> int:
+    data = {"name": name}
+    return _get_dim_id("author", engine, **data)
+
+
+def _get_author_list_id(author_ids: list[int], engine: Engine) -> int:
+    data = {"author_list": author_ids}
+    return _get_dim_id("author_list", engine, **data)
+
+
+def _get_city_id(city: str, region: str, country: str, engine: Engine) -> int:
+    data = {
+        "city": city,
+        "region": region,
+        "country": country,
+    }
+    return _get_dim_id("city", engine, **data)
+
+
+def _get_website_id(website: str, engine: Engine) -> int:
+    data = {"website": website}
+    return _get_dim_id("website", engine, **data)
+
+
+def _get_language_id(language: str, engine: Engine) -> int:
+    data = {"language": language}
+    return _get_dim_id("language", engine, **data)
+
+
+def _get_publisher_id(name: str, parent_name: str, engine: Engine) -> int:
+    data = {"name": name, "parent_name": parent_name}
+    return _get_dim_id("publisher", engine, **data)
+
+
+def _get_book_id(title: str, author_list_id: int, engine: Engine) -> int:
+    data = {
+        "title": title,
+        "author_list_id": author_list_id,
+    }
+    return _get_dim_id("book", engine, **data)
+
+
+def _get_bookstore_id() -> int:
+    raise NotImplementedError
 
 
 def setup_database(engine: Engine):
