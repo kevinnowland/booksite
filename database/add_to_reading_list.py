@@ -196,7 +196,6 @@ def prompt_book_id(engine: Engine) -> int:
     """get book id"""
     title = animated_input("title:")
 
-    print("\n")
     author_list_id = prompt_author_list_id(engine)
 
     try:
@@ -262,7 +261,6 @@ def prompt_stopped_reading_date() -> date:
     """get stopped reading date"""
     while True:
         try:
-            print("\n")
             date_string = animated_input(
                 "When did you stop reading the book? YYYY-MM-DD"
             )
