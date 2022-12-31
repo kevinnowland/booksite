@@ -24,7 +24,7 @@ def animated_print(text: str):
     for c in text:
         sys.stdout.write(c)
         sys.stdout.flush()
-        sleep(0.1)
+        sleep(0.02)
 
 
 def animated_input(text: str) -> str:
@@ -125,8 +125,8 @@ def prompt_author_ids(engine: Engine) -> list[int]:
         if not confirm_prompt("add another author?"):
             break
 
-    if len(author_ids) > 0:
-        raise Exception(f"must have more than one author! {author_ids}")
+    if len(author_ids) == 0:
+        raise Exception(f"must have more at least one author! {author_ids}")
 
     return author_ids
 
