@@ -12,9 +12,10 @@ from sqlalchemy.engine.base import Engine
 from src.data_types import FormatEnum, GenderEnum, GenreEnum, SubgenreEnum
 from src.database import (DimensionValueNotFoundError, _get_author_id,
                           _get_author_list_id, _get_book_id, _get_bookstore_id,
-                          _get_city_id, _get_language_id, _get_website_id,
-                          _insert_author, _insert_author_list, _insert_book,
-                          _insert_bookstore, _insert_city, _insert_language,
+                          _get_city_id, _get_language_id, _get_publisher_id,
+                          _get_website_id, _insert_author, _insert_author_list,
+                          _insert_book, _insert_bookstore, _insert_city,
+                          _insert_language, _insert_publisher,
                           _insert_reading_list, _insert_website,
                           get_author_info_by_name)
 
@@ -143,6 +144,42 @@ def prompt_author_list_id(engine: Engine) -> int:
     return author_list_id
 
 
+def prompt_city_id(engine: Engine) -> int:
+    """get city id via prompt"""
+    country = animated_input("Country:")
+    region = animated_input("Region/State/Province:")
+    city = animated_input("City:")
+
+    try:
+        city_id = _get_city_id(country, region, city, engine)
+    except DimensionValueNotFoundError:
+        pass
+
+    _insert_city(country, region, city, engine)
+    city_id = _get_city_id(country, region, city, engine)
+    return city_id
+
+
+def prompt_publisher_id(engine: Engine) -> int:
+    """get publisher via prompt"""
+    name = animated_input("publisher name:")
+    parent_name = animated_input("publisher parent name:")
+
+    try:
+        publisher_id = _get_publisher_id(name, parent_name, engine)
+        animated_print("existing publisher found")
+        return publisher_id
+    except DimensionValueNotFoundError:
+        pass
+
+    animated_print("Where is the publisher located?")
+    city_id = prompt_city_id(engine)
+    is_independent = confirm_prompt("Is publisher independent?")
+    _insert_publisher(name, parent_name, city_id, is_independent, engine)
+    publisher_id = _get_publisher_id(name, parent_name, engine)
+    return publisher_id
+
+
 def prompt_language_id(prompt: str, engine: Engine) -> int:
     """Get language id"""
     language = animated_input(prompt)
@@ -178,6 +215,9 @@ def prompt_book_id(engine: Engine) -> int:
         pass
 
     print("\n")
+    publisher_id = prompt_publisher(engine)
+
+    print("\n")
     if confirm_prompt("does the book have a translator?"):
         translator_id = prompt_author_id(is_translator=True, engine=engine)
 
@@ -204,10 +244,11 @@ def prompt_book_id(engine: Engine) -> int:
     _insert_book(
         title=title,
         author_list_id=author_list_id,
+        publisher_id=publisher_id,
+        published_year=published_year,
         language_id=language_id,
         translator_id=translator_id,
         original_language_id=original_language_id,
-        published_year=published_year,
         genre_id=genre_id,
         subgenre_id=subgenre_id,
         format_id=format_id,
@@ -235,22 +276,6 @@ def prompt_stopped_reading_date() -> date:
     return stopped_reading_date
 
 
-def prompt_city_id(engine: Engine) -> int:
-    """get city id via prompt"""
-    country = animated_input("Country:")
-    region = animated_input("Region/State/Province:")
-    city = animated_input("City:")
-
-    try:
-        city_id = _get_city_id(country, region, city, engine)
-    except DimensionValueNotFoundError:
-        pass
-
-    _insert_city(country, region, city, engine)
-    city_id = _get_city_id(country, region, city, engine)
-    return city_id
-
-
 def prompt_bookstore_id(engine: Engine) -> int:
     """get bookstore id via prompt"""
     name = animated_input("enter bookstore name:")
@@ -260,7 +285,7 @@ def prompt_bookstore_id(engine: Engine) -> int:
     except DimensionValueNotFoundError:
         pass
 
-    animated_print("Where is the bookstore located in?")
+    animated_print("Where is the bookstore located?")
     city_id = prompt_city_id(engine)
 
     _insert_bookstore(name, city_id, engine)
