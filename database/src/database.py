@@ -13,8 +13,7 @@ from humps import decamelize
 from sqlalchemy.engine.base import Engine
 
 from .data_types import GenreEnum  # type: ignore
-from .data_types import (Author, FormatEnum, GenderEnum,
-                         SubgenreEnum)
+from .data_types import FormatEnum, GenderEnum, SubgenreEnum
 
 E = TypeVar("E", bound=EnumMeta)
 
@@ -271,6 +270,15 @@ def _insert_book(
     _insert_table("book", engine, **data)
 
 
+def _insert_bookstore(name: str, city_id: int, engine: Engine):
+    """insert bookstore into bookstore table"""
+    data = {
+        "name": name,
+        "city_id": city_id,
+    }
+    _insert_table("bookstore", engine, **data)
+
+
 def _insert_reading_list(
     book_id: int,
     stopped_reading_date: date,
@@ -316,6 +324,7 @@ def setup_database(engine: Engine):
         "publisher",
         "language",
         "book",
+        "bookstore",
     ]
     for dim_table_name in dim_table_names:
         _create_dim_table(dim_table_name, engine)
