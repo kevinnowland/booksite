@@ -4,16 +4,24 @@
     dimension tables are not manually curated
     enum tables are manually curated dimension tables
         and are prefixed with enum_
+
+    Wanted to try doing this without using SQLAlchemy's ORM
+    capabilities, but am regretting it now. This is a backend with
+    basically no performance worries and we are writing too much
+    of our own reading and writing capabilities.
+
 """
 from datetime import date
 from enum import EnumMeta
-from typing import Any, TypeVar
+from typing import Any, Optional, TypeVar
 
 from humps import decamelize
 from sqlalchemy.engine.base import Engine
 
 from .data_types import GenreEnum  # type: ignore
-from .data_types import FormatEnum, GenderEnum, SubgenreEnum
+from .data_types import (Author, Book, Bookstore, City, FormatEnum, GenderEnum,
+                         Publisher, Purchase, PurchaseLocationTypeEnum,
+                         ReadingList, ReadingListEntry, SubgenreEnum, Website)
 
 E = TypeVar("E", bound=EnumMeta)
 
@@ -457,13 +465,151 @@ def setup_database(engine: Engine):
     _create_fact_table("reading_list", engine)
 
 
-def _get_reading_list(engine: Engine) -> list[tuple]:
+def _get_reading_list(engine: Engine) -> list[dict[str, Any]]:
     """get entire reading list data"""
     with open("sql/reading_list/get_reading_list.sql", "r") as f:
         sql = f.read()
-    return engine.execute(sql).all()  # type: ignore
+
+    rows = engine.execute(sql).all()  # type: ignore
+
+    return [
+        {
+            "title": row[0],
+            "author_list": [int(i) for i in row[1].split(",")],
+            "published_year": int(row[2]),
+            "publisher_name": row[3],
+            "publisher_parent_name": row[4],
+            "publisher_city": row[5],
+            "publisher_region": row[6],
+            "publisher_country": row[7],
+            "is_independent": int(row[8]) == 1,
+            "language": row[9],
+            "original_language": row[10],
+            "translator_name": row[11],
+            "translator_birth_year": row[12],
+            "translator_gendor": row[13],
+            "genre": row[14],
+            "subgenre": row[15],
+            "format": row[16],
+            "stopped_reading_date": row[17],
+            "is_read_completely": int(row[18]) == 1,
+            "was_gift": int(row[19]) == 1,
+            "website": row[20],
+            "bookstore_name": row[21],
+            "bookstore_city": row[22],
+            "bookstore_region": row[23],
+            "bookstore_country": row[24],
+            "rating": row[25],
+        }
+        for row in rows
+    ]
 
 
-def export_reading_list(engine: Engine) -> str:
-    """export reading list to json"""
-    raise NotImplementedError
+def _parse_raw_reading_list(
+    raw_reading_list: list[dict], engine: Engine
+) -> ReadingList:
+    """parse the raw reading list into a list of readinglistentry"""
+    raw_reading_list = _get_reading_list(engine)
+    entries: list[ReadingListEntry] = []
+    for row in raw_reading_list:
+
+        authors: list[Author] = []
+        for author_id in row["author_list"]:
+            author_info = _get_dim_values(
+                "author",
+                ["name", "birth_year", "gender_id"],
+                engine,
+                author_id=author_id,
+            )
+            authors.append(
+                Author(
+                    name=author_info["name"],
+                    birth_year=int(author_info["birth_year"]),
+                    gender=GenderEnum._value2member_map_[
+                        int(author_info["gender_id"])
+                    ].name,
+                )
+            )
+
+        translator: Optional[Author] = None
+        if row["translator_name"] != "":
+            translator = Author(
+                name=row["translator_name"],
+                birth_year=row["translator_birth_year"],
+                gender=row["translator_gender"],
+            )
+
+        if row["was_gift"]:
+            purchase = Purchase(
+                location_type=PurchaseLocationTypeEnum.GIFT.name, location=None
+            )
+        else:
+            bookstore: Optional[Bookstore] = None
+            if row["bookstore_name"] != "":
+                bookstore = Bookstore(
+                    name=row["bookstore_name"],
+                    city=City(
+                        city=row["bookstore_city"],
+                        region=row["bookstore_region"],
+                        country=row["bookstore_country"],
+                    ),
+                )
+            if row["website"] != "":
+                website = Website(website=row["website"], bookstore=bookstore)
+
+                if website.bookstore is not None:
+                    purchase_location_type = (
+                        PurchaseLocationTypeEnum.ONLINE_BOOKSTORE.name
+                    )
+                else:
+                    purchase_location_type = PurchaseLocationTypeEnum.WEBSITE.name
+
+                purchase = Purchase(
+                    location_type=purchase_location_type, location=website
+                )
+            else:
+                purchase = Purchase(
+                    location_type=PurchaseLocationTypeEnum.BOOKSTORE.name,
+                    location=bookstore,
+                )
+
+        entries.append(
+            ReadingListEntry(
+                book=Book(
+                    title=row["title"],
+                    authors=authors,
+                    translator=translator,
+                    language=row["language"],
+                    original_language=row["original_language"],
+                    published_year=row["published_year"],
+                    publisher=Publisher(
+                        name=row["publisher_name"],
+                        parent_name=row["publisher_parent_name"],
+                        city=City(
+                            city=row["publisher_city"],
+                            region=row["publisher_region"],
+                            country=row["publisher_country"],
+                        ),
+                        is_independent=row["is_independent"],
+                    ),
+                    genre=row["genre"],
+                    subgenre=row["subgenre"],
+                    format=row["format"],
+                ),
+                stopped_reading_date=row["stopped_reading_date"],
+                is_read_completely=row["is_read_completely"],
+                purchase=purchase,
+                rating=row["rating"],
+            )
+        )
+
+    return ReadingList(entries=entries)
+
+
+def export_reading_list(engine: Engine, output_file: str):
+    """export reading list"""
+    raw_reading_list = _get_reading_list(engine)
+    reading_list = _parse_raw_reading_list(raw_reading_list, engine)
+
+    with open(output_file, "w") as f:
+        f.write(reading_list.json())

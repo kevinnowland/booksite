@@ -4,10 +4,10 @@ SELECT
     b.published_year,
     p.name AS publisher_name,
     p.parent_name AS publisher_parent_name,
-    p.is_independent,
     pc.city AS publisher_city,
     pc.region AS publisher_region,
     pc.country AS publisher_country,
+    p.is_independent,
     l.language,
     ol.language AS original_language,
     a.name AS translator_name,
@@ -23,7 +23,8 @@ SELECT
     bs.name AS bookstore_name,
     bc.city AS bookstore_city,
     bc.region AS bookstore_region,
-    bc.country AS bookstore_country
+    bc.country AS bookstore_country,
+    rl.rating
 FROM
     reading_list AS rl
     JOIN book AS b
@@ -50,8 +51,8 @@ FROM
     ON f.format_id = b.format_id
     JOIN enum_gender AS ge
     ON ge.gender_id = a.gender_id
-    JOIN city as pc
+    JOIN city AS pc
     ON pc.city_id = p.city_id
-    JOIN city as bc
+    JOIN city AS bc
     ON bc.city_id = bs.city_id
 ;

@@ -47,6 +47,7 @@ class PurchaseLocationTypeEnum(int, Enum):
     WEBSITE = 1
     BOOKSTORE = 2
     ONLINE_BOOKSTORE = 3
+    GIFT = 4
 
 
 class City(CamelModel):
@@ -73,15 +74,14 @@ class Website(CamelModel):
 
 
 class Purchase(CamelModel):
-    date: date
-    location_type: PurchaseLocationTypeEnum
-    location: Union[Bookstore, Website]
+    location_type: str
+    location: Union[Bookstore, Website, None]
 
 
 class Author(CamelModel):
     name: str
     birth_year: int
-    gender: GenderEnum
+    gender: str
 
 
 class Book(CamelModel):
@@ -91,14 +91,19 @@ class Book(CamelModel):
     translator: Optional[Author]
     original_language: str
     published_year: int
-    genre: GenreEnum
-    subgenre: SubgenreEnum
     publisher: Publisher
+    genre: str
+    subgenre: str
+    format: str
 
 
 class ReadingListEntry(CamelModel):
-    books: Book
+    book: Book
     stopped_reading_date: date
     is_read_completely: bool
     purchase: Purchase
     rating: int
+
+
+class ReadingList(CamelModel):
+    entries: list[ReadingListEntry]
