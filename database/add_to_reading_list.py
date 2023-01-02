@@ -78,14 +78,14 @@ def prompt_raw_author_info(
         name = author_info["name"]
         birth_year = author_info["birth_year"]
         gender = GenderEnum._value2member_map_[author_info["gender_id"]]
-        prompt = f"Do you mean {name} - {birth_year} - {gender.name}?"
+        prompt = f"do you mean {name} - {birth_year} - {gender.name}?"
         if confirm_prompt(prompt):
             return name, birth_year, gender  # type: ignore
         else:
             animated_print(f"okay, will continue asking about {writer_type}")
     except DimensionValueNotFoundError:
         birth_year = int(animated_input(f"{writer_type} birth year:"))
-        gender_id = prompt_enum_id(GenderEnum, f"What is the {writer_type}'s gender?")
+        gender_id = prompt_enum_id(GenderEnum, f"what is the {writer_type}'s gender?")
         gender = GenderEnum._value2member_map_[gender_id]
 
     return name, birth_year, gender  # type: ignore
@@ -117,8 +117,8 @@ def prompt_author_ids(engine: Engine) -> list[int]:
     author_ids: list[int] = []
 
     while True:
-        i + 1
-        print(f"info for author {i}\n")
+        i = i + 1
+        print(f"\ninfo for author {i}")
         author_id = prompt_author_id(is_translator=False, engine=engine)
         author_ids.append(author_id)
 
@@ -126,7 +126,7 @@ def prompt_author_ids(engine: Engine) -> list[int]:
             break
 
     if len(author_ids) == 0:
-        raise Exception(f"must have more at least one author! {author_ids}")
+        raise Exception(f"must have at least one author! {author_ids}")
 
     return author_ids
 
@@ -146,9 +146,9 @@ def prompt_author_list_id(engine: Engine) -> int:
 
 def prompt_city_id(engine: Engine) -> int:
     """get city id via prompt"""
-    city = animated_input("City:")
-    region = animated_input("Region/State/Province:")
-    country = animated_input("Country:")
+    city = animated_input("city:")
+    region = animated_input("region/state/province:")
+    country = animated_input("country:")
 
     try:
         city_id = get_city_id(city, region, country, engine)
@@ -169,9 +169,9 @@ def prompt_publisher_id(engine: Engine) -> int:
         animated_print("existing publisher found")
         return publisher_id
     except DimensionValueNotFoundError:
-        animated_print("Where is the publisher located?\n")
+        animated_print("where is the publisher located?\n")
         city_id = prompt_city_id(engine)
-        is_independent = confirm_prompt("Is publisher independent?")
+        is_independent = confirm_prompt("is publisher independent?")
         insert_publisher(name, parent_name, city_id, is_independent, engine)
         publisher_id = get_publisher_id(name, parent_name, engine)
 
@@ -211,33 +211,33 @@ def prompt_book_id(engine: Engine) -> int:
     except DimensionValueNotFoundError:
         pass
 
-    print("\n")
+    print("\n", end="")
     publisher_id = prompt_publisher_id(engine)
 
-    print("\n")
+    print("\n", end="")
     translator_id = 0
     if confirm_prompt("does the book have a translator?"):
         translator_id = prompt_author_id(is_translator=True, engine=engine)
 
-    print("\n")
-    prompt = "What was the primary language you READ the book in?"
+    print("\n", end="")
+    prompt = "what was the primary language you READ the book in?"
     language_id = prompt_language_id(prompt, engine)
 
-    print("\n")
-    prompt = "What was the primary language the book was WRITTEN in?"
+    print("\n", end="")
+    prompt = "what was the primary language the book was WRITTEN in?"
     original_language_id = prompt_language_id(prompt, engine)
 
-    print("\n")
-    published_year = int(animated_input("What year was the book published?"))
+    print("\n", end="")
+    published_year = int(animated_input("what year was the book published?"))
 
-    print("\n")
-    genre_id = prompt_enum_id(GenreEnum, "What genre is the book?")
+    print("\n", end="")
+    genre_id = prompt_enum_id(GenreEnum, "what genre is the book?")
 
-    print("\n")
-    subgenre_id = prompt_enum_id(SubgenreEnum, "What subgenre is the book?")
+    print("\n", end="")
+    subgenre_id = prompt_enum_id(SubgenreEnum, "what subgenre is the book?")
 
-    print("\n")
-    format_id = prompt_enum_id(FormatEnum, "What is the book's format?")
+    print("\n", end="")
+    format_id = prompt_enum_id(FormatEnum, "what is the book's format?")
 
     insert_book(
         title=title,
@@ -262,7 +262,7 @@ def prompt_stopped_reading_date() -> date:
     while True:
         try:
             date_string = animated_input(
-                "When did you stop reading the book? YYYY-MM-DD"
+                "when did you stop reading the book? YYYY-MM-DD"
             )
             stopped_reading_date = date.fromisoformat(date_string)
             break
@@ -281,7 +281,7 @@ def prompt_bookstore_id(engine: Engine) -> int:
         bookstore_id = get_bookstore_id(name, engine)
         animated_print("using existing bookstore")
     except DimensionValueNotFoundError:
-        animated_print("Where is the bookstore located?\n")
+        animated_print("where is the bookstore located?\n")
         city_id = prompt_city_id(engine)
 
         insert_bookstore(name, city_id, engine)
