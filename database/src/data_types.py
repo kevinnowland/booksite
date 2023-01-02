@@ -81,7 +81,8 @@ class Book(CamelModel):
     translator: Optional[Author]
     original_language: str
     published_year: int
-    genres: list[GenreEnum]
+    genre: GenreEnum
+    subgenre: SubgenreEnum
     publisher: Publisher
 
 
