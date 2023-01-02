@@ -36,6 +36,14 @@ function checkOrX(is_read_completely) {
   }
 }
 
+function checkOrNone(is_read_completely) {
+  if (is_read_completely) {
+    return "\u2713"
+  } else {
+    return ""
+  }
+}
+
 function starRating(rating) {
   var stars = ""
   for (let i = 0; i < 5; i ++) {
@@ -55,8 +63,8 @@ function toTableRow(entry) {
       <td className="authors">{getAuthors(entry.book.authors)}</td>
       <td className="language center">{entry.book.language}</td>
       <td className="originaLanguage center">{getOriginalLanguage(entry.book.language, entry.book.original_language)}</td>
-      <td className="publisher">{entry.book.publisher.parent_name}</td>
-      <td className="isIndie center">{checkOrX(entry.book.publisher.is_independent)}</td>
+      <td className="publisher center">{entry.book.publisher.parent_name}</td>
+      <td className="isIndie center">{checkOrNone(entry.book.publisher.is_independent)}</td>
       <td className="stoppedReadingDate center">{dateText(entry.stopped_reading_date)}</td>
       <td className="isReadCompletely center">{checkOrX(entry.is_read_completely)}</td>
       <td className="starRating center">{starRating(entry.rating)}</td>
