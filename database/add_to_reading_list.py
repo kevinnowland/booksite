@@ -369,7 +369,7 @@ if __name__ == "__main__":
             engine=engine,
         )
 
-        animated_print("book successfully added!")
+        animated_print("book successfully added!\n")
 
         if not confirm_prompt("add another book?"):
             break
