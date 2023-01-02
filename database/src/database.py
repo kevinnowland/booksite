@@ -347,6 +347,7 @@ def insert_reading_list(
     book_id: int,
     stopped_reading_date: date,
     is_read_completely: bool,
+    was_gift: bool,
     bookstore_id: int,
     website_id: int,
     engine: Engine,
@@ -356,6 +357,7 @@ def insert_reading_list(
         "book_id": book_id,
         "stopped_reading_date": stopped_reading_date,
         "is_read_completely": is_read_completely,
+        "was_gift": was_gift,
         "bookstore_id": bookstore_id,
         "website_id": website_id,
     }
