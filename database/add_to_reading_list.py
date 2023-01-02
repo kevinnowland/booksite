@@ -349,21 +349,26 @@ if __name__ == "__main__":
 
         bookstore_id: int = 0
         website_id: int = 0
+        was_gift = False
 
         print("\n", end="")
-        if confirm_prompt("was the book purchased online?"):
-            website_id = prompt_website_id(engine)
-
-            if confirm_prompt("is this website associated with a bookstore?"):
-                bookstore_id = prompt_bookstore_id(engine)
+        if confirm_prompt("was the book a a gift?"):
+            was_gift = True
         else:
-            animated_print("let's get info about the bookstore then\n")
-            bookstore_id = prompt_bookstore_id(engine)
+            if confirm_prompt("was the book purchased online?"):
+                website_id = prompt_website_id(engine)
+
+                if confirm_prompt("is this website associated with a bookstore?"):
+                    bookstore_id = prompt_bookstore_id(engine)
+            else:
+                animated_print("let's get info about the bookstore then\n")
+                bookstore_id = prompt_bookstore_id(engine)
 
         insert_reading_list(
             book_id=book_id,
             stopped_reading_date=stopped_reading_date,
             is_read_completely=is_read_completely,
+            was_gift=was_gift,
             bookstore_id=bookstore_id,
             website_id=website_id,
             engine=engine,
