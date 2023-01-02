@@ -12,11 +12,19 @@ from sqlalchemy.engine.base import Engine
 from src.data_types import FormatEnum, GenderEnum, GenreEnum, SubgenreEnum
 from src.database import (DimensionValueNotFoundError, get_author,
                           get_author_id, get_author_list_id, get_book_id,
-                          get_bookstore_id, get_city_id, get_language_id,
-                          get_publisher_id, get_website_id, insert_author,
-                          insert_author_list, insert_book, insert_bookstore,
-                          insert_city, insert_language, insert_publisher, get_cities,
-                          insert_reading_list, insert_website)
+                          get_bookstore_id, get_cities, get_city_id,
+                          get_language_id, get_publisher_id, get_website_id,
+                          insert_author, insert_author_list, insert_book,
+                          insert_bookstore, insert_city, insert_language,
+                          insert_publisher, insert_reading_list,
+                          insert_website)
+
+
+VALID_READING_LANGUAGES = [
+    "English",
+    "French",
+    "Spanish",
+]
 
 
 def animated_print(text: str):
@@ -166,7 +174,7 @@ def prompt_city_id(engine: Engine) -> int:
     try:
         city_id = get_city_id(city, region, country, engine)
     except DimensionValueNotFoundError:
-        insert_city(city, region, country,  engine)
+        insert_city(city, region, country, engine)
         city_id = get_city_id(city, region, country, engine)
 
     return city_id
@@ -191,16 +199,28 @@ def prompt_publisher_id(engine: Engine) -> int:
     return publisher_id
 
 
-def prompt_language_id(prompt: str, engine: Engine) -> int:
+def prompt_language_id(
+    prompt: str, engine: Engine, valid_languages: Optional[list[str]] = None
+) -> int:
     """Get language id"""
-    language = animated_input(prompt)
-    language = language.lower().capitalize()
+    while True:
+        language = animated_input(prompt)
+        language = language.lower().capitalize()
 
-    try:
-        language_id = get_language_id(language, engine)
-    except DimensionValueNotFoundError:
-        insert_language(language, engine)
-        language_id = get_language_id(language, engine)
+        if valid_languages:
+            if language not in valid_languages:
+                print(
+                    f"language not recognized from list of valid languages: {valid_languages}"  # noqa: E501
+                )
+
+        try:
+            language_id = get_language_id(language, engine)
+        except DimensionValueNotFoundError:
+            if confirm_prompt(f"{language} not found in database. Add it?"):
+                insert_language(language, engine)
+                language_id = get_language_id(language, engine)
+            else:
+                animated_print("I suppose we'll try again...\n")
 
     return language_id
 
@@ -234,7 +254,7 @@ def prompt_book_id(engine: Engine) -> int:
 
     print("\n", end="")
     prompt = "what was the primary language you READ the book in?"
-    language_id = prompt_language_id(prompt, engine)
+    language_id = prompt_language_id(prompt, engine, VALID_READING_LANGUAGES)
 
     print("\n", end="")
     prompt = "what was the primary language the book was WRITTEN in?"
