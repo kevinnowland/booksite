@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """export reading list"""
 
 from argparse import ArgumentParser
