@@ -487,7 +487,7 @@ def _get_reading_list(engine: Engine) -> list[dict[str, Any]]:
             "original_language": row[10],
             "translator_name": row[11],
             "translator_birth_year": row[12],
-            "translator_gendor": row[13],
+            "translator_gender": row[13],
             "genre": row[14],
             "subgenre": row[15],
             "format": row[16],
