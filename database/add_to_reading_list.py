@@ -215,10 +215,12 @@ def prompt_language_id(
 
         try:
             language_id = get_language_id(language, engine)
+            break
         except DimensionValueNotFoundError:
             if confirm_prompt(f"{language} not found in database. Add it?"):
                 insert_language(language, engine)
                 language_id = get_language_id(language, engine)
+                break
             else:
                 animated_print("I suppose we'll try again...\n")
 
