@@ -24,19 +24,19 @@ pip install -r requirements-dev.txt
 Then can setup the database (which checked into git!) by running
 
 ```bash
-./bin/setup_database.py
+./setup_database.py -p data/production.db
 ```
 
 Can add to the existing database with
 
 ```bash
-./bin/add_entry.py
+./add_to_reading_list.py -p data/production.db
 ```
 
 And export to the app wtih
 
 ```bash
-./bin/export_reading_list.py
+./export_reading_list.py
 ```
 
 
