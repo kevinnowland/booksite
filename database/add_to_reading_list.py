@@ -235,8 +235,8 @@ def prompt_book_id(engine: Engine) -> int:
 
     try:
         book_id = get_book_id(title, author_list_id, engine)
-        print("\n")
-        animated_print("book already exists!")
+        print("\n", end="")
+        animated_print("book already exists!\n")
         if confirm_prompt("want to use existing book?"):
             return book_id
         else:
@@ -297,7 +297,7 @@ def prompt_stopped_reading_date() -> date:
     while True:
         try:
             date_string = animated_input(
-                "when did you stop reading the book? YYYY-MM-DD"
+                "when did you stop reading the book? (YYYY-MM-DD):"
             )
             stopped_reading_date = date.fromisoformat(date_string)
             break
