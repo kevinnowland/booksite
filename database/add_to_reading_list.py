@@ -373,3 +373,5 @@ if __name__ == "__main__":
 
         if not confirm_prompt("add another book?"):
             break
+
+    animated_print("goodbye!\n")
