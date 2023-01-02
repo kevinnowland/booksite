@@ -62,10 +62,20 @@ class Publisher(CamelModel):
     is_independent: bool
 
 
+class Bookstore(CamelModel):
+    name: str
+    city: City
+
+
+class Website(CamelModel):
+    website: str
+    bookstore: Optional[Bookstore]
+
+
 class Purchase(CamelModel):
     date: date
     location_type: PurchaseLocationTypeEnum
-    location: Union[City, str]
+    location: Union[Bookstore, Website]
 
 
 class Author(CamelModel):
@@ -88,7 +98,7 @@ class Book(CamelModel):
 
 class ReadingListEntry(CamelModel):
     books: Book
-    stopped_reading_date: Optional[date]
+    stopped_reading_date: date
     is_read_completely: bool
     purchase: Purchase
     rating: int
