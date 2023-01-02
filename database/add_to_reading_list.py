@@ -152,7 +152,7 @@ def prompt_city_id(engine: Engine) -> int:
         cities = get_cities(city, engine)
         for i, info in enumerate(cities):
             print(f"{i} - {info['city']}, {info['region']} {info['country']}")
-        index = animated_input("if matching city, enter index")
+        index = animated_input("if matching city, enter index:")
         try:
             info = cities[int(index)]
             region = info["region"]
