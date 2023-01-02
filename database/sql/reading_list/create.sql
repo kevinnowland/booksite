@@ -11,6 +11,6 @@ CREATE TABLE reading_list (
     FOREIGN KEY (website_id) REFERENCES website(website_id),
     UNIQUE(book_id, stopped_reading_date),
     CONSTRAINT valid_date CHECK(stopped_reading_date IS date(stopped_reading_date, '+0 days')),
-    CONSTRIANT valid_was_gift CHECK(was_gift = 0 or was_gift = 1),
-    CONSTRIANT valid_is_read_completely CHECK(is_read_completely = 0 or is_read_completely = 1)
+    CONSTRAINT valid_was_gift CHECK(was_gift = 0 or was_gift = 1),
+    CONSTRAINT valid_is_read_completely CHECK(is_read_completely = 0 or is_read_completely = 1)
 );
