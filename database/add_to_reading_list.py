@@ -194,7 +194,7 @@ def prompt_publisher_id(engine: Engine) -> int:
 def prompt_language_id(prompt: str, engine: Engine) -> int:
     """Get language id"""
     language = animated_input(prompt)
-    language = language.lower()
+    language = language.lower().capitalize()
 
     try:
         language_id = get_language_id(language, engine)
