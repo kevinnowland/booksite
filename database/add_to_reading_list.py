@@ -15,7 +15,7 @@ from src.database import (DimensionValueNotFoundError, get_author,
                           get_bookstore_id, get_city_id, get_language_id,
                           get_publisher_id, get_website_id, insert_author,
                           insert_author_list, insert_book, insert_bookstore,
-                          insert_city, insert_language, insert_publisher,
+                          insert_city, insert_language, insert_publisher, get_cities,
                           insert_reading_list, insert_website)
 
 
@@ -147,8 +147,21 @@ def prompt_author_list_id(engine: Engine) -> int:
 def prompt_city_id(engine: Engine) -> int:
     """get city id via prompt"""
     city = animated_input("city:")
-    region = animated_input("region/state/province:")
-    country = animated_input("country:")
+
+    try:
+        cities = get_cities(city, engine)
+        for i, info in enumerate(cities):
+            print(f"{i} - {info['city']}, {info['region']} {info['country']}")
+        index = animated_input("if matching city, enter index")
+        try:
+            info = cities[int(index)]
+            region = info["region"]
+            country = info["country"]
+        except ValueError:
+            animated_print(f"will continue asking for info about {city}")
+    except DimensionValueNotFoundError:
+        region = animated_input("region/state/province:")
+        country = animated_input("country:")
 
     try:
         city_id = get_city_id(city, region, country, engine)
@@ -325,31 +338,38 @@ if __name__ == "__main__":
 
     engine = create_engine("sqlite:///" + args.path)
 
-    print("\nLet's add a book to the reading list!\n")
-    book_id = prompt_book_id(engine)
+    while True:
 
-    print("\n", end="")
-    stopped_reading_date = prompt_stopped_reading_date()
-    is_read_completely = confirm_prompt("did you finish the book?")
+        print("\nLet's add a book to the reading list!\n")
+        book_id = prompt_book_id(engine)
 
-    bookstore_id: int = 0
-    website_id: int = 0
+        print("\n", end="")
+        stopped_reading_date = prompt_stopped_reading_date()
+        is_read_completely = confirm_prompt("did you finish the book?")
 
-    print("\n", end="")
-    if confirm_prompt("was the book purchased online?"):
-        website_id = prompt_website_id(engine)
+        bookstore_id: int = 0
+        website_id: int = 0
 
-        if confirm_prompt("is this website associated with a bookstore?"):
+        print("\n", end="")
+        if confirm_prompt("was the book purchased online?"):
+            website_id = prompt_website_id(engine)
+
+            if confirm_prompt("is this website associated with a bookstore?"):
+                bookstore_id = prompt_bookstore_id(engine)
+        else:
+            animated_print("let's get info about the bookstore then\n")
             bookstore_id = prompt_bookstore_id(engine)
-    else:
-        animated_print("let's get info about the bookstore then")
-        bookstore_id = prompt_bookstore_id(engine)
 
-    insert_reading_list(
-        book_id=book_id,
-        stopped_reading_date=stopped_reading_date,
-        is_read_completely=is_read_completely,
-        bookstore_id=bookstore_id,
-        website_id=website_id,
-        engine=engine,
-    )
+        insert_reading_list(
+            book_id=book_id,
+            stopped_reading_date=stopped_reading_date,
+            is_read_completely=is_read_completely,
+            bookstore_id=bookstore_id,
+            website_id=website_id,
+            engine=engine,
+        )
+
+        animated_print("book successfully added!")
+
+        if not confirm_prompt("add another book?"):
+            break
