@@ -379,6 +379,7 @@ if __name__ == "__main__":
                 animated_print("let's get info about the bookstore then\n")
                 bookstore_id = prompt_bookstore_id(engine)
 
+        print("\n", end="")
         rating = prompt_rating()
 
         insert_reading_list(
