@@ -36,7 +36,7 @@ Can add to the existing database with
 And export to the app wtih
 
 ```bash
-./export_reading_list.py
+./export_reading_list.py -p data/production.db -o ../web/src/data/production.json
 ```
 
 

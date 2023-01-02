@@ -606,7 +606,7 @@ def _parse_raw_reading_list(
     return ReadingList(entries=entries)
 
 
-def export_reading_list(engine: Engine, output_file: str):
+def export_to_json(engine: Engine, output_file: str):
     """export reading list"""
     raw_reading_list = _get_reading_list(engine)
     reading_list = _parse_raw_reading_list(raw_reading_list, engine)
