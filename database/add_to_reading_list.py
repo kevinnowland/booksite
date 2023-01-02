@@ -347,7 +347,8 @@ def prompt_website_id(engine: Engine) -> int:
     try:
         website_id = get_website_id(website, engine)
     except DimensionValueNotFoundError:
-        website_id = insert_website(website, engine)
+        insert_website(website, engine)
+        website_id = get_website_id(website, engine)
 
     return website_id
 
