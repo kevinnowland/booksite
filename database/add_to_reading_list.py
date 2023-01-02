@@ -263,7 +263,7 @@ def prompt_book_id(engine: Engine) -> int:
     original_language_id = prompt_language_id(prompt, engine)
 
     print("\n", end="")
-    published_year = int(animated_input("what year was the book published?"))
+    published_year = int(animated_input("what year was the book originally published?"))
 
     print("\n", end="")
     genre_id = prompt_enum_id(GenreEnum, "what genre is the book?")
