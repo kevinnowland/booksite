@@ -25,15 +25,16 @@ class GenreEnum(int, Enum):
 
 
 class SubgenreEnum(int, Enum):
-    OTHER = 1
+    LITERARY_FICTION = 1
     SCI_FI = 2
     FANTASY = 3
-    MEMOIR = 4
-    BIOGRAPHY = 5
-    HISTORY = 6
-    HISTORICAL_FICTION = 7
+    HISTORICAL_FICTION = 4
+    MEMOIR = 5
+    BIOGRAPHY = 6
+    HISTORY = 7
     TEXT_BOOK = 8
     POETRY = 9
+    OTHER = 10
 
 
 class FormatEnum(int, Enum):
