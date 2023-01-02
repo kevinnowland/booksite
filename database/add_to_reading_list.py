@@ -327,18 +327,22 @@ if __name__ == "__main__":
 
     print("\nLet's add a book to the reading list!\n")
     book_id = prompt_book_id(engine)
+
+    print("\n", end="")
     stopped_reading_date = prompt_stopped_reading_date()
-    is_read_completely = confirm_prompt("Did you finish the book?")
+    is_read_completely = confirm_prompt("did you finish the book?")
 
     bookstore_id: int = 0
     website_id: int = 0
 
-    if confirm_prompt("Was the book purchased online?"):
+    print("\n", end="")
+    if confirm_prompt("was the book purchased online?"):
         website_id = prompt_website_id(engine)
 
-        if confirm_prompt("Is this website associated with a bookstore?"):
+        if confirm_prompt("is this website associated with a bookstore?"):
             bookstore_id = prompt_bookstore_id(engine)
     else:
+        animated_print("let's get info about the bookstore then")
         bookstore_id = prompt_bookstore_id(engine)
 
     insert_reading_list(
