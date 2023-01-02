@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../assets/PublisherList.css'
+import '../assets/PublisherList.css';
 
 
 function toPublisherLi(publisher) {
