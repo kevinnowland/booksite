@@ -1,2 +1,2 @@
-INSERT INTO city (website)
+INSERT INTO website (website)
 VALUES ({website});
