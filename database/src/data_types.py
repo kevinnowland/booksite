@@ -90,3 +90,4 @@ class ReadingListEntry(CamelModel):
     stopped_reading_date: Optional[date]
     is_read_completely: bool
     purchase: Purchase
+    rating: int

@@ -330,6 +330,21 @@ def prompt_website_id(engine: Engine) -> int:
     return website_id
 
 
+def prompt_rating() -> int:
+    while True:
+        raw_rating = animated_input("rating (0-5):")
+        try:
+            rating = int(raw_rating)
+        except ValueError:
+            print("rating must be an integer")
+
+        if rating < 0 or rating > 5:
+            print("rating must be 0-5")
+        else:
+            break
+    return rating
+
+
 if __name__ == "__main__":
 
     parser = ArgumentParser()
@@ -364,6 +379,8 @@ if __name__ == "__main__":
                 animated_print("let's get info about the bookstore then\n")
                 bookstore_id = prompt_bookstore_id(engine)
 
+        rating = prompt_rating()
+
         insert_reading_list(
             book_id=book_id,
             stopped_reading_date=stopped_reading_date,
@@ -371,6 +388,7 @@ if __name__ == "__main__":
             was_gift=was_gift,
             bookstore_id=bookstore_id,
             website_id=website_id,
+            rating=rating,
             engine=engine,
         )
 

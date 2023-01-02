@@ -350,6 +350,7 @@ def insert_reading_list(
     was_gift: bool,
     bookstore_id: int,
     website_id: int,
+    rating: int,
     engine: Engine,
 ):
     """insert into reading list"""
@@ -360,6 +361,7 @@ def insert_reading_list(
         "was_gift": was_gift,
         "bookstore_id": bookstore_id,
         "website_id": website_id,
+        "rating": rating,
     }
     _insert_table("reading_list", engine, **data)
 

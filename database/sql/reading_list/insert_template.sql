@@ -5,7 +5,8 @@ INSERT INTO reading_list
   is_read_completely,
   was_gift,
   bookstore_id,
-  website_id
+  website_id,
+  rating
 )
 VALUES
 (
@@ -14,5 +15,6 @@ VALUES
   {is_read_completely},
   {was_gift},
   {bookstore_id},
-  {website_id}
+  {website_id},
+  {rating}
 );
