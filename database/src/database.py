@@ -455,3 +455,15 @@ def setup_database(engine: Engine):
 
     # fact table
     _create_fact_table("reading_list", engine)
+
+
+def _get_reading_list(engine: Engine) -> list[tuple]:
+    """get entire reading list data"""
+    with open("sql/reading_list/get_reading_list.sql", "r") as f:
+        sql = f.read()
+    return engine.execute(sql).all()  # type: ignore
+
+
+def export_reading_list(engine: Engine) -> str:
+    """export reading list to json"""
+    raise NotImplementedError
