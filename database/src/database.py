@@ -136,7 +136,8 @@ def _create_fact_table(table_name: str, engine: Engine):
 def _munge_sql_val(val: Any) -> str:
     """munge python val into something fitting for sql"""
     if type(val) == str:
-        return f"'{val}'"
+        clean = val.replace("'", "''")
+        return f"'{clean}'"
     elif type(val) == bool:
         return "1" if val else "0"
     elif type(val) == list:
