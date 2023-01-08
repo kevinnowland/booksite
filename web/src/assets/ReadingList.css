@@ -10,9 +10,9 @@ ul.readingList li.entry {
 }
 
 ul.readingList li.entry.completed {
-  background: green;
+  background: #D6FFD6;
 }
 
 ul.readingList li.entry.notCompleted {
-  background: yellow;
+  background: lightyellow;
 }
