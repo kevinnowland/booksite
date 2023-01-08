@@ -66,14 +66,73 @@ function starRating(rating) {
   return stars
 }
 
+function dateText(date_string) {
+  const d = new Date(date_string);
+  const options = {day: 'numeric', month: 'short', year: 'numeric'};
+  const dateString = d.toLocaleDateString("en-US", options)
+  return dateString
+}
+
 function RatingHeader(props) {
-  const entry = props.entry;
+  const rating = props.entry.rating;
+  const stopped_reading_date = props.entry.stopped_reading_date;
   return (
-    <div className="completionHeader">
-      <div className="rating">{starRating(entry.rating)}</div>
-      <div className="stoppedReadingDate">{entry.stopped_reading_date}</div>
+    <div className="ratingHeader">
+      <div className="rating">{starRating(rating)}</div>
+      <div className="stoppedReadingDate">{dateText(stopped_reading_date)}</div>
     </div>
   )
+}
+
+function Publisher(props) {
+  return 'Publisher'
+}
+
+function Translation(props) {
+  const translator = props.translator;
+  const language = props.language;
+  if (translator === null) {
+    return null
+  } else {
+    return (
+      <div>
+        <div>written in {language}</div>
+        <div>translated by {translator.name}</div>
+      </div>
+    )
+  }
+}
+
+function Language(props) {
+  return (
+    <div>
+      <div>{props.language}</div>
+      <Translation language={props.originalLanguage} translator={props.translator} />
+    </div>
+  )
+}
+
+function Book(props) {
+  const book = props.book;
+  const publisher = book.publisher;
+  const language = book.language;
+  const originalLanguage = book.original_language;
+  const translator = book.translator
+  return (
+    <div>
+      Book
+      <Publisher publisher={publisher}/>
+      <Language
+        language={language}
+        originalLanguage={originalLanguage}
+        translator={translator}
+      />
+    </div>
+  )
+}
+
+function Purchase(props) {
+  return 'Purchase'
 }
 
 class Entry extends React.Component {
@@ -87,6 +146,10 @@ class Entry extends React.Component {
           <div className="entryHeader">
             <BookHeader book={entry.book} />
             <RatingHeader entry={entry} />
+          </div>
+          <div className="entryExtra">
+            <Book book={entry.book} />
+            <Purchase purchase={entry.purchase} />
           </div>
         </div>
       </li>

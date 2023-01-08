@@ -22,7 +22,23 @@ li.notCompleted {
   background: lightyellow;
 }
 
+.entryHeader {
+  border-style: solid;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.ratingHeader {
+  text-align: center;
+}
+
 .title {
   font-style: italic;
   font-size: 1.33em;
+}
+
+.entryExtra {
+  margin-top: 5px;
+  border-style: solid;
 }
