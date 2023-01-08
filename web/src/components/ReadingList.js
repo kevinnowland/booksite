@@ -25,12 +25,20 @@ function getEntryKey(entry) {
   return entry.book.title + '-' + entry.stopped_reading_date
 }
 
+function getEntryClassName(entry) {
+  if (entry.is_read_completely) {
+    return "entry completed"
+  } else {
+    return "entry notCompleted"
+  }
+}
+
 class Entry extends React.Component {
 
   render () {
     const entry = this.props.entry
     
-    return <li className="entry">{entry.book.title}</li>
+    return <li className={getEntryClassName(entry)}>{entry.book.title}</li>
   }
 }
 

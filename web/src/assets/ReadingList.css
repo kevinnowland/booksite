@@ -1,0 +1,18 @@
+ul.readingList {
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+ul.readingList li.entry {
+  padding: 5px;
+  margin: 5px;
+}
+
+ul.readingList li.entry.completed {
+  background: green;
+}
+
+ul.readingList li.entry.notCompleted {
+  background: yellow;
+}
