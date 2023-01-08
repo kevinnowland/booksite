@@ -1,13 +1,52 @@
 import React from 'react';
+import _ from "lodash";
 import '../assets/ReadingList.css';
+
+function compareEntries(a, b) {
+  const aDate = new Date(a.stopped_reading_date)
+  const bDate = new Date(b.stopped_reading_date)
+
+  if (aDate < bDate) {
+    return 1
+  } else if (aDate > bDate) {
+    return -1
+  } else {
+    return 0
+  }
+}
+
+function sortRawEntries(entries) {
+  var sortedEntries = _.cloneDeep(entries);
+  sortedEntries.sort(compareEntries);
+  return sortedEntries
+}
+
+function getEntryKey(entry) {
+  return entry.book.title + '-' + entry.stopped_reading_date
+}
+
+class Entry extends React.Component {
+
+  render () {
+    const entry = this.props.entry
+    
+    return <li className="entry">{entry.book.title}</li>
+  }
+}
 
 
 class ReadingList extends React.Component {
 
   render() {
-    return <p> This is a reading list </p>
+    const sortedRawEntries = sortRawEntries(this.props.reading_list.entries);
+    const entries = sortedRawEntries.map((entry) => 
+      <Entry key={getEntryKey(entry)} entry={entry} />
+    );
+
+    return (
+      <ul className="readingList">{entries}</ul>
+    )
   }
 }
-
 
 export default ReadingList;
