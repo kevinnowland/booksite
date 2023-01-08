@@ -122,19 +122,23 @@ function starRating(rating) {
   return stars
 }
 
-function toTableRow(entry) {
+function getTableRowKey(entry) {
+  return entry.book.title + "-" + entry.stopped_reading_date
+}
+
+function TableRow(props) {
   return (
-    <tr key={entry.book.title}>
-      <td className="title">{entry.book.title}</td>
-      <td className="authors">{getAuthors(entry.book.authors)}</td>
-      <td className="language center">{entry.book.language}</td>
-      <td className="originaLanguage center">{getOriginalLanguage(entry.book.language, entry.book.original_language)}</td>
-      <td className="publisher center">{entry.book.publisher.parent_name}</td>
-      <td className="publisherCity center">{getCity(entry.book.publisher.city)}</td>
-      <td className="isIndie center">{checkOrNone(entry.book.publisher.is_independent)}</td>
-      <td className="stoppedReadingDate center">{dateText(entry.stopped_reading_date)}</td>
-      <td className="isReadCompletely center">{checkOrX(entry.is_read_completely)}</td>
-      <td className="starRating center">{starRating(entry.rating)}</td>
+    <tr>
+      <td className="title">{props.entry.book.title}</td>
+      <td className="authors">{getAuthors(props.entry.book.authors)}</td>
+      <td className="language center">{props.entry.book.language}</td>
+      <td className="originaLanguage center">{getOriginalLanguage(props.entry.book.language, props.entry.book.original_language)}</td>
+      <td className="publisher center">{props.entry.book.publisher.parent_name}</td>
+      <td className="publisherCity center">{getCity(props.entry.book.publisher.city)}</td>
+      <td className="isIndie center">{checkOrNone(props.entry.book.publisher.is_independent)}</td>
+      <td className="stoppedReadingDate center">{dateText(props.entry.stopped_reading_date)}</td>
+      <td className="isReadCompletely center">{checkOrX(props.entry.is_read_completely)}</td>
+      <td className="starRating center">{starRating(props.entry.rating)}</td>
     </tr>
   )
 }
@@ -163,7 +167,9 @@ class ReadingList extends React.Component {
   render() {
 
     const sortedEntries = sortEntries(this.props.reading_list.entries)
-    const tableRows = sortedEntries.map(toTableRow);
+    const tableRows = sortedEntries.map((entry) => 
+      <TableRow key={getTableRowKey(entry)} entry={entry} />
+    );
 
     return (
       <div className="readingList">
