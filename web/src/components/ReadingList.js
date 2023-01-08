@@ -3,8 +3,8 @@ import _ from "lodash";
 import '../assets/ReadingList.css';
 
 function compareEntries(a, b) {
-  const aDate = new Date(a.stopped_reading_date)
-  const bDate = new Date(b.stopped_reading_date)
+  const aDate = new Date(a.stoppedReadingDate)
+  const bDate = new Date(b.stoppedReadingDate)
 
   if (aDate < bDate) {
     return 1
@@ -22,11 +22,11 @@ function sortRawEntries(entries) {
 }
 
 function getEntryKey(entry) {
-  return entry.book.title + '-' + entry.stopped_reading_date
+  return entry.book.title + '-' + entry.stoppedReadingDate
 }
 
 function getEntryClassName(entry) {
-  if (entry.is_read_completely) {
+  if (entry.isReadCompletely) {
     return "entry completed"
   } else {
     return "entry notCompleted"
@@ -75,11 +75,11 @@ function dateText(date_string) {
 
 function RatingHeader(props) {
   const rating = props.entry.rating;
-  const stopped_reading_date = props.entry.stopped_reading_date;
+  const stoppedReadingDate = props.entry.stoppedReadingDate;
   return (
     <div className="ratingHeader">
       <div className="rating">{starRating(rating)}</div>
-      <div className="stoppedReadingDate">{dateText(stopped_reading_date)}</div>
+      <div className="stoppedReadingDate">{dateText(stoppedReadingDate)}</div>
     </div>
   )
 }
@@ -116,7 +116,7 @@ function Book(props) {
   const book = props.book;
   const publisher = book.publisher;
   const language = book.language;
-  const originalLanguage = book.original_language;
+  const originalLanguage = book.originalLanguage;
   const translator = book.translator
   return (
     <div>
