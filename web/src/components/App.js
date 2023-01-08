@@ -1,7 +1,6 @@
 import React from 'react';
 import PublisherList from './PublisherList'
 import ReadingList from './ReadingList'
-import ReadingTable from './ReadingTable'
 
 import publishers from '../data/publishers'
 import reading_list from '../data/reading_list'
@@ -30,8 +29,6 @@ class App extends React.Component {
 
         <ReadingList reading_list={this.state.reading_list} />
 
-        <ReadingTable reading_list={this.state.reading_list} />
-        
         <div> <p> Shapefiles from census bureau data </p> </div>
       </div>
     )
