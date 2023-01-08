@@ -84,10 +84,36 @@ function RatingHeader(props) {
   )
 }
 
+function getIsIndependentText(isIndependent) {
+  if (isIndependent) {
+    return 'is indie'
+  } else {
+    return 'is NOT indie'
+  }
+}
+
 function Publisher(props) {
+  var list;
+  if (props.publisher.name === props.publisher.parentName) {
+    list = (
+      <ul className='dashed'>
+        <li key='name'>{props.publisher.name}</li>
+        <li key='isIndependent'>{getIsIndependentText(props.isIndendent)}</li>
+      </ul>
+    )
+  } else {
+      list =(
+        <ul className='dashed'>
+          <li key='name'>{props.publisher.name}</li>
+          <li key='parentName'>{props.publisher.parentName}</li>
+          <li key='isIndependent'>{getIsIndependentText(props.isIndendent)}</li>
+        </ul>
+      )
+  }
   return (
     <div className="publisher">
       <div className='title'><u>Publisher Info</u></div>
+      {list}
     </div>
   )
 }
@@ -96,12 +122,12 @@ function Language(props) {
   var list;
   if (props.translator === null) {
     list = 
-      <ul className="language">
+      <ul className='dashed'>
         <li key="language">read in {props.language}</li>
       </ul>
   } else {
     list = (
-      <ul className="language">
+      <ul className='dashed'>
         <li key="language">read in {props.language}</li>
         <li key="originalLanguage">written in {props.originalLanguage}</li>
           <li key="translator">translated by {props.translator.name}</li>

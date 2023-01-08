@@ -46,6 +46,12 @@ ul.readingList div.entryExtra {
   justify-content: space-around;
 }
 
+ul.readingList div.entryExtra ul.dashed {
+  list-style-type: '- ';
+  text-align: left;
+  padding: 0px;
+}
+
 ul.readingList div.publisher {
   border-style: dashed;
   text-align: left;
@@ -61,12 +67,6 @@ ul.readingList div.language {
 
 ul.readingList div.language div.title {
   text-align: center;
-}
-
-ul.readingList div.language ul.language {
-  list-style-type: '- ';
-  text-align: left;
-  padding: 0px;
 }
 
 ul.readingList div.purchase {
