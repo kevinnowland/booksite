@@ -22,23 +22,23 @@ ul.readingList li.notCompleted {
   background: lightyellow;
 }
 
-ul.readingList .entryHeader {
+ul.readingList div.entryHeader {
   border-style: solid;
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
 }
 
-ul.readingList .ratingHeader {
+ul.readingList div.ratingHeader {
   text-align: center;
 }
 
-ul.readingList .title {
+ul.readingList div.bookHeader div.title {
   font-style: italic;
   font-size: 1.33em;
 }
 
-ul.readingList .entryExtra {
+ul.readingList div.entryExtra {
   margin-top: 5px;
   border-style: solid;
   display: flex;
@@ -46,14 +46,32 @@ ul.readingList .entryExtra {
   justify-content: space-around;
 }
 
-ul.readingList .publisher {
+ul.readingList div.publisher {
+  border-style: dashed;
+  text-align: left;
+}
+
+ul.readingList div.publisher div.title {
+  text-align: center;
+}
+
+ul.readingList div.language {
   border-style: dashed;
 }
 
-ul.readingList .language {
-  border-style: dashed;
+ul.readingList div.language div.title {
+  text-align: center;
 }
 
-ul.readingList .purchase {
+ul.readingList div.language ul.readingList {
+  text-align: left;
+}
+
+ul.readingList div.purchase {
   border-style: dashed;
+  text-align: left;
+}
+
+ul.readingList div.purchase div.title {
+  text-align: center;
 }

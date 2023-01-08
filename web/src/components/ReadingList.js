@@ -85,35 +85,43 @@ function RatingHeader(props) {
 }
 
 function Publisher(props) {
-  return <div className="publisher">Publisher</div>
-}
-
-function Translation(props) {
-  const translator = props.translator;
-  const language = props.language;
-  if (translator === null) {
-    return null
-  } else {
-    return (
-      <div>
-        <div>written in {language}</div>
-        <div>translated by {translator.name}</div>
-      </div>
-    )
-  }
+  return (
+    <div className="publisher">
+      <div className='title'><u>Publisher Info</u></div>
+    </div>
+  )
 }
 
 function Language(props) {
+  var list;
+  if (props.translator === null) {
+    list = 
+      <ul className="language">
+        <li key="language">read in {props.language}</li>
+      </ul>
+  } else {
+    list = (
+      <ul className="language">
+        <li key="language">read in {props.language}</li>
+        <li key="originalLanguage">written in {props.originalLanguage}</li>
+          <li key="translator">translated by {props.translator.name}</li>
+      </ul>
+    )
+  }
   return (
     <div className='language'>
-      <div>{props.language}</div>
-      <Translation language={props.originalLanguage} translator={props.translator} />
+      <div className='title'><u>Language Info</u></div>
+      {list}
     </div>
   )
 }
 
 function Purchase(props) {
-  return <div className='purchase'>Purchase</div>
+  return (
+    <div className='purchase'>
+      <div className='title'><u>Purchase Info</u></div>
+    </div>
+  )
 }
 
 class Entry extends React.Component {
