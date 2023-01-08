@@ -92,24 +92,92 @@ function getIsIndependentText(isIndependent) {
   }
 }
 
-function Publisher(props) {
-  var list;
-  if (props.publisher.name === props.publisher.parentName) {
-    list = (
-      <ul className='dashed'>
-        <li key='name'>{props.publisher.name}</li>
-        <li key='isIndependent'>{getIsIndependentText(props.isIndendent)}</li>
-      </ul>
-    )
+function getNameText(name, parentName) {
+  if (name === parentName) {
+    return name
   } else {
-      list =(
-        <ul className='dashed'>
-          <li key='name'>{props.publisher.name}</li>
-          <li key='parentName'>{props.publisher.parentName}</li>
-          <li key='isIndependent'>{getIsIndependentText(props.isIndendent)}</li>
-        </ul>
-      )
+    return name + ' (' + parentName + ')'
   }
+}
+
+function getCity(city) {
+  const stateAbbrevs = new Map([
+    ["Alabama", "AL"],
+    ["Alaska", "AK"],
+    ["Arizona", "AZ"],
+    ["Arkansa", "AR"],
+    ["California", "CA"],
+    ["Colorado", "CO"],
+    ["Connecticut", "CT"],
+    ["Delaware", "DE"],
+    ["D.C.", "DC"],
+    ["DC", "DC"],
+    ["District of Columbia", "DC"],
+    ["Florida", "FL"],
+    ["Georgia", "GA"],
+    ["Hawaii", "HI"],
+    ["Idaho", "ID"],
+    ["Illinois", "IL"],
+    ["Indiana", "IN"],
+    ["Iowa", "IA"],
+    ["Kansas", "KS"],
+    ["Kentucky", "KY"],
+    ["Louisiana", "LA"],
+    ["Maine", "ME"],
+    ["Maryland", "MD"],
+    ["Massachusetts", "MA"],
+    ["Michigan", "MI"],
+    ["Minnesota", "MN"],
+    ["Mississippi", "MS"],
+    ["Missouri", "MO"],
+    ["Montana", "MT"],
+    ["Nebraska", "NE"],
+    ["Nevada", "NV"],
+    ["New Hampshire", "NH"],
+    ["New Jersey", "NJ"],
+    ["New Mexico", "NM"],
+    ["New York", "NY"],
+    ["North Carolina", "NC"],
+    ["North Dakota", "ND"],
+    ["Ohio", "OH"],
+    ["Oklahoma", "OK"],
+    ["Oregon", "OR"],
+    ["Pennsylvania", "OR"],
+    ["Puerto Rico", "PR"],
+    ["Rhode Island", "RI"],
+    ["South Carolina", "SC"],
+    ["South Dakota", "SD"],
+    ["Tennessee", "TN"],
+    ["Texas", "TX"],
+    ["Utah", "UT"],
+    ["Vermont", "UT"],
+    ["Virgin Islands", "VI"],
+    ["Virginia", "VA"],
+    ["Washington", "WA"],
+    ["West Virginia", "WV"],
+    ["Wisconsin", "WI"],
+    ["Wyoming", "WY"]
+  ]);
+
+  if (city.country === "United States") {
+    return city.city + ", " + stateAbbrevs.get(city.region)
+  } else {
+    return city.city + ", " + city.country
+  }
+}
+
+function Publisher(props) {
+  const name = props.publisher.name;
+  const parentName = props.publisher.parentName;
+  const city = props.publisher.city;
+  const list = (
+    <ul className='dashed'>
+      <li key='name'>{getNameText(name, parentName)}</li>
+      <li key='city'>{getCity(city)}</li>
+      <li key='isIndependent'>{getIsIndependentText(props.isIndendent)}</li>
+    </ul>
+  );
+
   return (
     <div className="publisher">
       <div className='title'><u>Publisher Info</u></div>
@@ -121,18 +189,19 @@ function Publisher(props) {
 function Language(props) {
   var list;
   if (props.translator === null) {
-    list = 
+    list = (
       <ul className='dashed'>
         <li key="language">read in {props.language}</li>
       </ul>
+    );
   } else {
     list = (
       <ul className='dashed'>
         <li key="language">read in {props.language}</li>
         <li key="originalLanguage">written in {props.originalLanguage}</li>
-          <li key="translator">translated by {props.translator.name}</li>
+        <li key="translator">translated by {props.translator.name}</li>
       </ul>
-    )
+    );
   }
   return (
     <div className='language'>
