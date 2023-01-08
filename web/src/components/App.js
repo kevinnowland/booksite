@@ -28,6 +28,8 @@ class App extends React.Component {
         </div>
 
         <ReadingList reading_list={this.state.reading_list} />
+        
+        <div> <p> Shapefiles from census bureau data </p> </div>
       </div>
     )
   }
