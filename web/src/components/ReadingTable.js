@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from "lodash";
-import '../assets/ReadingList.css';
+import '../assets/ReadingTable.css';
 
 function getCity(city) {
   const stateAbbrevs = new Map([
@@ -162,7 +162,7 @@ function sortEntries(entries) {
   return sortedEntries
 }
 
-class ReadingList extends React.Component {
+class ReadingTable extends React.Component {
 
   render() {
 
@@ -172,8 +172,8 @@ class ReadingList extends React.Component {
     );
 
     return (
-      <div className="readingList">
-        <table className="readingList">
+      <div className="readingTable">
+        <table className="readingTable">
           <thead>
             <tr>
               <th className="title">Title</th>
@@ -195,4 +195,4 @@ class ReadingList extends React.Component {
   }
 }
 
-export default ReadingList;
+export default ReadingTable;

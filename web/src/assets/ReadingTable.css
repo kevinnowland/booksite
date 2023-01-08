@@ -1,0 +1,20 @@
+table.readingTable {
+  border-collapse: collapse;
+}
+
+table.readingTable tr, th, td {
+  border: 1px solid black;
+  padding: 0.5rem;
+}
+
+table.readingTable tbody tr:nth-child(odd) {
+  background: #eee;
+}
+
+table.readingTable td.center {
+  text-align: center;
+}
+
+table.readingTable td.title {
+  font-style: italic;
+}
