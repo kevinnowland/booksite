@@ -612,4 +612,4 @@ def export_to_json(engine: Engine, output_file: str):
     reading_list = _parse_raw_reading_list(raw_reading_list, engine)
 
     with open(output_file, "w") as f:
-        f.write(reading_list.json())
+        f.write(reading_list.json(by_alias=True))
