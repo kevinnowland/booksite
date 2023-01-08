@@ -44,17 +44,50 @@ function getAuthors(authors) {
   return author_list
 }
 
+function BookHeader(props) {
+  const book = props.book;
+  return (
+    <div className="bookHeader">
+      <div className="title">{book.title}</div>
+      <div className="authors">{getAuthors(book.authors)}</div>
+    </div>
+  )
+}
+
+function starRating(rating) {
+  var stars = ""
+  for (let i = 0; i < 5; i ++) {
+    if (i < rating ) {
+      stars += "\u2605"
+    } else {
+      stars += "\u2606"
+    }
+  }
+  return stars
+}
+
+function RatingHeader(props) {
+  const entry = props.entry;
+  return (
+    <div className="completionHeader">
+      <div className="rating">{starRating(entry.rating)}</div>
+      <div className="stoppedReadingDate">{entry.stopped_reading_date}</div>
+    </div>
+  )
+}
+
 class Entry extends React.Component {
 
   render () {
     const entry = this.props.entry
     
     return (
-        <li className={getEntryClassName(entry)}>
+      <li className={getEntryClassName(entry)}>
         <div className="entry">
-          <div className="title">{entry.book.title}</div>
-          <div className="authors">{getAuthors(entry.book.authors)}</div>
-          <div className="stoppedReadingDate">{entry.stopped_reading_date}</div>
+          <div className="entryHeader">
+            <BookHeader book={entry.book} />
+            <RatingHeader entry={entry} />
+          </div>
         </div>
       </li>
     )

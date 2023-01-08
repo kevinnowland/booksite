@@ -4,15 +4,25 @@ ul.readingList {
   margin: 0px;
 }
 
-ul.readingList li.entry {
-  padding: 5px;
-  margin: 5px;
+li.entry {
+  padding: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 10%;
+  margin-left: 10%;
+
+  border-radius:10px;
 }
 
-ul.readingList li.entry.completed {
+li.completed {
   background: #D6FFD6;
 }
 
-ul.readingList li.entry.notCompleted {
+li.notCompleted {
   background: lightyellow;
+}
+
+.title {
+  font-style: italic;
+  font-size: 1.33em;
 }
