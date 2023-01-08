@@ -33,12 +33,31 @@ function getEntryClassName(entry) {
   }
 }
 
+function getAuthors(authors) {
+  var author_list = "";
+  authors.forEach((author, i) => {
+    if (i > 0) {
+      author_list += ", "
+    }
+    author_list += author.name
+  });
+  return author_list
+}
+
 class Entry extends React.Component {
 
   render () {
     const entry = this.props.entry
     
-    return <li className={getEntryClassName(entry)}>{entry.book.title}</li>
+    return (
+        <li className={getEntryClassName(entry)}>
+        <div className="entry">
+          <div className="title">{entry.book.title}</div>
+          <div className="authors">{getAuthors(entry.book.authors)}</div>
+          <div className="stoppedReadingDate">{entry.stopped_reading_date}</div>
+        </div>
+      </li>
+    )
   }
 }
 
