@@ -10,7 +10,7 @@ class App extends React.Component {
     super(props)
     this.state = {
       "publishers": publishers,
-      "reading_list": reading_list,
+      "readingList": reading_list,
     };
   }
 
@@ -27,7 +27,7 @@ class App extends React.Component {
           })}
         </div>
 
-        <ReadingList reading_list={this.state.reading_list} />
+        <ReadingList readingList={this.state.readingList} />
 
         <div> <p> Shapefiles from census bureau data </p> </div>
       </div>

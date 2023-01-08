@@ -161,7 +161,7 @@ class Entry extends React.Component {
 class ReadingList extends React.Component {
 
   render() {
-    const sortedRawEntries = sortRawEntries(this.props.reading_list.entries);
+    const sortedRawEntries = sortRawEntries(this.props.readingList.entries);
     const entries = sortedRawEntries.map((entry) => 
       <Entry key={getEntryKey(entry)} entry={entry} />
     );
