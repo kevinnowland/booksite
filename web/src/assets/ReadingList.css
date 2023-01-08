@@ -4,7 +4,7 @@ ul.readingList {
   margin: 0px;
 }
 
-li.entry {
+ul.readingList li.entry {
   padding: 20px;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -14,31 +14,46 @@ li.entry {
   border-radius:10px;
 }
 
-li.completed {
+ul.readingList li.completed {
   background: #D6FFD6;
 }
 
-li.notCompleted {
+ul.readingList li.notCompleted {
   background: lightyellow;
 }
 
-.entryHeader {
+ul.readingList .entryHeader {
   border-style: solid;
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
 }
 
-.ratingHeader {
+ul.readingList .ratingHeader {
   text-align: center;
 }
 
-.title {
+ul.readingList .title {
   font-style: italic;
   font-size: 1.33em;
 }
 
-.entryExtra {
+ul.readingList .entryExtra {
   margin-top: 5px;
   border-style: solid;
+  display: flex;
+  flex-wrap: no-wrap;
+  justify-content: space-around;
+}
+
+ul.readingList .publisher {
+  border-style: dashed;
+}
+
+ul.readingList .language {
+  border-style: dashed;
+}
+
+ul.readingList .purchase {
+  border-style: dashed;
 }
