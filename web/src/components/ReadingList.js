@@ -85,7 +85,7 @@ function RatingHeader(props) {
 }
 
 function Publisher(props) {
-  return 'Publisher'
+  return <div className="publisher">Publisher</div>
 }
 
 function Translation(props) {
@@ -105,40 +105,26 @@ function Translation(props) {
 
 function Language(props) {
   return (
-    <div>
+    <div className='language'>
       <div>{props.language}</div>
       <Translation language={props.originalLanguage} translator={props.translator} />
     </div>
   )
 }
 
-function Book(props) {
-  const book = props.book;
-  const publisher = book.publisher;
-  const language = book.language;
-  const originalLanguage = book.originalLanguage;
-  const translator = book.translator
-  return (
-    <div>
-      Book
-      <Publisher publisher={publisher}/>
-      <Language
-        language={language}
-        originalLanguage={originalLanguage}
-        translator={translator}
-      />
-    </div>
-  )
-}
-
 function Purchase(props) {
-  return 'Purchase'
+  return <div className='purchase'>Purchase</div>
 }
 
 class Entry extends React.Component {
 
   render () {
-    const entry = this.props.entry
+    const entry = this.props.entry;
+    const book = entry.book;
+    const language = book.language;
+    const originalLanguage = book.originalLanguage;
+    const translator = book.translator;
+    const publisher = book.publisher;
     
     return (
       <li className={getEntryClassName(entry)}>
@@ -148,7 +134,12 @@ class Entry extends React.Component {
             <RatingHeader entry={entry} />
           </div>
           <div className="entryExtra">
-            <Book book={entry.book} />
+            <Publisher publisher={publisher}/>
+            <Language
+              language={language}
+              originalLanguage={originalLanguage}
+              translator={translator}
+            />
             <Purchase purchase={entry.purchase} />
           </div>
         </div>
