@@ -191,26 +191,30 @@ function Publisher(props) {
 }
 
 function Language(props) {
-  var list;
+  console.log(props);
+  const language = props.language;
+  const originalLanguage = props.originalLanguage;
+
+  var languageText;
+
   if (props.translator === null) {
-    list = (
-      <ul className='dashed'>
-        <li key="language">read in {props.language}</li>
-      </ul>
+    languageText = (
+      <div>This book was written and read in <b>{language}</b>.</div>
     );
   } else {
-    list = (
-      <ul className='dashed'>
-        <li key="language">read in {props.language}</li>
-        <li key="originalLanguage">written in {props.originalLanguage}</li>
-        <li key="translator">translated by {props.translator.name}</li>
-      </ul>
+    const translatorName = props.translator.name;
+    languageText = (
+      <div>
+        This book was read in <b>{language}</b>,
+        but was written in <b>{originalLanguage}</b> and
+        translated by <b>{translatorName}</b>.
+      </div>
     );
   }
   return (
     <div className='language'>
       <div className='title'><u>Language Info</u></div>
-      {list}
+      {languageText}
     </div>
   )
 }
