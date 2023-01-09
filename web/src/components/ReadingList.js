@@ -191,7 +191,6 @@ function Publisher(props) {
 }
 
 function Language(props) {
-  console.log(props);
   const language = props.language;
   const originalLanguage = props.originalLanguage;
 
@@ -244,7 +243,6 @@ function Purchase(props) {
     info = <div>This book was a gift!</div>
   } else if (locationType === "BOOKSTORE") {
     if (location.isLibrary) {
-      console.log(location)
       info = <div>borrowed from {location.name} in {getCity(location.city)}</div>
     } else {
       info = <Bookstore name={location.name} city={location.city} />
