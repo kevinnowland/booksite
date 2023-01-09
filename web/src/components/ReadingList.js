@@ -218,42 +218,42 @@ function Language(props) {
   )
 }
 
-function Bookstore(props) {
-  var city;
-  if (props.city.city === '') {
-    city = ''
-  } else {
-    city = getCity(props.city);
-  }
-  const name = props.name;
-
-  return (
-    <div className="bookstore">
-      <div>{name}</div>
-      <div>{city}</div>
-    </div>
-  )
-}
 
 function Purchase(props) {
   const locationType = props.purchase.locationType;
   const location = props.purchase.location;
+
   var info = '';
+
   if (locationType === "GIFT") {
-    info = <div>This book was a gift!</div>
+    info = <div>This book was a <b>gift</b>!</div>
   } else if (locationType === "BOOKSTORE") {
     if (location.isLibrary) {
-      info = <div>borrowed from {location.name} in {getCity(location.city)}</div>
+      info = (
+        <div>
+          This book was borrowed from <b>{location.name}</b>
+          in {getCity(location.city)}.
+        </div>
+      )
     } else {
-      info = <Bookstore name={location.name} city={location.city} />
+      info = (
+        <div>
+          This book was purchased from <b>{location.name}</b> in {getCity(location.city)}
+        </div>
+      )
     }
   } else if (locationType === "WEBSITE") {
-    info = <div>{location.website}</div>
+    info = (
+      <div>
+        This book was purchased on <b>{location.website}</b>.
+      </div>
+    )
   } else {
     info = (
       <div>
-        <Bookstore name={location.name} city={location.city} />
-        <div><i>via</i> {location.website}</div>
+        This book was purchased on <b>{location.website}</b>,
+        which is affiliated with <b>{location.name}</b> in
+        {getCity(location.city)}.
       </div>
     )
   }
