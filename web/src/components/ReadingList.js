@@ -211,10 +211,51 @@ function Language(props) {
   )
 }
 
+function Bookstore(props) {
+  var city;
+  if (props.city.city === '') {
+    city = ''
+  } else {
+    city = getCity(props.city);
+  }
+  const name = props.name;
+
+  return (
+    <div className="bookstore">
+      <div>{name}</div>
+      <div>{city}</div>
+    </div>
+  )
+}
+
 function Purchase(props) {
+  const locationType = props.purchase.locationType;
+  const location = props.purchase.location;
+  var info = '';
+  if (locationType === "GIFT") {
+    info = <div>This book was a gift!</div>
+  } else if (locationType === "BOOKSTORE") {
+    if (location.isLibrary) {
+      console.log(location)
+      info = <div>borrowed from {location.name} in {getCity(location.city)}</div>
+    } else {
+      info = <Bookstore name={location.name} city={location.city} />
+    }
+  } else if (locationType === "WEBSITE") {
+    info = <div>{location.website}</div>
+  } else {
+    info = (
+      <div>
+        <Bookstore name={location.name} city={location.city} />
+        <div><i>via</i> {location.website}</div>
+      </div>
+    )
+  }
+
   return (
     <div className='purchase'>
       <div className='title'><u>Purchase Info</u></div>
+      {info}
     </div>
   )
 }
