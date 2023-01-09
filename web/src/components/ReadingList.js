@@ -86,17 +86,9 @@ function RatingHeader(props) {
 
 function getIsIndependentText(isIndependent) {
   if (isIndependent) {
-    return 'is indie'
+    return 'which IS an indie press.'
   } else {
-    return 'is NOT indie'
-  }
-}
-
-function getNameText(name, parentName) {
-  if (name === parentName) {
-    return name
-  } else {
-    return name + ' (' + parentName + ')'
+    return 'which is not an indie press.'
   }
 }
 
@@ -170,20 +162,27 @@ function Publisher(props) {
   const name = props.publisher.name;
   const parentName = props.publisher.parentName;
   const city = props.publisher.city;
-  const list = (
-    <ul className='dashed'>
-      <li key='name'>{getNameText(name, parentName)}</li>
-      <li key='city'>{getCity(city)}</li>
-      <li key='isIndependent'>{getIsIndependentText(props.isIndendent)}</li>
-    </ul>
-  );
+  const isIndependent = props.publisher.isIndependent;
 
-  return (
-    <div className="publisher">
-      <div className='title'><u>Publisher Info</u></div>
-      {list}
-    </div>
-  )
+  const nameText = "Published by " + name +  " (" + getCity(city) + ")";
+  const parentNameText = "an imprint of " + parentName;
+  const indieText = getIsIndependentText(isIndependent);
+
+  if (name === parentName) {
+    return (
+      <div className="publisher">
+        <div className="title"><u>Publisher Info</u></div>
+        <div>{nameText + ", " + indieText}</div>
+      </div>
+    )
+  } else {
+    return (
+      <div className="publisher">
+        <div className="title"><u>Publisher Info</u></div>
+        <div>{nameText + ", " + parentNameText + ", " + indieText}</div>
+      </div>
+    )
+  }
 }
 
 function Language(props) {
