@@ -261,6 +261,28 @@ function Purchase(props) {
 }
 
 class Entry extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showExtra: false
+    };
+
+    this.handleClick= this.handleClick.bind(this);
+  }
+
+  getDisplay() {
+    if (this.state.showExtra) {
+      return "inline"
+    } else {
+      return "none"
+    }
+  }
+
+  handleClick() {
+    this.setState(prevState => ({
+      showExtra: !prevState.showExtra
+    }));
+  }
 
   render () {
     const entry = this.props.entry;
@@ -270,14 +292,23 @@ class Entry extends React.Component {
     const translator = book.translator;
     const publisher = book.publisher;
     
+    var style = null;
+    if (!this.state.showExtra) {
+      style = {display: 'none'}
+    }
+
+    
     return (
       <li className={getEntryClassName(entry)}>
-        <div className="entry">
+        <div className="entry" onClick={this.handleClick}>
           <div className="entryHeader">
             <BookHeader book={entry.book} />
             <RatingHeader entry={entry} />
           </div>
-          <div className="entryExtra">
+          <div
+            className="entryExtra"
+            style={style}
+          >
             <Publisher publisher={publisher}/>
             <Language
               language={language}
