@@ -12,6 +12,8 @@ ul.readingList li.entry {
   margin-left: 10%;
 
   border-radius:10px;
+
+  font-size:1.33em;
 }
 
 ul.readingList li.completed {
@@ -23,9 +25,8 @@ ul.readingList li.notCompleted {
 }
 
 ul.readingList div.entryHeader {
-  border-style: solid;
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 
@@ -35,15 +36,16 @@ ul.readingList div.ratingHeader {
 
 ul.readingList div.bookHeader div.title {
   font-style: italic;
-  font-size: 1.33em;
+  font-size: 1.5em;
 }
 
 ul.readingList div.entryExtra {
-  margin-top: 5px;
   border-style: solid;
+  border-radius: 5px;
+  margin-top: 10px;
+  padding: 5px;
   display: flex;
-  flex-wrap: no-wrap;
-  justify-content: space-around;
+  flex-wrap: wrap;
 }
 
 ul.readingList div.entryExtra ul.dashed {
@@ -53,8 +55,10 @@ ul.readingList div.entryExtra ul.dashed {
 }
 
 ul.readingList div.publisher {
-  border-style: dashed;
   text-align: left;
+  width: 25%;
+  padding-left: 4%;
+  padding-right: 4%;
 }
 
 ul.readingList div.publisher div.title {
@@ -62,7 +66,9 @@ ul.readingList div.publisher div.title {
 }
 
 ul.readingList div.language {
-  border-style: dashed;
+  width: 25%;
+  padding-left: 4%;
+  padding-right: 4%;
 }
 
 ul.readingList div.language div.title {
@@ -70,8 +76,10 @@ ul.readingList div.language div.title {
 }
 
 ul.readingList div.purchase {
-  border-style: dashed;
   text-align: left;
+  width: 25%;
+  padding-left: 4%;
+  padding-right: 4%;
 }
 
 ul.readingList div.purchase div.title {
