@@ -66,6 +66,7 @@ class Publisher(CamelModel):
 class Bookstore(CamelModel):
     name: str
     city: City
+    is_library: bool
 
 
 class Website(CamelModel):

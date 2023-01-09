@@ -258,9 +258,12 @@ def prompt_book_id(engine: Engine) -> int:
     prompt = "what was the primary language you READ the book in?"
     language_id = prompt_language_id(prompt, engine, VALID_READING_LANGUAGES)
 
-    print("\n", end="")
-    prompt = "what was the primary language the book was WRITTEN in?"
-    original_language_id = prompt_language_id(prompt, engine)
+    if translator_id == 0:
+        print("\n", end="")
+        prompt = "what was the primary language the book was WRITTEN in?"
+        original_language_id = prompt_language_id(prompt, engine)
+    else:
+        original_language_id = language_id
 
     print("\n", end="")
     published_year = int(animated_input("what year was the book originally published?"))
@@ -316,10 +319,11 @@ def prompt_bookstore_id(engine: Engine) -> int:
         bookstore_id = get_bookstore_id(name, engine)
         animated_print("using existing bookstore")
     except DimensionValueNotFoundError:
+        is_library = confirm_prompt("Is bookstore a library?")
         animated_print("where is the bookstore located?\n")
         city_id = prompt_city_id(engine)
 
-        insert_bookstore(name, city_id, engine)
+        insert_bookstore(name, city_id, is_library, engine)
         bookstore_id = get_bookstore_id(name, engine)
 
     return bookstore_id

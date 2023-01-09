@@ -24,6 +24,7 @@ SELECT
     bc.city AS bookstore_city,
     bc.region AS bookstore_region,
     bc.country AS bookstore_country,
+    bs.is_library AS bookstore_is_library,
     rl.rating
 FROM
     reading_list AS rl

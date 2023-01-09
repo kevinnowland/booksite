@@ -343,11 +343,12 @@ def insert_book(
     _insert_table("book", engine, **data)
 
 
-def insert_bookstore(name: str, city_id: int, engine: Engine):
+def insert_bookstore(name: str, city_id: int, is_library: bool, engine: Engine):
     """insert bookstore into bookstore table"""
     data = {
         "name": name,
         "city_id": city_id,
+        "is_library": is_library,
     }
     _insert_table("bookstore", engine, **data)
 
@@ -499,7 +500,8 @@ def _get_reading_list(engine: Engine) -> list[dict[str, Any]]:
             "bookstore_city": row[22],
             "bookstore_region": row[23],
             "bookstore_country": row[24],
-            "rating": row[25],
+            "bookstore_is_library": row[25],
+            "rating": row[26],
         }
         for row in rows
     ]
@@ -553,6 +555,7 @@ def _parse_raw_reading_list(
                         region=row["bookstore_region"],
                         country=row["bookstore_country"],
                     ),
+                    is_library=row["is_library"],
                 )
             if row["website"] != "":
                 website = Website(website=row["website"], bookstore=bookstore)
