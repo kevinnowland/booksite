@@ -555,7 +555,7 @@ def _parse_raw_reading_list(
                         region=row["bookstore_region"],
                         country=row["bookstore_country"],
                     ),
-                    is_library=row["is_library"],
+                    is_library=row["bookstore_is_library"],
                 )
             if row["website"] != "":
                 website = Website(website=row["website"], bookstore=bookstore)
