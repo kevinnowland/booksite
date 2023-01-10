@@ -231,8 +231,7 @@ function Purchase(props) {
     if (location.isLibrary) {
       info = (
         <div>
-          This book was borrowed from <b>{location.name}</b>
-          in {getCity(location.city)}.
+          This book was borrowed from <b>{location.name}</b> in {getCity(location.city)}.
         </div>
       )
     } else {
