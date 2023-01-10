@@ -234,15 +234,6 @@ function Purchase(props) {
 }
 
 
-function getEntryClassName(entry) {
-  if (entry.isReadCompletely) {
-    return "entry completed"
-  } else {
-    return "entry notCompleted"
-  }
-}
-
-
 class Entry extends React.Component {
   constructor(props) {
     super(props);
@@ -251,6 +242,14 @@ class Entry extends React.Component {
     };
 
     this.handleClick= this.handleClick.bind(this);
+  }
+
+  getClassName() {
+    if (this.props.entry.isReadCompletely) {
+      return "entry completed"
+    } else {
+      return "entry notCompleted"
+    }
   }
 
   getDisplay() {
@@ -282,7 +281,7 @@ class Entry extends React.Component {
 
     
     return (
-      <li className={getEntryClassName(entry)}>
+      <li className={this.getClassName()}>
         <div className="entry" onClick={this.handleClick}>
           <div className="entryHeader">
             <BookHeader book={entry.book} />
