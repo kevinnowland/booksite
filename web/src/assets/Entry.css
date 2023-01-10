@@ -1,0 +1,85 @@
+li.entry {
+  padding: 20px;
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 10%;
+  margin-left: 10%;
+
+  border-radius:10px;
+
+  font-size:1.33em;
+  
+  cursor: pointer;
+}
+
+li.entry.completed {
+  background: #D6FFD6;
+}
+
+li.entry.notCompleted {
+  background: lightyellow;
+}
+
+li.entry div.entryHeader {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+li.entry div.ratingHeader {
+  text-align: center;
+}
+
+li.entry div.bookHeader div.title {
+  font-style: italic;
+  font-size: 1.5em;
+}
+
+li.entry div.entryExtra {
+  border-style: solid;
+  border-radius: 5px;
+  margin-top: 10px;
+  padding: 5px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+li.entry div.entryExtra ul.dashed {
+  list-style-type: '- ';
+  text-align: left;
+  padding: 0px;
+}
+
+li.entry div.publisher {
+  text-align: left;
+  width: 25%;
+  padding-left: 4%;
+  padding-right: 4%;
+}
+
+li.entry div.publisher div.title {
+  text-align: center;
+}
+
+li.entry div.language {
+  width: 25%;
+  padding-left: 4%;
+  padding-right: 4%;
+}
+
+li.entry div.language div.title {
+  text-align: center;
+}
+
+li.entry div.purchase {
+  text-align: left;
+  width: 25%;
+  padding-left: 4%;
+  padding-right: 4%;
+}
+
+li.entry div.purchase div.title {
+  text-align: center;
+}
+
