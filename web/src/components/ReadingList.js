@@ -22,16 +22,12 @@ function sortRawEntries(entries) {
   return sortedEntries
 }
 
-function getEntryKey(entry) {
-  return entry.book.title + '-' + entry.stoppedReadingDate
-}
-
 class ReadingList extends React.Component {
 
   render() {
     const sortedRawEntries = sortRawEntries(this.props.readingList.entries);
     const entries = sortedRawEntries.map((entry) => 
-      <Entry key={getEntryKey(entry)} entry={entry} />
+      <Entry key={entry.readingListId} entry={entry} />
     );
 
     return (
