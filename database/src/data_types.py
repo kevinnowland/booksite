@@ -99,6 +99,7 @@ class Book(CamelModel):
 
 
 class ReadingListEntry(CamelModel):
+    reading_list_id: int
     book: Book
     stopped_reading_date: date
     is_read_completely: bool

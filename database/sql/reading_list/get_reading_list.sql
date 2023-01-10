@@ -1,4 +1,5 @@
 SELECT
+    rl.reading_list_id,
     b.title,
     al.author_list,
     b.published_year,
