@@ -165,7 +165,14 @@ class ReadingList extends React.Component {
   }
 
   render() {
-    const sortValues = ["date read", "publisher", "date published", "genre", "purchase"];
+    const sortValues = [
+      "date read",
+      "publisher",
+      "date published",
+      "language",
+      "genre",
+      "purchase info"
+    ];
     const buttons = sortValues.map((value) => (
       <button
         key={value}
