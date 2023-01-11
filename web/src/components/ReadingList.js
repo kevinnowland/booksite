@@ -50,6 +50,14 @@ function sortMapKeysEntryLength(m, asc) {
   }
 }
 
+function sortMapEntries(m) {
+  const n = _.cloneDeep(m);
+  for (let [k, v] of n) {
+    n.set(k, sortRawEntries(v))
+  }
+  return n
+}
+
 // TODO: add unit test
 function sortEntriesByDateRead(entries) {
   const entryMap = new Map();
@@ -65,11 +73,9 @@ function sortEntriesByDateRead(entries) {
     }
   }
 
-  for (let [k, v] of entryMap) {
-    entryMap.set(k, sortRawEntries(v))
-  }
+  const sortedMap = sortMapEntries(entryMap)
   
-  return sortMapKeys(entryMap, false)
+  return sortMapKeys(sortedMap, false)
 }
 
 function getIsIndieKey(entry) {
@@ -101,13 +107,29 @@ function sortEntriesByPublisher(entries) {
 
   const sortedMap = sortMapKeys(entryMap, true);
   for (let [k, v] of sortedMap) {
-    for (let [kk, vv] of v) {
-      v.set(kk, sortRawEntries(vv))
-    }
-    sortedMap.set(k, sortMapKeysEntryLength(v, false));
+    const sortedV = sortMapEntries(v);
+    sortedMap.set(k, sortMapKeysEntryLength(sortedV, false));
   }
 
   return sortedMap
+}
+
+// TODO: add unit test
+function sortEntriesByDatePublished(entries) {
+  const entryMap = new Map();
+
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const publishedYear = entry.book.publishedYear;
+    if (entryMap.has(publishedYear)) {
+      entryMap.get(publishedYear).push(entry);
+    } else {
+      entryMap.set(publishedYear, [entry])
+    }
+  }
+
+  const sortedMap = sortMapEntries(entryMap)
+  return sortMapKeys(sortedMap, false);
 }
 
 function splitWords(str) {
@@ -160,6 +182,9 @@ class ReadingList extends React.Component {
     const entries = sortedRawEntries.map((entry) => 
       <Entry key={entry.readingListId} entry={entry} />
     );
+    
+    const publishedYearEntries = sortEntriesByDatePublished(this.props.readingList.entries);
+    console.log(publishedYearEntries);
 
     return (
       <div className="readingList">
