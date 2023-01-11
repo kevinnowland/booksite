@@ -49,25 +49,29 @@ class ReadingList extends React.Component {
           <button
             className="sort"
             onClick={(e) => this.updateSortBy(e)}
-            value="date">
+            value="date"
+          >
             Date
           </button>
           <button
             className="sort"
             onClick={(e) => this.updateSortBy(e)}
-            value="publisher">
+            value="publisher"
+          >
             Publisher
           </button>
           <button
             className="sort"
             onClick={(e) => this.updateSortBy(e)}
-            value="genre">
+            value="genre"
+          >
             Genre
           </button>
           <button
             className="sort"
             onClick={(e) => this.updateSortBy(e)}
-            value="purchase">
+            value="purchase"
+          >
             Purchase
           </button>
         </div>

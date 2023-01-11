@@ -19,14 +19,14 @@ div.sortOptions {
 }
 
 button.sort {
+  padding: 10px 16px;
+
   border-radius: 8px;
   border-style: none;
 
-  padding: 10px 16px;
+  font-size: 0.8em;
 
   cursor: pointer;
-
-  font-size: 0.8em;
 
   background-color: rgb(210, 210, 210);
 
