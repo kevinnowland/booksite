@@ -113,7 +113,7 @@ function sortEntriesByPublisher(entries) {
 class ReadingList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {sortBy: 'date'};
+    this.state = {sortBy: 'date read'};
 
     this.updateSortBy = this.updateSortBy.bind(this);
   }
@@ -124,8 +124,14 @@ class ReadingList extends React.Component {
     }));
   }
 
-  capitalize(str) {
-    return str[0].toUpperCase() + str.substring(1)
+  splitWords(str) {
+    return str.split(/(\s+)/)
+  }
+
+  capitalizeWords(str) {
+    const words = this.splitWords(str);
+    const capitals = words.map((word) => word[0].toUpperCase() + word.substring(1));
+    return capitals.join(' ')
   }
 
   getColor(value) {
@@ -137,7 +143,7 @@ class ReadingList extends React.Component {
   }
 
   render() {
-    const sortValues = ["date", "publisher", "genre", "purchase"];
+    const sortValues = ["date read", "publisher", "date published", "genre", "purchase"];
     const buttons = sortValues.map((value) => (
       <button
         key={value}
@@ -146,7 +152,7 @@ class ReadingList extends React.Component {
         value={value}
         style={{backgroundColor: this.getColor(value)}}
       >
-        {this.capitalize(value)}
+        {this.capitalizeWords(value)}
       </button>
     ));
 
