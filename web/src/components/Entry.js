@@ -127,18 +127,20 @@ function getCity(city) {
 }
 
 function Publisher(props) {
-  const name = props.publisher.name;
-  const parentName = props.publisher.parentName;
-  const city = getCity(props.publisher.city);
-  const isIndependent = props.publisher.isIndependent;
+  const publisher = props.publisher;
+  const name = publisher.name;
+  const parentName = publisher.parentName;
+  const city = getCity(publisher.city);
+  const isIndependent = publisher.isIndependent;
 
   var publisherText;
 
   if (name === parentName) {
     publisherText =(
       <div>
-        Published by <b>{name}</b> ({city}),
+        Published in by <b>{name}</b> ({city}),
         which is <b>{getIsIndependentText(isIndependent)} independent</b>.
+        Originally appeared in <b>{props.publishedYear}</b>.
       </div>
     )
   } else {
@@ -146,6 +148,7 @@ function Publisher(props) {
       <div>
         Published by <b>{name}</b> ({city}), which is an imprint of <b>{parentName}</b>, 
         which is <b>{getIsIndependentText(isIndependent)} independent</b>.
+        Originally appeared in <b>{props.publishedYear}</b>.
       </div>
     )
   }
@@ -273,6 +276,7 @@ class Entry extends React.Component {
     const originalLanguage = book.originalLanguage;
     const translator = book.translator;
     const publisher = book.publisher;
+    const publishedYear = book.publishedYear;
     
     var style = null;
     if (!this.state.showExtra) {
@@ -291,7 +295,7 @@ class Entry extends React.Component {
             className="entryExtra"
             style={style}
           >
-            <Publisher publisher={publisher}/>
+            <Publisher publisher={publisher} publishedYear={publishedYear} />
             <Language
               language={language}
               originalLanguage={originalLanguage}
