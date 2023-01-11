@@ -1,5 +1,41 @@
+div.readingList {
+  width: 100%;
+}
+
 ul.readingList {
   list-style-type: none;
   padding: 0px;
   margin: 0px;
+}
+
+div.sortOptions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+
+  font-size: 1.33em;
+  line-height: 2em;
+}
+
+button.sort {
+  border-radius: 8px;
+  border-style: none;
+
+  padding: 10px 16px;
+
+  cursor: pointer;
+
+  font-size: 0.8em;
+
+  background-color: rgb(210, 210, 210);
+
+}
+
+button.sort:hover {
+  background-color: rgb(232, 232, 232);
+}
+
+button.sort:focus {
+  background-color: rgb(160, 160, 160);
 }

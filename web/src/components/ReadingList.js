@@ -45,6 +45,7 @@ class ReadingList extends React.Component {
     return (
       <div className="readingList">
         <div className="sortOptions">
+          Sort by:&nbsp;
           <button
             className="sort"
             onClick={(e) => this.updateSortBy(e)}
