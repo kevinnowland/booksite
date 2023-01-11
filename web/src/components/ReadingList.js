@@ -36,44 +36,32 @@ class ReadingList extends React.Component {
     }));
   }
 
+  capitalize(str) {
+    return str[0].toUpperCase() + str.substring(1)
+  }
+
   render() {
     const sortedRawEntries = sortRawEntries(this.props.readingList.entries);
     const entries = sortedRawEntries.map((entry) => 
       <Entry key={entry.readingListId} entry={entry} />
     );
+    const sortValues = ["date", "publisher", "genre", "purchase"];
+    const buttons = sortValues.map((value) => (
+      <button
+        key={value}
+        className="sort"
+        onClick={(e) => this.updateSortBy(e)}
+        value={value}
+      >
+        {this.capitalize(value)}
+      </button>
+    ));
 
     return (
       <div className="readingList">
         <div className="sortOptions">
           Sort by:&nbsp;
-          <button
-            className="sort"
-            onClick={(e) => this.updateSortBy(e)}
-            value="date"
-          >
-            Date
-          </button>
-          <button
-            className="sort"
-            onClick={(e) => this.updateSortBy(e)}
-            value="publisher"
-          >
-            Publisher
-          </button>
-          <button
-            className="sort"
-            onClick={(e) => this.updateSortBy(e)}
-            value="genre"
-          >
-            Genre
-          </button>
-          <button
-            className="sort"
-            onClick={(e) => this.updateSortBy(e)}
-            value="purchase"
-          >
-            Purchase
-          </button>
+          {buttons}
         </div>
         <ul className="readingList">{entries}</ul>
       </div>
