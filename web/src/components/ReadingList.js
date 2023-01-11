@@ -110,6 +110,16 @@ function sortEntriesByPublisher(entries) {
   return sortedMap
 }
 
+function splitWords(str) {
+  return str.split(/(\s+)/)
+}
+
+function capitalizeWords(str) {
+  const words = splitWords(str);
+  const capitals = words.map((word) => word[0].toUpperCase() + word.substring(1));
+  return capitals.join(' ')
+}
+
 class ReadingList extends React.Component {
   constructor(props) {
     super(props);
@@ -122,16 +132,6 @@ class ReadingList extends React.Component {
     this.setState(prevState => ({
       sortBy: e.target.value
     }));
-  }
-
-  splitWords(str) {
-    return str.split(/(\s+)/)
-  }
-
-  capitalizeWords(str) {
-    const words = this.splitWords(str);
-    const capitals = words.map((word) => word[0].toUpperCase() + word.substring(1));
-    return capitals.join(' ')
   }
 
   getColor(value) {
@@ -152,7 +152,7 @@ class ReadingList extends React.Component {
         value={value}
         style={{backgroundColor: this.getColor(value)}}
       >
-        {this.capitalizeWords(value)}
+        {capitalizeWords(value)}
       </button>
     ));
 
