@@ -23,6 +23,18 @@ function sortRawEntries(entries) {
 }
 
 class ReadingList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {sortBy: 'date'};
+
+    this.updateSortBy = this.updateSortBy.bind(this);
+  }
+
+  updateSortBy(e) {
+    this.setState(prevState => ({
+      sortBy: e.target.value
+    }));
+  }
 
   render() {
     const sortedRawEntries = sortRawEntries(this.props.readingList.entries);
@@ -31,7 +43,35 @@ class ReadingList extends React.Component {
     );
 
     return (
-      <ul className="readingList">{entries}</ul>
+      <div className="readingList">
+        <div className="sortOptions">
+          <button
+            className="sort"
+            onClick={(e) => this.updateSortBy(e)}
+            value="date">
+            Date
+          </button>
+          <button
+            className="sort"
+            onClick={(e) => this.updateSortBy(e)}
+            value="publisher">
+            Publisher
+          </button>
+          <button
+            className="sort"
+            onClick={(e) => this.updateSortBy(e)}
+            value="genre">
+            Genre
+          </button>
+          <button
+            className="sort"
+            onClick={(e) => this.updateSortBy(e)}
+            value="purchase">
+            Purchase
+          </button>
+        </div>
+        <ul className="readingList">{entries}</ul>
+      </div>
     )
   }
 }
