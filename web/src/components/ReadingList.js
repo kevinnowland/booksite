@@ -51,7 +51,7 @@ function sortMapKeysEntryLength(m, asc) {
 }
 
 // TODO: add unit test
-function sortEntriesByDate(entries) {
+function sortEntriesByDateRead(entries) {
   const entryMap = new Map();
 
   for (let i = 0; i < entries.length; i++) {
@@ -160,12 +160,6 @@ class ReadingList extends React.Component {
     const entries = sortedRawEntries.map((entry) => 
       <Entry key={entry.readingListId} entry={entry} />
     );
-
-    const publisherEntries = sortEntriesByPublisher(this.props.readingList.entries);
-    console.log(publisherEntries);
-
-    const dateEntries = sortEntriesByDate(this.props.readingList.entries);
-    console.log(dateEntries);
 
     return (
       <div className="readingList">
