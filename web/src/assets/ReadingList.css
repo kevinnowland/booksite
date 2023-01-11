@@ -27,15 +27,4 @@ button.sort {
   font-size: 0.8em;
 
   cursor: pointer;
-
-  background-color: rgb(210, 210, 210);
-
-}
-
-button.sort:hover {
-  background-color: rgb(232, 232, 232);
-}
-
-button.sort:focus {
-  background-color: rgb(160, 160, 160);
 }

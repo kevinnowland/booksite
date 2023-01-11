@@ -40,6 +40,14 @@ class ReadingList extends React.Component {
     return str[0].toUpperCase() + str.substring(1)
   }
 
+  getColor(value) {
+    if (value === this.state.sortBy) {
+      return "rgb(172, 172, 172)"
+    } else {
+      return "rgb(210, 210, 210)"
+    }
+  }
+
   render() {
     const sortedRawEntries = sortRawEntries(this.props.readingList.entries);
     const entries = sortedRawEntries.map((entry) => 
@@ -52,6 +60,7 @@ class ReadingList extends React.Component {
         className="sort"
         onClick={(e) => this.updateSortBy(e)}
         value={value}
+        style={{backgroundColor: this.getColor(value)}}
       >
         {this.capitalize(value)}
       </button>
