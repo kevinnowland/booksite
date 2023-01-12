@@ -132,6 +132,67 @@ function sortEntriesByDatePublished(entries) {
   return sortMapKeys(sortedMap, false);
 }
 
+// map of strings to maps of strings to lists
+// get map from top level keys to total number
+// of elements in the lists which are the elements of
+// all maps under the top level key
+function getNestedEntryCounts(m) {
+  const counts = new Map();
+  for (let [k, v] of m) {
+    var count = 0;
+    for (let e of v.entries()) {
+      count += e.length;
+    }
+    counts.set(k, count);
+  }
+  return counts
+}
+
+// TODO: unit test
+function sortEntriesByLanguage(entries) {
+  const origMap = new Map();
+  const transMap = new Map();
+
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const language = entry.book.language;
+    const originalLanguage = entry.book.originalLanguage;
+
+    if (language === originalLanguage) {
+      if (origMap.has(language)) {
+        origMap.get(language).push(entry);
+      } else {
+        origMap.set(language, [entry]);
+      }
+    } else {
+      const toKey = "to " + language;
+      const fromKey = "from " + originalLanguage;
+      if (transMap.has(toKey)) {
+        if (transMap.get(toKey).has(fromKey)) {
+          transMap.get(toKey).get(fromKey).push(entry);
+        } else {
+          transMap.get(toKey).set(fromKey, [entry]);
+        }
+      }
+      else {
+        transMap.set(toKey, new Map([[fromKey, [entry]]]));
+      }
+    }
+  }
+
+  // sort origMap
+  const sortedOrigMap = sortMapEntries(sortMapKeysEntryLength(origMap, false));
+
+  // sort transMap
+  const counts = getNestedEntryCounts(transMap);
+  const sortedTransMap = new Map([...transMap.entries()].sort((a, b) => counts.get(a) - counts.get(b)));
+  for (let [k, v] of sortedTransMap) {
+    sortedTransMap.set(k, sortMapEntries(sortMapKeysEntryLength(v, false)));
+  }
+
+  return new Map([["original", sortedOrigMap], ["translated", sortedTransMap]]);
+}
+
 function splitWords(str) {
   return str.split(/(\s+)/)
 }
@@ -190,8 +251,8 @@ class ReadingList extends React.Component {
       <Entry key={entry.readingListId} entry={entry} />
     );
     
-    const publishedYearEntries = sortEntriesByDatePublished(this.props.readingList.entries);
-    console.log(publishedYearEntries);
+    const entriesByLanguage = sortEntriesByLanguage(this.props.readingList.entries);
+    console.log(entriesByLanguage);
 
     return (
       <div className="readingList">
