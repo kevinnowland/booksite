@@ -24,6 +24,7 @@ class GenreEnum(int, Enum):
     POETRY = 3
 
 
+# TODO: add essays
 class SubgenreEnum(int, Enum):
     LITERARY_FICTION = 1
     SCI_FI = 2
