@@ -28,3 +28,24 @@ button.sort {
 
   cursor: pointer;
 }
+
+div.key {
+  margin-top: 5px;
+  margin-left: 10%;
+  margin-right: 10%;
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+div.keyEntry {
+  display: flex;
+  gap: 10px;
+  padding: 2px;
+}
+
+div.keyEntry div.color {
+  border-radius: 4px;
+  padding: 8px;
+  border-style: solid;
+}

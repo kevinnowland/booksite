@@ -203,6 +203,30 @@ function capitalizeWords(str) {
   return capitals.join(' ')
 }
 
+
+function KeyEntry(props) {
+
+  return (
+    <div className="keyEntry">
+      <div
+        className="color"
+        style={{backgroundColor: props.color}}
+      ></div>
+      <div className="value">{props.value}</div>
+    </div>
+  )
+}
+
+function Key(props) {
+
+  return (
+    <div className="key">
+      <KeyEntry value="Completed" color="#D6FFD6"/>
+      <KeyEntry value="Not Completed" color="lightyellow"/>
+    </div>
+  )
+}
+
 class ReadingList extends React.Component {
   constructor(props) {
     super(props);
@@ -260,6 +284,7 @@ class ReadingList extends React.Component {
           Sort by:&nbsp;
           {buttons}
         </div>
+        <Key />
         <ul className="readingList">{entries}</ul>
       </div>
     )
