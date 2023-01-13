@@ -249,6 +249,7 @@ function Genre(props) {
   var formatInfo = '';
 
   if (genre === "FICTION") {
+
     if (subgenre === "THRILLER") {
       genreInfo = (
         <div>
@@ -269,6 +270,27 @@ function Genre(props) {
         </div>
       );
     }
+
+    if (format === "LONG") {
+      formatInfo = (
+        <div className="format">
+          The book is a <b>novel</b>.
+        </div>
+      );
+    } else if (format === "MEDIUM") {
+      formatInfo = (
+        <div className="format">
+          The book is a <b>novella</b>.
+        </div>
+      );
+    } else if (format === "MULTIPLE_SHORT") {
+      formatInfo = (
+        <div className="format">
+          The book consists of <b>multiple shorter pieces</b>.
+        </div>
+      );
+    }
+    
   } else if (genre === "POETRY") {
     genreInfo = (
       <div>
@@ -276,6 +298,7 @@ function Genre(props) {
       </div>
     );
   } else if (genre === "NON_FICTION") {
+
     if (subgenre === "OTHER") {
       genreInfo = (
         <div>
@@ -290,6 +313,28 @@ function Genre(props) {
         </div>
       );
     }
+
+    if (format === "LONG") {
+      formatInfo = (
+        <div className="format">
+          The book is a single <b>long</b> work.
+        </div>
+      );
+    } else if (format === "MEDIUM") {
+      formatInfo = (
+        <div className="format">
+          The book is neither a long work nor a
+          series of shorter works.
+        </div>
+      );
+    } else if (format === "MULTIPLE_SHORT") {
+      formatInfo = (
+        <div className="format">
+          The book consists of multiple <b>shorter pieces</b>.
+        </div>
+      );
+    }
+
   }
 
 

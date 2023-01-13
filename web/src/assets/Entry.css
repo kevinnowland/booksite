@@ -69,6 +69,10 @@ li.entry div.genre {
   padding-right: 3%;
 }
 
+li.entry div.genre div.format {
+  padding-top: 0.5em;
+}
+
 li.entry div.genre div.title {
   text-align: center;
 }
