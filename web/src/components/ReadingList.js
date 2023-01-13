@@ -255,6 +255,40 @@ function sortEntriesByGenre(entries) {
   return sortedMap
 }
 
+function pushOrSet(m, k, entry) {
+  if (m.has(k)) {
+    m.get(k).push(entry);
+  } else {
+    m.set(k, [entry]);
+  }
+}
+
+function sortEntriesByPurchaseInfo(entries) {
+  const entryMap = new Map();
+
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const locationType = entry.purchase.locationType;
+    const location = entry.purchase.location;
+
+    if (locationType === "GIFT") {
+      pushOrSet(entryMap, "Gift", entry);
+    } else if (locationType === "WEBSITE" || locationType === "ONLINE_BOOKSTORE") {
+      pushOrSet(entryMap, "Online", entry);
+    } else if (locationType === "BOOKSTORE") {
+      if (location.isLibrary) {
+        pushOrSet(entryMap, "Library", entry);
+      } else {
+        pushOrSet(entryMap, "Bookstore", entry);
+      }
+    }
+  }
+
+  const sortedMap = sortMapKeysEntryLength(entryMap, false);
+
+  return sortMapEntries(sortedMap)
+}
+
 function KeyEntry(props) {
 
   return (
@@ -325,7 +359,7 @@ class ReadingList extends React.Component {
     const entries = sortedRawEntries.map((entry) => 
       <Entry key={entry.readingListId} entry={entry} />
     );
-    
+
     return (
       <div className="readingList">
         <div className="sortOptions">
