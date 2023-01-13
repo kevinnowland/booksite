@@ -236,11 +236,67 @@ function Purchase(props) {
   )
 }
 
+function formatSubgenre(genre) {
+  return genre.toLowerCase().replace('_', ' ')
+}
 
 function Genre(props) {
+  const genre = props.genre;
+  const subgenre = props.subgenre;
+  const format = props.format;
+
+  var genreInfo = '';
+  var formatInfo = '';
+
+  if (genre === "FICTION") {
+    if (subgenre === "THRILLER") {
+      genreInfo = (
+        <div>
+          This work of <b>fiction</b> could be
+          considered a <b>thriller</b>.
+        </div>
+      );
+    } else if (subgenre === "OTHER") {
+      <div>
+        this work of <b>fiction</b> does not
+        have a clear genre.
+      </div>
+    } else {
+      genreInfo = (
+        <div>
+          This work of <b>fiction</b> could be
+          considered <b>{formatSubgenre(subgenre)}</b>.
+        </div>
+      );
+    }
+  } else if (genre === "POETRY") {
+    genreInfo = (
+      <div>
+        This is a <b>poetry</b> book.
+      </div>
+    );
+  } else if (genre === "NON_FICTION") {
+    if (subgenre === "OTHER") {
+      genreInfo = (
+        <div>
+          This is a <b>non-fiction</b> book.
+        </div>
+      );
+    } else {
+      genreInfo = (
+        <div>
+          This is a <b>non-fiction</b> book
+          that is a <b>{formatSubgenre(subgenre)}</b>.
+        </div>
+      );
+    }
+  }
+
+
   return (
     <div className='genre'>
       <div className='title'><u>Genre</u></div>
+      {genreInfo} {formatInfo}
     </div>
   )
 }
@@ -286,6 +342,9 @@ class Entry extends React.Component {
     const translator = book.translator;
     const publisher = book.publisher;
     const publishedYear = book.publishedYear;
+    const genre = book.genre;
+    const subgenre = book.subgenre;
+    const format = book.format;
     
     var style = null;
     if (!this.state.showExtra) {
@@ -305,7 +364,7 @@ class Entry extends React.Component {
             style={style}
           >
             <Publisher publisher={publisher} publishedYear={publishedYear} />
-            <Genre />
+            <Genre genre={genre} subgenre={subgenre} format={format}/>
             <Language
               language={language}
               originalLanguage={originalLanguage}
