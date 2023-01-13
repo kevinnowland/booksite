@@ -200,9 +200,60 @@ function splitWords(str) {
 function capitalizeWords(str) {
   const words = splitWords(str);
   const capitals = words.map((word) => word[0].toUpperCase() + word.substring(1));
-  return capitals.join(' ')
+  return capitals.join('')
 }
 
+function formatGenre(genre) {
+  const lower = genre.toLowerCase().replace('_', ' ');
+  return capitalizeWords(lower)
+}
+
+function sortGenreMap(genreMap) {
+  const sortedGenreMap = sortMapKeysEntryLength(genreMap, false);
+  return sortMapEntries(sortedGenreMap)
+}
+
+function sortEntriesByGenre(entries) {
+  const entryMap = new Map();
+  
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const genre = formatGenre(entry.book.genre);
+    const subgenre = formatGenre(entry.book.subgenre);
+
+    if (genre === "Poetry") {
+      if (entryMap.has(genre)) {
+        entryMap.get(genre).push(entry);
+      } else {
+        entryMap.set(genre, [entry]);
+      }
+    } else {
+      if (!entryMap.has(genre)) {
+        console.log(genre);
+        entryMap.set(genre, new Map());
+      }
+
+      if (entryMap.get(genre).has(subgenre)) {
+        entryMap.get(genre).get(subgenre).push(entry);
+      } else {
+        entryMap.get(genre).set(subgenre, [entry]);
+      }
+    }
+  }
+
+  const sortedMap = new Map();
+  if (entryMap.has("Fiction")) {
+    sortedMap.set("Fiction", sortGenreMap(entryMap.get("Fiction")));
+  }
+  if (entryMap.has("Non Fiction")) {
+    sortedMap.set("Non Fiction", sortGenreMap(entryMap.get("Non Fiction")));
+  }
+  if (entryMap.has("Poetry")) {
+    sortedMap.set("Poetry", sortEntriesByDateRead(entryMap.get("Poetry")));
+  }
+
+  return sortedMap
+}
 
 function KeyEntry(props) {
 
@@ -275,9 +326,6 @@ class ReadingList extends React.Component {
       <Entry key={entry.readingListId} entry={entry} />
     );
     
-    const entriesByLanguage = sortEntriesByLanguage(this.props.readingList.entries);
-    console.log(entriesByLanguage);
-
     return (
       <div className="readingList">
         <div className="sortOptions">
