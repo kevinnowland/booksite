@@ -35,6 +35,7 @@ class SubgenreEnum(int, Enum):
     TEXT_BOOK = 8
     POETRY = 9
     OTHER = 10
+    THRILLER = 11
 
 
 class FormatEnum(int, Enum):
