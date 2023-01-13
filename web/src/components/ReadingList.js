@@ -3,6 +3,15 @@ import _ from 'lodash';
 import '../assets/ReadingList.css';
 import Entry from './Entry';
 
+function pushOrSet(m, k, entry) {
+  if (m.has(k)) {
+    m.get(k).push(entry);
+  } else {
+    m.set(k, [entry]);
+  }
+}
+
+
 function compareEntries(a, b) {
   const aDate = new Date(a.stoppedReadingDate)
   const bDate = new Date(b.stoppedReadingDate)
@@ -66,11 +75,7 @@ function sortEntriesByDateRead(entries) {
     const entry = _.cloneDeep(entries[i]);
     const year = getYear(entry.stoppedReadingDate);
 
-    if (entryMap.has(year)) {
-      entryMap.get(year).push(entry);
-    } else {
-      entryMap.set(year, [entry]);
-    }
+    pushOrSet(entryMap, year, entry);
   }
 
   const sortedMap = sortMapEntries(entryMap)
@@ -98,11 +103,7 @@ function sortEntriesByPublisher(entries) {
       entryMap.set(isIndieKey, new Map());
     }
 
-    if (entryMap.get(isIndieKey).has(publisher)) {
-      entryMap.get(isIndieKey).get(publisher).push(entry);
-    } else {
-      entryMap.get(isIndieKey).set(publisher, [entry]);
-    }
+    pushOrSet(entryMap.get(isIndieKey), publisher, entry);
   }
 
   const sortedMap = sortMapKeys(entryMap, true);
@@ -121,11 +122,7 @@ function sortEntriesByDatePublished(entries) {
   for (let i = 0; i < entries.length; i++) {
     const entry = entries[i];
     const publishedYear = entry.book.publishedYear;
-    if (entryMap.has(publishedYear)) {
-      entryMap.get(publishedYear).push(entry);
-    } else {
-      entryMap.set(publishedYear, [entry])
-    }
+    pushOrSet(entryMap, publishedYear, entry);
   }
 
   const sortedMap = sortMapEntries(entryMap)
@@ -159,20 +156,12 @@ function sortEntriesByLanguage(entries) {
     const originalLanguage = entry.book.originalLanguage;
 
     if (language === originalLanguage) {
-      if (origMap.has(language)) {
-        origMap.get(language).push(entry);
-      } else {
-        origMap.set(language, [entry]);
-      }
+      pushOrSet(origMap, language, entry);
     } else {
       const toKey = "to " + language;
       const fromKey = "from " + originalLanguage;
       if (transMap.has(toKey)) {
-        if (transMap.get(toKey).has(fromKey)) {
-          transMap.get(toKey).get(fromKey).push(entry);
-        } else {
-          transMap.get(toKey).set(fromKey, [entry]);
-        }
+        pushOrSet(transMap.get(toKey), fromKey, entry);
       }
       else {
         transMap.set(toKey, new Map([[fromKey, [entry]]]));
@@ -222,22 +211,12 @@ function sortEntriesByGenre(entries) {
     const subgenre = formatGenre(entry.book.subgenre);
 
     if (genre === "Poetry") {
-      if (entryMap.has(genre)) {
-        entryMap.get(genre).push(entry);
-      } else {
-        entryMap.set(genre, [entry]);
-      }
+      pushOrSet(entryMap, genre, entry);
     } else {
       if (!entryMap.has(genre)) {
-        console.log(genre);
         entryMap.set(genre, new Map());
       }
-
-      if (entryMap.get(genre).has(subgenre)) {
-        entryMap.get(genre).get(subgenre).push(entry);
-      } else {
-        entryMap.get(genre).set(subgenre, [entry]);
-      }
+      pushOrSet(entryMap.get(genre), subgenre, entry);
     }
   }
 
@@ -253,14 +232,6 @@ function sortEntriesByGenre(entries) {
   }
 
   return sortedMap
-}
-
-function pushOrSet(m, k, entry) {
-  if (m.has(k)) {
-    m.get(k).push(entry);
-  } else {
-    m.set(k, [entry]);
-  }
 }
 
 function sortEntriesByPurchaseInfo(entries) {
