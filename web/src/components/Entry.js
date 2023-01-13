@@ -237,6 +237,15 @@ function Purchase(props) {
 }
 
 
+function Genre(props) {
+  return (
+    <div className='genre'>
+      <div className='title'><u>Genre</u></div>
+    </div>
+  )
+}
+
+
 class Entry extends React.Component {
   constructor(props) {
     super(props);
@@ -296,6 +305,7 @@ class Entry extends React.Component {
             style={style}
           >
             <Publisher publisher={publisher} publishedYear={publishedYear} />
+            <Genre />
             <Language
               language={language}
               originalLanguage={originalLanguage}

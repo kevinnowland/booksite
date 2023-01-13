@@ -53,19 +53,30 @@ li.entry div.entryExtra ul.dashed {
 
 li.entry div.publisher {
   text-align: left;
-  width: 25%;
-  padding-left: 4%;
-  padding-right: 4%;
+  width: 19%;
+  padding-left: 3%;
+  padding-right: 3%;
 }
 
 li.entry div.publisher div.title {
   text-align: center;
 }
 
+li.entry div.genre {
+  text-align: left;
+  width: 19%;
+  padding-left: 3%;
+  padding-right: 3%;
+}
+
+li.entry div.genre div.title {
+  text-align: center;
+}
+
 li.entry div.language {
-  width: 25%;
-  padding-left: 4%;
-  padding-right: 4%;
+  width: 19%;
+  padding-left: 3%;
+  padding-right: 3%;
 }
 
 li.entry div.language div.title {
@@ -74,9 +85,9 @@ li.entry div.language div.title {
 
 li.entry div.purchase {
   text-align: left;
-  width: 25%;
-  padding-left: 4%;
-  padding-right: 4%;
+  width: 19%;
+  padding-left: 3%;
+  padding-right: 3%;
 }
 
 li.entry div.purchase div.title {
