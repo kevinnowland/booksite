@@ -22,7 +22,7 @@ function BookHeader(props) {
   )
 }
 
-function starRating(rating) {
+export function starRating(rating) {
   var stars = ""
   for (let i = 0; i < 5; i ++) {
     if (i < rating ) {

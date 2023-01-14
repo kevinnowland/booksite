@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import '../assets/ReadingList.css';
-import Entry from './Entry';
+import Entry,  {starRating} from './Entry';
 
 function pushOrSet(m, k, entry) {
   if (m.has(k)) {
@@ -256,6 +256,27 @@ function sortEntriesByPurchaseInfo(entries) {
   return sortMapEntries(sortedMap)
 }
 
+function sortEntriesByRating(entries) {
+  const entryMap = new Map([
+    [starRating(5), []],
+    [starRating(4), []],
+    [starRating(3), []],
+    [starRating(2), []],
+    [starRating(1), []],
+    [starRating(0), []]
+  ]);
+
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const rating = starRating(entry.rating);
+    entryMap.get(rating).push(entry);
+  }
+
+  sortEntriesByDateRead(entryMap);
+
+  return entryMap;
+}
+
 function KeyEntry(props) {
 
   return (
@@ -344,7 +365,8 @@ class ReadingList extends React.Component {
       "date published",
       "language",
       "genre",
-      "purchase info"
+      "purchase info",
+      "rating"
     ];
     const buttons = sortValues.map((value) => (
       <button
@@ -373,6 +395,8 @@ class ReadingList extends React.Component {
       entryMap = sortEntriesByGenre(entries);
     } else if (sortBy === "purchase info") {
       entryMap = sortEntriesByPurchaseInfo(entries);
+    } else if (sortBy === "rating") {
+      entryMap = sortEntriesByRating(entries);
     } else {
       throw new Error("invalid sort option");
     }
