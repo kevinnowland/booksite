@@ -293,7 +293,7 @@ class SortedEntries extends React.Component {
     const v = this.props.v;
     const n = this.props.n;
   
-    const headerClassName = "sortedEntryHeader " + n.toString();
+    const headerClassName = "sortedEntryHeader level" + n.toString();
     const entryHeader = <div className={headerClassName}>{k}</div>
 
     if (v instanceof Map) {

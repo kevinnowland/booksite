@@ -49,3 +49,27 @@ div.keyEntry div.color {
   padding: 8px;
   border-style: solid;
 }
+
+div.sortedEntryHeader {
+  text-align: center;
+  width: 100%;
+  margin: 10px;
+  padding: 10px;
+}
+
+div.sortedEntryHeader.level0 {
+  display: none;
+}
+
+div.sortedEntryHeader.level1 {
+  margin-top: 50px;
+  font-size: 1.5em;
+}
+
+div.sortedEntryHeader.level2 {
+  font-size: 1.25em;
+}
+
+div.srtedEntryHeader.level1 {
+  font-size: 1.05em;
+}
