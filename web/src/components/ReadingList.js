@@ -83,27 +83,20 @@ function sortEntriesByDateRead(entries) {
   return sortMapKeys(sortedMap, false)
 }
 
-function getIsIndieKey(entry) {
-  if (entry.book.publisher.isIndependent) {
-    return "Independent Press"
-  } else {
-    return "Mainstream Press"
-  }
-}
-
 function sortEntriesByPublisher(entries) {
   const entryMap = new Map();
 
   for (let i = 0; i < entries.length; i++) {
     const entry = _.cloneDeep(entries[i]);
-    const isIndieKey = getIsIndieKey(entry);
-    const publisher = entry.book.publisher.name;
+    const isIndependent = entry.book.publisher.isIndependent;
+    const key = isIndependent ? "Independent Press" : "Mainstream Press";
+    const publisher = isIndependent ? entry.book.publisher.name : entry.book.publisher.parentName;
 
-    if (!entryMap.has(isIndieKey)) {
-      entryMap.set(isIndieKey, new Map());
+    if (!entryMap.has(key)) {
+      entryMap.set(key, new Map());
     }
 
-    pushOrSet(entryMap.get(isIndieKey), publisher, entry);
+    pushOrSet(entryMap.get(key), publisher, entry);
   }
 
   const sortedMap = sortMapKeys(entryMap, true);
