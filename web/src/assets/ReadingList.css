@@ -1,5 +1,6 @@
 div.readingList {
   width: 100%;
+  font-family: "Cutive Mono", "Abhaya Libre";
 }
 
 ul.readingList {
@@ -16,6 +17,8 @@ div.sortOptions {
 
   font-size: 1.33em;
   line-height: 2em;
+
+  font-family: "Cutive Mono", "Abhaya Libre";
 }
 
 button.sort {
@@ -54,6 +57,7 @@ div.sortedEntryHeader {
   text-align: center;
   margin: 10px;
   padding: 10px;
+  font-family: "Abhaya Libre", sans;
 }
 
 div.sortedEntryHeader.level0 {
@@ -62,13 +66,13 @@ div.sortedEntryHeader.level0 {
 
 div.sortedEntryHeader.level1 {
   margin-top: 50px;
-  font-size: 1.5em;
+  font-size: 2em;
 }
 
 div.sortedEntryHeader.level2 {
-  font-size: 1.25em;
+  font-size: 1.5em;
 }
 
-div.srtedEntryHeader.level1 {
-  font-size: 1.05em;
+div.sortedEntryHeader.level3 {
+  font-size: 1.25em;
 }
