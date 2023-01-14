@@ -85,9 +85,9 @@ function sortEntriesByDateRead(entries) {
 
 function getIsIndieKey(entry) {
   if (entry.book.publisher.isIndependent) {
-    return "indie"
+    return "Independent Press"
   } else {
-    return "not indie"
+    return "Mainstream Press"
   }
 }
 
@@ -158,8 +158,8 @@ function sortEntriesByLanguage(entries) {
     if (language === originalLanguage) {
       pushOrSet(origMap, language, entry);
     } else {
-      const toKey = "to " + language;
-      const fromKey = "from " + originalLanguage;
+      const toKey = "Read in " + language;
+      const fromKey = "Translated from " + originalLanguage;
       if (transMap.has(toKey)) {
         pushOrSet(transMap.get(toKey), fromKey, entry);
       }
@@ -179,7 +179,10 @@ function sortEntriesByLanguage(entries) {
     sortedTransMap.set(k, sortMapEntries(sortMapKeysEntryLength(v, false)));
   }
 
-  return new Map([["original", sortedOrigMap], ["translated", sortedTransMap]]);
+  return new Map([
+    ["Read in Original Language", sortedOrigMap],
+    ["Read in Translation", sortedTransMap]]
+  );
 }
 
 function splitWords(str) {
