@@ -283,6 +283,42 @@ function Key(props) {
   )
 }
 
+class SortedEntries extends React.Component {
+
+  render() {
+    const k = this.props.k;
+    const v = this.props.v;
+    const n = this.props.n;
+  
+    const headerClassName = "sortedEntryHeader " + n.toString();
+    const entryHeader = <div className={headerClassName}>{k}</div>
+
+    if (v instanceof Map) {
+      const sortedEntries = [...v.entries()].map((e) => {
+        return <SortedEntries key={e[0]} k={e[0]} v={e[1]} n={n+1} />
+      });
+      return (
+        <div className="sortedEntries">
+          {entryHeader}
+          {sortedEntries}
+        </div>
+      )
+    }
+
+    const entries = v.map((entry) => 
+      <Entry key={entry.readingListId} entry={entry} />
+    );
+    return (
+      <div className="sortedEntries">
+        {entryHeader}
+        <ul className="readingList">
+          {entries}
+        </ul>
+      </div>
+    )
+  }
+}
+
 class ReadingList extends React.Component {
   constructor(props) {
     super(props);
@@ -326,10 +362,24 @@ class ReadingList extends React.Component {
       </button>
     ));
 
-    const sortedRawEntries = sortRawEntries(this.props.readingList.entries);
-    const entries = sortedRawEntries.map((entry) => 
-      <Entry key={entry.readingListId} entry={entry} />
-    );
+    var entryMap;
+    const entries = this.props.readingList.entries;
+    const sortBy = this.state.sortBy;
+    if (sortBy === "date read") {
+      entryMap = sortEntriesByDateRead(entries);
+    } else if (sortBy === "publisher") {
+      entryMap = sortEntriesByPublisher(entries);
+    } else if (sortBy === "date published") {
+      entryMap = sortEntriesByDatePublished(entries);
+    } else if (sortBy === "language") {
+      entryMap = sortEntriesByLanguage(entries);
+    } else if (sortBy === "genre") {
+      entryMap = sortEntriesByGenre(entries);
+    } else if (sortBy === "purchase info") {
+      entryMap = sortEntriesByPurchaseInfo(entries);
+    } else {
+      throw new Error("invalid sort option");
+    }
 
     return (
       <div className="readingList">
@@ -338,7 +388,7 @@ class ReadingList extends React.Component {
           {buttons}
         </div>
         <Key />
-        <ul className="readingList">{entries}</ul>
+        <SortedEntries k="top" v={entryMap} n={0} />
       </div>
     )
   }
