@@ -30,6 +30,8 @@ button.sort {
   font-size: 0.8em;
 
   cursor: pointer;
+  
+  font-family: "Cutive Mono", "Abhaya Libre";
 }
 
 div.key {
