@@ -258,7 +258,7 @@ def prompt_book_id(engine: Engine) -> int:
     prompt = "what was the primary language you READ the book in?"
     language_id = prompt_language_id(prompt, engine, VALID_READING_LANGUAGES)
 
-    if translator_id == 0:
+    if translator_id != 0:
         print("\n", end="")
         prompt = "what was the primary language the book was WRITTEN in?"
         original_language_id = prompt_language_id(prompt, engine)
