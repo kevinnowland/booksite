@@ -1,0 +1,10 @@
+div.map {
+  width: 100%;
+
+  text-align: center;
+}
+
+svg.map {
+  display: block;
+  margin: auto;
+}
