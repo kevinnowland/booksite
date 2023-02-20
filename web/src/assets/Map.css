@@ -7,4 +7,7 @@ div.map {
 svg.map {
   display: block;
   margin: auto;
+
+  width: 1200px;
+  height: 800px;
 }

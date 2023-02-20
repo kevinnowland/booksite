@@ -17,7 +17,7 @@ function Map(props) {
       .append('path')
       .attr('class', (d) => d.properties.NAME)
       .attr('d', path)
-      .style('fill', 'grey')
+      .style('fill', 'lightgrey')
       .style('stroke-width', 1)
       .style('stroke', 'black')
   };
@@ -35,7 +35,7 @@ function Map(props) {
 
   return (
     <div className='map'>
-      <svg width='1200px' height='800px' className='map' ref={svgRef}></svg>
+      <svg className='map' ref={svgRef}></svg>
     </div>
   )
 }
