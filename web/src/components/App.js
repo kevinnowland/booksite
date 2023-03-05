@@ -16,7 +16,7 @@ class App extends React.Component {
     return (
       <div>
         <Map />
-        {/*<ReadingList readingList={this.state.readingList} />*/}
+        {<ReadingList readingList={this.state.readingList} />}
         <div> <p> Shapefiles from census bureau data </p> </div>
       </div>
     )
