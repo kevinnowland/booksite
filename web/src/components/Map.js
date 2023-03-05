@@ -6,36 +6,29 @@ import '../assets/Map.css'
 
 
 function Map(props) {
-  const svgRef = useRef();
-  const projRef= useRef(d3.geoAlbersUsa().scale(1500))
+  const width = 1200;
+  const height = 800;
+  const projection = d3.geoAlbersUsa().scale(1500).translate([width / 2, height / 2]);
+  const path = d3.geoPath().projection(projection);
 
-  const renderChart = (data, path) => {
-    d3.select(svgRef.current)
-      .selectAll('path')
-      .data(data)
-      .enter()
-      .append('path')
-      .attr('class', (d) => d.properties.NAME)
-      .attr('d', path)
-      .style('fill', 'lightgrey')
-      .style('stroke-width', 1)
-      .style('stroke', 'black')
+  const renderPaths = () => {
+    return data.features.map((d) => {
+      return (
+        <path
+          key={d.properties.NAME}
+          d={path(d)}
+          className={d.properties.NAME}
+          fill='lightgrey'
+          strokeWidth='1'
+          stroke='black'
+        />
+      )
+    })
   };
-
-  useEffect(() => {
-    const height = svgRef.current.clientHeight;
-    const width = svgRef.current.clientWidth;
-
-    projRef.current.translate([width / 2, height / 2]);
-
-    const path = d3.geoPath().projection(projRef.current);
-
-    renderChart(data.features, path)
-  }, []);
 
   return (
     <div className='map'>
-      <svg className='map' ref={svgRef}></svg>
+      <svg height={height} width={width} className='map'>{renderPaths()}</svg>
     </div>
   )
 }
