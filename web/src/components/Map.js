@@ -43,7 +43,7 @@ function Map(props) {
           key={d.properties.NAME}
           d={path(d)}
           className={d.properties.NAME}
-          fill='lightgrey'
+          fill='#F0F0F0'
           strokeWidth='1'
           stroke='black'
         />
