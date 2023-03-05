@@ -31,3 +31,10 @@ To run the website:
 cd web
 npm start
 ```
+
+## External Data Sources
+
+Cities were obtained from [here](https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json)
+and then reformatted to GeoJSON points manually.
+
+geoJSON for states was obtained from census bureau data.
