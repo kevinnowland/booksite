@@ -7,4 +7,5 @@ div.map {
 svg.map {
   display: block;
   margin: auto;
+  padding-bottom: 50px;
 }
