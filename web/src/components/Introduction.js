@@ -1,10 +1,11 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 
 import '../assets/Introduction.css'
 
 function Introduction(props) {
   return (
-    <p> There is no markdown here </p>
+    <ReactMarkdown>{props.markdown}</ReactMarkdown>
   )
 }
 
