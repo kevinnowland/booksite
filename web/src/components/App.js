@@ -5,18 +5,27 @@ import Introduction from './Introduction'
 
 import reading_list from '../data/reading_list'
 
+
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       "readingList": reading_list,
+      'introMarkdown': '',
     };
   }
 
+  async componentDidMount() {
+    const res = await fetch('./introduction.md')
+    const text = await res.text()
+    this.setState({ introMarkdown: text })
+  }
+
   render() {
+
     return (
       <div>
-        <Introduction markdown={`# hello world!\nwhat is up`}/>
+        <Introduction markdown={this.state.introMarkdown} />
         <Map />
         <ReadingList readingList={this.state.readingList} />
         <div> <p> Shapefiles from census bureau data </p> </div>
