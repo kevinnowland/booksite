@@ -5,7 +5,9 @@ import '../assets/Introduction.css'
 
 function Introduction(props) {
   return (
-    <ReactMarkdown>{props.markdown}</ReactMarkdown>
+    <div className='introduction'>
+      <ReactMarkdown>{props.markdown}</ReactMarkdown>
+    </div>
   )
 }
 
