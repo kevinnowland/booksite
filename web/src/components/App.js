@@ -16,7 +16,7 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    const res = await fetch('./introduction.md')
+    const res = await fetch(process.env.PUBLIC_URL + '/introduction.md')
     const text = await res.text()
     this.setState({ introMarkdown: text })
   }
