@@ -6,15 +6,15 @@ li.entry {
   margin-right: 10%;
   margin-left: 10%;
 
-  border-radius:10px;
+  border-radius: 10px;
 
-  font-size:1.33em;
-  
+  font-size: 1.33em;
+
   cursor: pointer;
 }
 
 li.entry.completed {
-  background: #D6FFD6;
+  background: #d6ffd6;
 }
 
 li.entry.notCompleted {
@@ -29,6 +29,12 @@ li.entry div.entryHeader {
 
 li.entry div.ratingHeader {
   text-align: center;
+
+  width: 20%;
+}
+
+li.entry div.bookHeader {
+  width: 79%;
 }
 
 li.entry div.bookHeader div.title {
@@ -46,7 +52,7 @@ li.entry div.entryExtra {
 }
 
 li.entry div.entryExtra ul.dashed {
-  list-style-type: '- ';
+  list-style-type: "- ";
   text-align: left;
   padding: 0px;
 }
@@ -97,4 +103,3 @@ li.entry div.purchase {
 li.entry div.purchase div.title {
   text-align: center;
 }
-
