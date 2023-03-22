@@ -30,10 +30,6 @@ seemed natural to make a page that was oriented around that task as well.
 My reading list had been going for about a year which seemed like a decent
 starting place for data which I'm naturally interested in.
 
-> __I'm going to stop asking you (myself) questions.__
-
-Good idea.
-
 Over the last few years I have been putting more thought into what I read.
 There are too many good books and life isn't long enough. There have been times
 when I've tried to alternate fiction and non-fiction--but I like fiction more
@@ -61,7 +57,12 @@ as the parent publisher as of 2023. For English language books, independent mean
 published by a company which rolls up under the "big five"of Penguin Random House, 
 Hachette Book Group, HarperCollins, Simon and Schuster, or Macmillan. For books published in
 France (or elsewhere) I do not have a clear division, although certainly Gallimard is not
-independent.
+independent. The "as of 2023" part is important as well, as many of these imprints have
+had parent companies merge and their names might be slightly different than what I've listed
+-- I don't find myself caring about the different varieties of Tor. I've tried to be more
+faithful to the independents, but I'm certain that some of the publishers listed are slightly
+wrong for the copy that I've read. Which is to say nothing of whoever the original publisher
+was, which is not what is listed.
 
 > __What's with the map though?__
 
@@ -89,3 +90,28 @@ books, so trying to capture author demographics is not easy. Also frought with e
 issues around identity that require clear answers to be found in interviews or to actually
 contact the author and make a personal connection. So I'm (mostly) staying away from gender, 
 race, religion, and even age for the most part.
+
+Speaking of gender, I do care a bit about its cognate genre. Although genre boundaries are
+permable and artificial, I do read a lot which falls neatly into "science fiction" and I
+want to encourage myself to read more genres, and to read things which blur genre
+lines and even go between fiction and non-fiction. The genres listed for books have been
+decided by me. Apologies to the authors who probably feel otherwise and constrained by
+what I've put on their books.
+
+> __And how are you displaying all this data?__
+
+The geographic data will be on a map somehow, although how to weight things by city is not
+clear to me as of this writing. I am currently thinking of just including that as a bar chart
+alongside the map, as the geographic spread is a different question than how overrepresented
+is New York.
+
+Since other measures are more about ratios, perhaps some donut or other charts that are sortable
+by all time and seasonal chunks?
+
+Maybe if I get fancy I will put together some graphics for the bar and donut charts to be 
+book themed. For now, the goal is just to represent them and not worry about if the bar
+chart looks like a messy stack of books and the donut charts actually are donut looking.
+to show 
+
+Ultimately I will try to weave the data into this text, but for now the visualizations will be
+separate.
