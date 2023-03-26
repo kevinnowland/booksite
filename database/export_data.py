@@ -4,7 +4,7 @@
 from argparse import ArgumentParser
 
 from sqlalchemy import create_engine
-from src.database import export_reading_list
+from src.database import export_publisher_cities, export_reading_list
 
 if __name__ == "__main__":
 
@@ -27,3 +27,6 @@ if __name__ == "__main__":
 
     engine = create_engine("sqlite:///" + args.path)
     export_reading_list(engine, args.output_directory + "/reading_list.json")
+    export_publisher_cities(
+        engine, args.output_directory + "/publisher_cities_list.json"
+    )

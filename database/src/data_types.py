@@ -111,3 +111,18 @@ class ReadingListEntry(CamelModel):
 
 class ReadingList(CamelModel):
     entries: list[ReadingListEntry]
+
+
+class PublisherTitles(CamelModel):
+    name: str
+    titles: list[str]
+
+
+class PublisherCity(CamelModel):
+    name: str
+    state: str
+    publishers: list[PublisherTitles]
+
+
+class PublisherCityList(CamelModel):
+    cities: list[PublisherCity]

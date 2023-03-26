@@ -13,9 +13,10 @@
 """
 from datetime import date
 from enum import EnumMeta
-from typing import Any, Optional, TypeVar
+from typing import Any, Optional, TypedDict, TypeVar
 
 from humps import decamelize
+from pydantic import BaseModel
 from sqlalchemy.engine.base import Engine
 
 from .data_types import GenreEnum  # type: ignore
@@ -27,6 +28,9 @@ from .data_types import (
     FormatEnum,
     GenderEnum,
     Publisher,
+    PublisherCity,
+    PublisherCityList,
+    PublisherTitles,
     Purchase,
     PurchaseLocationTypeEnum,
     ReadingList,
@@ -630,3 +634,78 @@ def export_reading_list(engine: Engine, output_file: str):
 
     with open(output_file, "w") as f:
         f.write(reading_list.json(by_alias=True))
+
+
+class RawPublisherCity(TypedDict):
+    city_id: int
+    name: str
+    state: str
+    publisher_name: str
+    title: str
+
+
+def _get_raw_publisher_cities(engine: Engine) -> list[RawPublisherCity]:
+    """execute sql query to get list of book titles and their cities"""
+    with open("sql/misc/get_publisher_cities.sql", "r") as f:
+        sql = f.read()
+
+    rows = engine.execute(sql).all()  # type: ignore
+    return [
+        {
+            "city_id": int(row[0]),
+            "name": row[1],
+            "state": row[2],
+            "publisher_name": row[3],
+            "title": row[4],
+        }
+        for row in rows
+    ]
+
+
+class IntPublisherCity(TypedDict):
+    name: str
+    state: str
+    publishers: dict[str, list[str]]
+
+
+def _parse_publisher_cities(
+    raw_publisher_cities: list[RawPublisherCity],
+) -> PublisherCityList:
+    cities: dict[int, IntPublisherCity] = dict()
+    for raw in raw_publisher_cities:
+        if c := cities.get(raw["city_id"]):
+            if t := c["publishers"].get(raw["publisher_name"]):
+                t.append(raw["title"])
+            else:
+                c["publishers"][raw["publisher_name"]] = [raw["title"]]
+        else:
+            cities[raw["city_id"]] = {
+                "name": raw["name"],
+                "state": raw["state"],
+                "publishers": {raw["publisher_name"]: [raw["title"]]},
+            }
+
+    return PublisherCityList(
+        cities=[
+            PublisherCity(
+                name=ic["name"],
+                state=ic["state"],
+                publishers=[
+                    PublisherTitles(
+                        name=publisher_name,
+                        titles=titles,
+                    )
+                    for publisher_name, titles in ic["publishers"].items()
+                ],
+            )
+            for ic in cities.values()
+        ]
+    )
+
+
+def export_publisher_cities(engine: Engine, output_file: str):
+    raw_publisher_cities = _get_raw_publisher_cities(engine)
+    publisher_cities = _parse_publisher_cities(raw_publisher_cities)
+
+    with open(output_file, "w") as f:
+        f.write(publisher_cities.json(by_alias=True))
