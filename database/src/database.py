@@ -19,9 +19,21 @@ from humps import decamelize
 from sqlalchemy.engine.base import Engine
 
 from .data_types import GenreEnum  # type: ignore
-from .data_types import (Author, Book, Bookstore, City, FormatEnum, GenderEnum,
-                         Publisher, Purchase, PurchaseLocationTypeEnum,
-                         ReadingList, ReadingListEntry, SubgenreEnum, Website)
+from .data_types import (
+    Author,
+    Book,
+    Bookstore,
+    City,
+    FormatEnum,
+    GenderEnum,
+    Publisher,
+    Purchase,
+    PurchaseLocationTypeEnum,
+    ReadingList,
+    ReadingListEntry,
+    SubgenreEnum,
+    Website,
+)
 
 E = TypeVar("E", bound=EnumMeta)
 
@@ -611,7 +623,7 @@ def _parse_raw_reading_list(
     return ReadingList(entries=entries)
 
 
-def export_to_json(engine: Engine, output_file: str):
+def export_reading_list(engine: Engine, output_file: str):
     """export reading list"""
     raw_reading_list = _get_reading_list(engine)
     reading_list = _parse_raw_reading_list(raw_reading_list, engine)
