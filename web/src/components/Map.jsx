@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import * as d3 from "d3";
-import _ from "lodash";
 import cities from "../data/usa_cities.json";
 import states from "../data/usa_states_small.json";
 import publisherCities from "../data/publisher_cities_list.json";
@@ -25,7 +24,25 @@ function getCitiesToRender() {
   };
 }
 
-function Map(props) {
+function CityCircle(props) {
+  return (
+    <circle
+      cx={props.cx}
+      cy={props.cy}
+      r="5"
+      fill="orange"
+      stroke="black"
+      strokeWidth="1"
+    >
+      <title>
+        {" "}
+        {props.name}, {props.state}{" "}
+      </title>
+    </circle>
+  );
+}
+
+function Map() {
   const width = 1200;
   const height = 800;
   const projection = d3
@@ -53,14 +70,12 @@ function Map(props) {
   const renderCities = () => {
     return citiesToRender.features.map((d) => {
       return (
-        <circle
+        <CityCircle
           key={d.properties.name + "-" + d.properties.state}
+          name={d.properties.name}
+          state={d.properties.state}
           cx={projection(d.geometry.coordinates)[0]}
           cy={projection(d.geometry.coordinates)[1]}
-          r="5"
-          fill="orange"
-          stroke="black"
-          strokeWidth="1"
         />
       );
     });
