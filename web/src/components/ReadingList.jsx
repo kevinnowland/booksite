@@ -1,7 +1,7 @@
-import React from 'react';
-import _ from 'lodash';
-import '../assets/ReadingList.css';
-import Entry,  {starRating} from './Entry';
+import React from "react";
+import _ from "lodash";
+import "../assets/ReadingList.css";
+import Entry, { starRating } from "./Entry";
 
 function pushOrSet(m, k, entry) {
   if (m.has(k)) {
@@ -11,60 +11,63 @@ function pushOrSet(m, k, entry) {
   }
 }
 
-
 function compareEntries(a, b) {
-  const aDate = new Date(a.stoppedReadingDate)
-  const bDate = new Date(b.stoppedReadingDate)
+  const aDate = new Date(a.stoppedReadingDate);
+  const bDate = new Date(b.stoppedReadingDate);
 
   if (aDate < bDate) {
-    return 1
+    return 1;
   } else if (aDate > bDate) {
-    return -1
+    return -1;
   } else {
-    return 0
+    return 0;
   }
 }
 
 function sortRawEntries(entries) {
   var sortedEntries = _.cloneDeep(entries);
   sortedEntries.sort(compareEntries);
-  return sortedEntries
+  return sortedEntries;
 }
 
 // TODO: add unit test
 function getYear(dateString) {
   const date = new Date(dateString);
-  return date.getFullYear().toString()
+  return date.getFullYear().toString();
 }
 
 // TODO: add unit test
 function sortMapKeys(m, asc) {
   if (asc) {
-    const n = new Map([...m.entries()].sort())
-    return n
+    const n = new Map([...m.entries()].sort());
+    return n;
   } else {
-    const n = new Map([...m.entries()].sort().reverse())
-    return n
+    const n = new Map([...m.entries()].sort().reverse());
+    return n;
   }
 }
 
 // TODO: add unit test
 function sortMapKeysEntryLength(m, asc) {
   if (asc) {
-    const n = new Map([...m.entries()].sort((a, b) => a[1].length - b[1].length));
-    return n
+    const n = new Map(
+      [...m.entries()].sort((a, b) => a[1].length - b[1].length)
+    );
+    return n;
   } else {
-    const n = new Map([...m.entries()].sort((a, b) => b[1].length - a[1].length));
-    return n
+    const n = new Map(
+      [...m.entries()].sort((a, b) => b[1].length - a[1].length)
+    );
+    return n;
   }
 }
 
 function sortMapEntries(m) {
   const n = _.cloneDeep(m);
   for (let [k, v] of n) {
-    n.set(k, sortRawEntries(v))
+    n.set(k, sortRawEntries(v));
   }
-  return n
+  return n;
 }
 
 // TODO: add unit test
@@ -78,9 +81,9 @@ function sortEntriesByDateRead(entries) {
     pushOrSet(entryMap, year, entry);
   }
 
-  const sortedMap = sortMapEntries(entryMap)
-  
-  return sortMapKeys(sortedMap, false)
+  const sortedMap = sortMapEntries(entryMap);
+
+  return sortMapKeys(sortedMap, false);
 }
 
 function sortEntriesByPublisher(entries) {
@@ -90,7 +93,9 @@ function sortEntriesByPublisher(entries) {
     const entry = _.cloneDeep(entries[i]);
     const isIndependent = entry.book.publisher.isIndependent;
     const key = isIndependent ? "Independent Press" : "Mainstream Press";
-    const publisher = isIndependent ? entry.book.publisher.name : entry.book.publisher.parentName;
+    const publisher = isIndependent
+      ? entry.book.publisher.name
+      : entry.book.publisher.parentName;
 
     if (!entryMap.has(key)) {
       entryMap.set(key, new Map());
@@ -105,7 +110,7 @@ function sortEntriesByPublisher(entries) {
     sortedMap.set(k, sortMapKeysEntryLength(sortedV, false));
   }
 
-  return sortedMap
+  return sortedMap;
 }
 
 // TODO: add unit test
@@ -118,7 +123,7 @@ function sortEntriesByDatePublished(entries) {
     pushOrSet(entryMap, publishedYear, entry);
   }
 
-  const sortedMap = sortMapEntries(entryMap)
+  const sortedMap = sortMapEntries(entryMap);
   return sortMapKeys(sortedMap, false);
 }
 
@@ -135,7 +140,7 @@ function getNestedEntryCounts(m) {
     }
     counts.set(k, count);
   }
-  return counts
+  return counts;
 }
 
 // TODO: unit test
@@ -155,8 +160,7 @@ function sortEntriesByLanguage(entries) {
       const fromKey = "Translated from " + originalLanguage;
       if (transMap.has(toKey)) {
         pushOrSet(transMap.get(toKey), fromKey, entry);
-      }
-      else {
+      } else {
         transMap.set(toKey, new Map([[fromKey, [entry]]]));
       }
     }
@@ -167,40 +171,44 @@ function sortEntriesByLanguage(entries) {
 
   // sort transMap
   const counts = getNestedEntryCounts(transMap);
-  const sortedTransMap = new Map([...transMap.entries()].sort((a, b) => counts.get(a) - counts.get(b)));
+  const sortedTransMap = new Map(
+    [...transMap.entries()].sort((a, b) => counts.get(a) - counts.get(b))
+  );
   for (let [k, v] of sortedTransMap) {
     sortedTransMap.set(k, sortMapEntries(sortMapKeysEntryLength(v, false)));
   }
 
   return new Map([
     ["Read in Original Language", sortedOrigMap],
-    ["Read in Translation", sortedTransMap]]
-  );
+    ["Read in Translation", sortedTransMap],
+  ]);
 }
 
 function splitWords(str) {
-  return str.split(/(\s+)/)
+  return str.split(/(\s+)/);
 }
 
 function capitalizeWords(str) {
   const words = splitWords(str);
-  const capitals = words.map((word) => word[0].toUpperCase() + word.substring(1));
-  return capitals.join('')
+  const capitals = words.map(
+    (word) => word[0].toUpperCase() + word.substring(1)
+  );
+  return capitals.join("");
 }
 
 function formatGenre(genre) {
-  const lower = genre.toLowerCase().replace('_', ' ');
-  return capitalizeWords(lower)
+  const lower = genre.toLowerCase().replace("_", " ");
+  return capitalizeWords(lower);
 }
 
 function sortGenreMap(genreMap) {
   const sortedGenreMap = sortMapKeysEntryLength(genreMap, false);
-  return sortMapEntries(sortedGenreMap)
+  return sortMapEntries(sortedGenreMap);
 }
 
 function sortEntriesByGenre(entries) {
   const entryMap = new Map();
-  
+
   for (let i = 0; i < entries.length; i++) {
     const entry = entries[i];
     const genre = formatGenre(entry.book.genre);
@@ -227,7 +235,7 @@ function sortEntriesByGenre(entries) {
     sortedMap.set("Poetry", sortEntriesByDateRead(entryMap.get("Poetry")));
   }
 
-  return sortedMap
+  return sortedMap;
 }
 
 function sortEntriesByPurchaseInfo(entries) {
@@ -240,7 +248,10 @@ function sortEntriesByPurchaseInfo(entries) {
 
     if (locationType === "GIFT") {
       pushOrSet(entryMap, "Gift", entry);
-    } else if (locationType === "WEBSITE" || locationType === "ONLINE_BOOKSTORE") {
+    } else if (
+      locationType === "WEBSITE" ||
+      locationType === "ONLINE_BOOKSTORE"
+    ) {
       pushOrSet(entryMap, "Online", entry);
     } else if (locationType === "BOOKSTORE") {
       if (location.isLibrary) {
@@ -253,7 +264,7 @@ function sortEntriesByPurchaseInfo(entries) {
 
   const sortedMap = sortMapKeysEntryLength(entryMap, false);
 
-  return sortMapEntries(sortedMap)
+  return sortMapEntries(sortedMap);
 }
 
 function sortEntriesByRating(entries) {
@@ -263,7 +274,7 @@ function sortEntriesByRating(entries) {
     [starRating(3), []],
     [starRating(2), []],
     [starRating(1), []],
-    [starRating(0), []]
+    [starRating(0), []],
   ]);
 
   for (let i = 0; i < entries.length; i++) {
@@ -278,83 +289,75 @@ function sortEntriesByRating(entries) {
 }
 
 function KeyEntry(props) {
-
   return (
     <div className="keyEntry">
-      <div
-        className="color"
-        style={{backgroundColor: props.color}}
-      ></div>
+      <div className="color" style={{ backgroundColor: props.color }}></div>
       <div className="value">{props.value}</div>
     </div>
-  )
+  );
 }
 
 function Key(props) {
-
   return (
     <div className="key">
-      <KeyEntry value="Completed" color="#D6FFD6"/>
-      <KeyEntry value="Not Completed" color="lightyellow"/>
+      <KeyEntry value="Completed" color="#D6FFD6" />
+      <KeyEntry value="Not Completed" color="lightyellow" />
     </div>
-  )
+  );
 }
 
 class SortedEntries extends React.Component {
-
   render() {
     const k = this.props.k;
     const v = this.props.v;
     const n = this.props.n;
-  
+
     const headerClassName = "sortedEntryHeader level" + n.toString();
-    const entryHeader = <div className={headerClassName}>{k}</div>
+    const entryHeader = <div className={headerClassName}>{k}</div>;
 
     if (v instanceof Map) {
       const sortedEntries = [...v.entries()].map((e) => {
-        return <SortedEntries key={e[0]} k={e[0]} v={e[1]} n={n+1} />
+        return <SortedEntries key={e[0]} k={e[0]} v={e[1]} n={n + 1} />;
       });
       return (
         <div className="sortedEntries">
           {entryHeader}
           {sortedEntries}
         </div>
-      )
+      );
     }
 
-    const entries = v.map((entry) => 
+    const entries = v.map((entry) => (
       <Entry key={entry.readingListId} entry={entry} />
-    );
+    ));
     return (
       <div className="sortedEntries">
         {entryHeader}
-        <ul className="readingList">
-          {entries}
-        </ul>
+        <ul className="readingList">{entries}</ul>
       </div>
-    )
+    );
   }
 }
 
 class ReadingList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {sortBy: 'date read'};
+    this.state = { sortBy: "date read" };
 
     this.updateSortBy = this.updateSortBy.bind(this);
   }
 
   updateSortBy(e) {
-    this.setState(prevState => ({
-      sortBy: e.target.value
-    }));
+    this.setState({
+      sortBy: e.target.value,
+    });
   }
 
   getColor(value) {
     if (value === this.state.sortBy) {
-      return "rgb(172, 172, 172)"
+      return "rgb(172, 172, 172)";
     } else {
-      return "rgb(210, 210, 210)"
+      return "rgb(210, 210, 210)";
     }
   }
 
@@ -366,7 +369,7 @@ class ReadingList extends React.Component {
       "language",
       "genre",
       "purchase info",
-      "rating"
+      "rating",
     ];
     const buttons = sortValues.map((value) => (
       <button
@@ -374,7 +377,7 @@ class ReadingList extends React.Component {
         className="sort"
         onClick={(e) => this.updateSortBy(e)}
         value={value}
-        style={{backgroundColor: this.getColor(value)}}
+        style={{ backgroundColor: this.getColor(value) }}
       >
         {capitalizeWords(value)}
       </button>
@@ -410,7 +413,7 @@ class ReadingList extends React.Component {
         <Key />
         <SortedEntries k="top" v={entryMap} n={0} />
       </div>
-    )
+    );
   }
 }
 
