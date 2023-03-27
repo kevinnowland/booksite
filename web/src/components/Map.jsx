@@ -25,6 +25,10 @@ function getCitiesToRender() {
 }
 
 function CityCircle(props) {
+  const fireAlert = () => {
+    alert("foo");
+  };
+
   return (
     <circle
       cx={props.cx}
@@ -33,6 +37,7 @@ function CityCircle(props) {
       fill="orange"
       stroke="black"
       strokeWidth="1"
+      onMouseEnter={fireAlert}
     >
       <title>
         {" "}
@@ -43,6 +48,7 @@ function CityCircle(props) {
 }
 
 function Map() {
+  const [whichCity, setWhichCity] = useState("foo");
   const width = 1200;
   const height = 800;
   const projection = d3
@@ -87,6 +93,7 @@ function Map() {
         <g className="UsaStates">{renderStates()}</g>
         <g className="UsaCities">{renderCities()}</g>
       </svg>
+      <div> {whichCity} </div>
     </div>
   );
 }
