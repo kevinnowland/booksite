@@ -30,25 +30,31 @@ function CityCircle(props) {
   };
 
   return (
-    <circle
-      cx={props.cx}
-      cy={props.cy}
-      r="5"
-      fill="orange"
-      stroke="black"
-      strokeWidth="1"
-      onMouseEnter={fireAlert}
-    >
-      <title>
-        {" "}
-        {props.name}, {props.state}{" "}
-      </title>
-    </circle>
+    <g>
+      <circle
+        cx={props.cx}
+        cy={props.cy}
+        r="5"
+        fill="orange"
+        stroke="black"
+        strokeWidth="1"
+        onMouseEnter={fireAlert}
+      >
+        <title>
+          {" "}
+          {props.name}, {props.state}{" "}
+        </title>
+      </circle>
+      <foreignObject x={props.cx} y={props.cy} height="200" width="100">
+        <div xmlns="http://www.w3.org/1999/xhtml">
+          {props.name}, {props.state}
+        </div>
+      </foreignObject>
+    </g>
   );
 }
 
 function Map() {
-  const [whichCity, setWhichCity] = useState("foo");
   const width = 1200;
   const height = 800;
   const projection = d3
@@ -93,7 +99,6 @@ function Map() {
         <g className="UsaStates">{renderStates()}</g>
         <g className="UsaCities">{renderCities()}</g>
       </svg>
-      <div> {whichCity} </div>
     </div>
   );
 }
