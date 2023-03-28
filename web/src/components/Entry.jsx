@@ -1,15 +1,16 @@
-import React from 'react';
-import '../assets/Entry.css';
+import React from "react";
+import "../assets/Entry.css";
+import { getStateAbbrev } from "../common/utils";
 
 function getAuthors(authors) {
   var author_list = "";
   authors.forEach((author, i) => {
     if (i > 0) {
-      author_list += ", "
+      author_list += ", ";
     }
-    author_list += author.name
+    author_list += author.name;
   });
-  return author_list
+  return author_list;
 }
 
 function BookHeader(props) {
@@ -19,26 +20,26 @@ function BookHeader(props) {
       <div className="title">{book.title}</div>
       <div className="authors">{getAuthors(book.authors)}</div>
     </div>
-  )
+  );
 }
 
 export function starRating(rating) {
-  var stars = ""
-  for (let i = 0; i < 5; i ++) {
-    if (i < rating ) {
-      stars += "\u2605"
+  var stars = "";
+  for (let i = 0; i < 5; i++) {
+    if (i < rating) {
+      stars += "\u2605";
     } else {
-      stars += "\u2606"
+      stars += "\u2606";
     }
   }
-  return stars
+  return stars;
 }
 
 function dateText(date_string) {
   const d = new Date(date_string);
-  const options = {day: 'numeric', month: 'short', year: 'numeric'};
-  const dateString = d.toLocaleDateString("en-US", options)
-  return dateString
+  const options = { day: "numeric", month: "short", year: "numeric" };
+  const dateString = d.toLocaleDateString("en-US", options);
+  return dateString;
 }
 
 function RatingHeader(props) {
@@ -49,80 +50,22 @@ function RatingHeader(props) {
       <div className="rating">{starRating(rating)}</div>
       <div className="stoppedReadingDate">{dateText(stoppedReadingDate)}</div>
     </div>
-  )
+  );
 }
 
 function getIsIndependentText(isIndependent) {
   if (isIndependent) {
-    return ''
+    return "";
   } else {
-    return 'not'
+    return "not";
   }
 }
 
 function getCity(city) {
-  const stateAbbrevs = new Map([
-    ["Alabama", "AL"],
-    ["Alaska", "AK"],
-    ["Arizona", "AZ"],
-    ["Arkansa", "AR"],
-    ["California", "CA"],
-    ["Colorado", "CO"],
-    ["Connecticut", "CT"],
-    ["Delaware", "DE"],
-    ["D.C.", "DC"],
-    ["DC", "DC"],
-    ["District of Columbia", "DC"],
-    ["Florida", "FL"],
-    ["Georgia", "GA"],
-    ["Hawaii", "HI"],
-    ["Idaho", "ID"],
-    ["Illinois", "IL"],
-    ["Indiana", "IN"],
-    ["Iowa", "IA"],
-    ["Kansas", "KS"],
-    ["Kentucky", "KY"],
-    ["Louisiana", "LA"],
-    ["Maine", "ME"],
-    ["Maryland", "MD"],
-    ["Massachusetts", "MA"],
-    ["Michigan", "MI"],
-    ["Minnesota", "MN"],
-    ["Mississippi", "MS"],
-    ["Missouri", "MO"],
-    ["Montana", "MT"],
-    ["Nebraska", "NE"],
-    ["Nevada", "NV"],
-    ["New Hampshire", "NH"],
-    ["New Jersey", "NJ"],
-    ["New Mexico", "NM"],
-    ["New York", "NY"],
-    ["North Carolina", "NC"],
-    ["North Dakota", "ND"],
-    ["Ohio", "OH"],
-    ["Oklahoma", "OK"],
-    ["Oregon", "OR"],
-    ["Pennsylvania", "OR"],
-    ["Puerto Rico", "PR"],
-    ["Rhode Island", "RI"],
-    ["South Carolina", "SC"],
-    ["South Dakota", "SD"],
-    ["Tennessee", "TN"],
-    ["Texas", "TX"],
-    ["Utah", "UT"],
-    ["Vermont", "UT"],
-    ["Virgin Islands", "VI"],
-    ["Virginia", "VA"],
-    ["Washington", "WA"],
-    ["West Virginia", "WV"],
-    ["Wisconsin", "WI"],
-    ["Wyoming", "WY"]
-  ]);
-
   if (city.country === "United States") {
-    return city.city + ", " + stateAbbrevs.get(city.region)
+    return city.city + ", " + getStateAbbrev(city.region);
   } else {
-    return city.city + ", " + city.country
+    return city.city + ", " + city.country;
   }
 }
 
@@ -136,29 +79,32 @@ function Publisher(props) {
   var publisherText;
 
   if (name === parentName) {
-    publisherText =(
+    publisherText = (
       <div>
-        Published in by <b>{name}</b> ({city}),
-        which is <b>{getIsIndependentText(isIndependent)} independent</b>.
-        Originally appeared in <b>{props.publishedYear}</b>.
+        Published in by <b>{name}</b> ({city}), which is{" "}
+        <b>{getIsIndependentText(isIndependent)} independent</b>. Originally
+        appeared in <b>{props.publishedYear}</b>.
       </div>
-    )
+    );
   } else {
     publisherText = (
       <div>
-        Published by <b>{name}</b> ({city}), which is an imprint of <b>{parentName}</b>, 
-        which is <b>{getIsIndependentText(isIndependent)} independent</b>.
-        Originally appeared in <b>{props.publishedYear}</b>.
+        Published by <b>{name}</b> ({city}), which is an imprint of{" "}
+        <b>{parentName}</b>, which is{" "}
+        <b>{getIsIndependentText(isIndependent)} independent</b>. Originally
+        appeared in <b>{props.publishedYear}</b>.
       </div>
-    )
+    );
   }
 
   return (
     <div className="publisher">
-      <div className="title"><u>Publisher Info</u></div>
+      <div className="title">
+        <u>Publisher Info</u>
+      </div>
       {publisherText}
     </div>
-  )
+  );
 }
 
 function Language(props) {
@@ -169,75 +115,85 @@ function Language(props) {
 
   if (props.translator === null) {
     languageText = (
-      <div>This book was written and read in <b>{language}</b>.</div>
+      <div>
+        This book was written and read in <b>{language}</b>.
+      </div>
     );
   } else {
     const translatorName = props.translator.name;
     languageText = (
       <div>
-        This book was read in <b>{language}</b>,
-        but was written in <b>{originalLanguage}</b> and
-        translated by <b>{translatorName}</b>.
+        This book was read in <b>{language}</b>, but was written in{" "}
+        <b>{originalLanguage}</b> and translated by <b>{translatorName}</b>.
       </div>
     );
   }
   return (
-    <div className='language'>
-      <div className='title'><u>Language Info</u></div>
+    <div className="language">
+      <div className="title">
+        <u>Language Info</u>
+      </div>
       {languageText}
     </div>
-  )
+  );
 }
-
 
 function Purchase(props) {
   const locationType = props.purchase.locationType;
   const location = props.purchase.location;
 
-  var info = '';
+  var info = "";
 
   if (locationType === "GIFT") {
-    info = <div>This book was a <b>gift</b>!</div>
+    info = (
+      <div>
+        This book was a <b>gift</b>!
+      </div>
+    );
   } else if (locationType === "BOOKSTORE") {
     if (location.isLibrary) {
       info = (
         <div>
-          This book was borrowed from <b>{location.name}</b> in {getCity(location.city)}.
+          This book was borrowed from <b>{location.name}</b> in{" "}
+          {getCity(location.city)}.
         </div>
-      )
+      );
     } else {
       info = (
         <div>
-          This book was purchased from <b>{location.name}</b> in {getCity(location.city)}
+          This book was purchased from <b>{location.name}</b> in{" "}
+          {getCity(location.city)}
         </div>
-      )
+      );
     }
   } else if (locationType === "WEBSITE") {
     info = (
       <div>
         This book was purchased on <b>{location.website}</b>.
       </div>
-    )
+    );
   } else {
     info = (
       <div>
-        This book was purchased on <b>{location.website}</b>,
-        which is affiliated with <b>{location.name}</b> in
+        This book was purchased on <b>{location.website}</b>, which is
+        affiliated with <b>{location.name}</b> in
         {getCity(location.city)}.
       </div>
-    )
+    );
   }
 
   return (
-    <div className='purchase'>
-      <div className='title'><u>Purchase Info</u></div>
+    <div className="purchase">
+      <div className="title">
+        <u>Purchase Info</u>
+      </div>
       {info}
     </div>
-  )
+  );
 }
 
 function formatSubgenre(genre) {
-  return genre.toLowerCase().replace('_', ' ')
+  return genre.toLowerCase().replace("_", " ");
 }
 
 function Genre(props) {
@@ -245,28 +201,25 @@ function Genre(props) {
   const subgenre = props.subgenre;
   const format = props.format;
 
-  var genreInfo = '';
-  var formatInfo = '';
+  var genreInfo = "";
+  var formatInfo = "";
 
   if (genre === "FICTION") {
-
     if (subgenre === "THRILLER") {
       genreInfo = (
         <div>
-          This work of <b>fiction</b> could be
-          considered a <b>thriller</b>.
+          This work of <b>fiction</b> could be considered a <b>thriller</b>.
         </div>
       );
     } else if (subgenre === "OTHER") {
       <div>
-        this work of <b>fiction</b> does not
-        have a clear genre.
-      </div>
+        this work of <b>fiction</b> does not have a clear genre.
+      </div>;
     } else {
       genreInfo = (
         <div>
-          This work of <b>fiction</b> could be
-          considered <b>{formatSubgenre(subgenre)}</b>.
+          This work of <b>fiction</b> could be considered{" "}
+          <b>{formatSubgenre(subgenre)}</b>.
         </div>
       );
     }
@@ -290,7 +243,6 @@ function Genre(props) {
         </div>
       );
     }
-    
   } else if (genre === "POETRY") {
     genreInfo = (
       <div>
@@ -298,7 +250,6 @@ function Genre(props) {
       </div>
     );
   } else if (genre === "NON_FICTION") {
-
     if (subgenre === "OTHER") {
       genreInfo = (
         <div>
@@ -308,8 +259,8 @@ function Genre(props) {
     } else {
       genreInfo = (
         <div>
-          This is a <b>non-fiction</b> book
-          that is a <b>{formatSubgenre(subgenre)}</b>.
+          This is a <b>non-fiction</b> book that is a{" "}
+          <b>{formatSubgenre(subgenre)}</b>.
         </div>
       );
     }
@@ -323,8 +274,7 @@ function Genre(props) {
     } else if (format === "MEDIUM") {
       formatInfo = (
         <div className="format">
-          The book is neither a long work nor a
-          series of shorter works.
+          The book is neither a long work nor a series of shorter works.
         </div>
       );
     } else if (format === "MULTIPLE_SHORT") {
@@ -334,52 +284,51 @@ function Genre(props) {
         </div>
       );
     }
-
   }
 
-
   return (
-    <div className='genre'>
-      <div className='title'><u>Genre</u></div>
+    <div className="genre">
+      <div className="title">
+        <u>Genre</u>
+      </div>
       {genreInfo} {formatInfo}
     </div>
-  )
+  );
 }
-
 
 class Entry extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showExtra: false
+      showExtra: false,
     };
 
-    this.handleClick= this.handleClick.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   getClassName() {
     if (this.props.entry.isReadCompletely) {
-      return "entry completed"
+      return "entry completed";
     } else {
-      return "entry notCompleted"
+      return "entry notCompleted";
     }
   }
 
   getDisplay() {
     if (this.state.showExtra) {
-      return "inline"
+      return "inline";
     } else {
-      return "none"
+      return "none";
     }
   }
 
   handleClick() {
-    this.setState(prevState => ({
-      showExtra: !prevState.showExtra
+    this.setState((prevState) => ({
+      showExtra: !prevState.showExtra,
     }));
   }
 
-  render () {
+  render() {
     const entry = this.props.entry;
     const book = entry.book;
     const language = book.language;
@@ -390,13 +339,12 @@ class Entry extends React.Component {
     const genre = book.genre;
     const subgenre = book.subgenre;
     const format = book.format;
-    
+
     var style = null;
     if (!this.state.showExtra) {
-      style = {display: 'none'}
+      style = { display: "none" };
     }
 
-    
     return (
       <li className={this.getClassName()}>
         <div className="entry" onClick={this.handleClick}>
@@ -404,12 +352,9 @@ class Entry extends React.Component {
             <BookHeader book={entry.book} />
             <RatingHeader entry={entry} />
           </div>
-          <div
-            className="entryExtra"
-            style={style}
-          >
+          <div className="entryExtra" style={style}>
             <Publisher publisher={publisher} publishedYear={publishedYear} />
-            <Genre genre={genre} subgenre={subgenre} format={format}/>
+            <Genre genre={genre} subgenre={subgenre} format={format} />
             <Language
               language={language}
               originalLanguage={originalLanguage}
@@ -419,7 +364,7 @@ class Entry extends React.Component {
           </div>
         </div>
       </li>
-    )
+    );
   }
 }
 
