@@ -54,9 +54,10 @@ function Publisher(props) {
 }
 
 function CityCircle(props) {
-  const fireAlert = () => {
-    alert("foo");
-  };
+  const [isHidden, setIsHidden] = useState(true);
+
+  const handleMouseOver = () => setIsHidden(false);
+  const handleMouseOut = () => setIsHidden(true);
 
   const i = getCityIndex(props, publisherCities.cities);
   const cityData = publisherCities.cities[i];
@@ -79,15 +80,22 @@ function CityCircle(props) {
         fill="orange"
         stroke="black"
         strokeWidth="1"
-        onMouseEnter={fireAlert}
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
+      ></circle>
+      <foreignObject
+        x={props.cx - 50}
+        y={props.cy - 50}
+        height="100%"
+        width="100%"
+        style={{ visibility: isHidden ? "hidden" : "visible" }}
       >
-        <title>
-          {" "}
-          {props.name}, {props.state}{" "}
-        </title>
-      </circle>
-      <foreignObject x={props.cx} y={props.cy - 50} height="100%" width="100%">
-        <div className="pubCityInfo" xmlns="http://www.w3.org/1999/xhtml">
+        <div
+          className="pubCityInfo"
+          xmlns="http://www.w3.org/1999/xhtml"
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMouseOut}
+        >
           <div>
             <b>
               {props.name}, {getStateAbbrev(props.state)}
