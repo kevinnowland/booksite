@@ -15,24 +15,23 @@ function getCityIndex(obj, list) {
   return -1;
 }
 
-function getCitiesToRender() {
-  const features = cities.features.reduce((filtered, feature) => {
+function getCitiesToRender(projection) {
+  const citiesToRender = cities.features.reduce((filtered, feature) => {
     const ind = getCityIndex(feature.properties, publisherCities.cities);
     if (ind > -1) {
       const city = publisherCities.cities[ind];
+      const coords = projection(feature.geometry.coordinates);
       filtered.push({
         name: city.name,
         state: city.state,
         publishers: city.publishers,
-        coordinates: feature.geometry.coordinates,
+        cx: coords[0],
+        cy: coords[1],
       });
     }
     return filtered;
   }, []);
-  return {
-    type: "FeatureCollection",
-    features: features,
-  };
+  return citiesToRender;
 }
 
 function Publisher(props) {
@@ -55,36 +54,33 @@ function Publisher(props) {
   );
 }
 
-function CityCircle(props) {
+function CityInfo(props) {
   const [isHidden, setIsHidden] = useState(true);
 
   const handleMouseOver = () => setIsHidden(false);
   const handleMouseOut = () => setIsHidden(true);
 
-  const i = getCityIndex(props, publisherCities.cities);
-  const cityData = publisherCities.cities[i];
-  const numPublishers = cityData.publishers.length;
+  const numPublishers = props.publishers.length;
   let numBooks = 0;
   for (let i = 0; i < numPublishers; i++) {
-    numBooks += cityData.publishers[i].titles.length;
+    numBooks += props.publishers[i].titles.length;
   }
 
-  const publishers = cityData.publishers.map((p) => {
+  const publishers = props.publishers.map((p) => {
     return <Publisher key={p.name} name={p.name} titles={p.titles} />;
   });
 
   return (
     <g>
-      <circle
-        cx={props.cx}
-        cy={props.cy}
-        r="5"
-        fill="orange"
-        stroke="black"
-        strokeWidth="1"
+      <rect
+        x={props.cx - 5}
+        y={props.cy - 5}
+        width="10"
+        height="10"
+        opacity="0"
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
-      ></circle>
+      ></rect>
       <foreignObject
         x={props.cx - 50}
         y={props.cy - 50}
@@ -114,6 +110,19 @@ function CityCircle(props) {
   );
 }
 
+function CityCircle(props) {
+  return (
+    <circle
+      cx={props.cx}
+      cy={props.cy}
+      r="5"
+      fill="orange"
+      stroke="black"
+      strokeWidth="1"
+    ></circle>
+  );
+}
+
 function Map() {
   const width = 1500;
   const height = 800;
@@ -122,7 +131,7 @@ function Map() {
     .scale(1500)
     .translate([width / 2, height / 2]);
   const path = d3.geoPath().projection(projection);
-  const citiesToRender = getCitiesToRender();
+  const citiesToRender = getCitiesToRender(projection);
   console.log(citiesToRender);
 
   const renderStates = () => {
@@ -141,14 +150,29 @@ function Map() {
   };
 
   const renderCities = () => {
-    return citiesToRender.features.map((c) => {
+    return citiesToRender.map((c) => {
       return (
         <CityCircle
           key={c.name + "-" + c.state}
           name={c.name}
           state={c.state}
-          cx={projection(c.coordinates)[0]}
-          cy={projection(c.coordinates)[1]}
+          cx={c.cx}
+          cy={c.cy}
+        />
+      );
+    });
+  };
+
+  const renderCityInfo = () => {
+    return citiesToRender.map((c) => {
+      return (
+        <CityInfo
+          key={c.name + "-" + c.state}
+          name={c.name}
+          state={c.state}
+          publishers={c.publishers}
+          cx={c.cx}
+          cy={c.cy}
         />
       );
     });
@@ -159,6 +183,7 @@ function Map() {
       <svg height={height} width={width} className="map">
         <g className="UsaStates">{renderStates()}</g>
         <g className="UsaCities">{renderCities()}</g>
+        <g classNAme="usaCityInfo">{renderCityInfo()}</g>
       </svg>
     </div>
   );
