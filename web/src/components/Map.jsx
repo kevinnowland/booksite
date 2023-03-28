@@ -82,7 +82,7 @@ function CityInfo(props) {
         onMouseOut={handleMouseOut}
       ></rect>
       <foreignObject
-        x={props.cx - 50}
+        x={props.cx - 125}
         y={props.cy - 50}
         height="100%"
         width="100%"
