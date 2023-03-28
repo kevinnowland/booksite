@@ -15,18 +15,20 @@ function getCityIndex(obj, list) {
   return -1;
 }
 
-function cityInList(obj, list) {
-  if (getCityIndex(obj, list) >= 0) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 function getCitiesToRender() {
-  const features = cities.features.filter((f) =>
-    cityInList(f.properties, publisherCities.cities)
-  );
+  const features = cities.features.reduce((filtered, feature) => {
+    const ind = getCityIndex(feature.properties, publisherCities.cities);
+    if (ind > -1) {
+      const city = publisherCities.cities[ind];
+      filtered.push({
+        name: city.name,
+        state: city.state,
+        publishers: city.publishers,
+        coordinates: feature.geometry.coordinates,
+      });
+    }
+    return filtered;
+  }, []);
   return {
     type: "FeatureCollection",
     features: features,
@@ -121,6 +123,7 @@ function Map() {
     .translate([width / 2, height / 2]);
   const path = d3.geoPath().projection(projection);
   const citiesToRender = getCitiesToRender();
+  console.log(citiesToRender);
 
   const renderStates = () => {
     return states.features.map((d) => {
@@ -138,14 +141,14 @@ function Map() {
   };
 
   const renderCities = () => {
-    return citiesToRender.features.map((d) => {
+    return citiesToRender.features.map((c) => {
       return (
         <CityCircle
-          key={d.properties.name + "-" + d.properties.state}
-          name={d.properties.name}
-          state={d.properties.state}
-          cx={projection(d.geometry.coordinates)[0]}
-          cy={projection(d.geometry.coordinates)[1]}
+          key={c.name + "-" + c.state}
+          name={c.name}
+          state={c.state}
+          cx={projection(c.coordinates)[0]}
+          cy={projection(c.coordinates)[1]}
         />
       );
     });
