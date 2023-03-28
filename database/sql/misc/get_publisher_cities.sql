@@ -2,7 +2,7 @@ SELECT
   c.city_id as city_id
   ,c.city as name
   ,c.region as state
-  ,p.name as publisher_name
+  ,p.parent_name as publisher_name
   ,b.title as title
 FROM
   book as b
