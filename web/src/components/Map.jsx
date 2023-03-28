@@ -4,6 +4,7 @@ import cities from "../data/usa_cities.json";
 import states from "../data/usa_states_small.json";
 import publisherCities from "../data/publisher_cities_list.json";
 import "../assets/Map.css";
+import { getStateAbbrev } from "../common/utils";
 
 function cityInList(obj, list) {
   for (let i = 0; i < list.length; i++) {
@@ -47,7 +48,7 @@ function CityCircle(props) {
       </circle>
       <foreignObject x={props.cx} y={props.cy} height="200" width="100">
         <div xmlns="http://www.w3.org/1999/xhtml">
-          {props.name}, {props.state}
+          {props.name}, {getStateAbbrev(props.state)}
         </div>
       </foreignObject>
     </g>
@@ -55,7 +56,7 @@ function CityCircle(props) {
 }
 
 function Map() {
-  const width = 1200;
+  const width = 1500;
   const height = 800;
   const projection = d3
     .geoAlbersUsa()
