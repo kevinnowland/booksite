@@ -9,3 +9,24 @@ svg.map {
   margin: auto;
   padding-bottom: 50px;
 }
+
+div.pubCityInfo {
+  background: white;
+  width: 250px;
+  max-height: 400px;
+  text-align: left;
+  padding: 5px;
+  margin-left: 10px;
+
+  border-style: solid;
+  overflow-y: auto;
+}
+
+div.pubSummary {
+  margin-top: 5px;
+}
+
+div.publisher {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}

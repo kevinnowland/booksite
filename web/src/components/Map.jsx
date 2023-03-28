@@ -6,13 +6,21 @@ import publisherCities from "../data/publisher_cities_list.json";
 import "../assets/Map.css";
 import { getStateAbbrev } from "../common/utils";
 
-function cityInList(obj, list) {
+function getCityIndex(obj, list) {
   for (let i = 0; i < list.length; i++) {
     if (list[i].name === obj.name && list[i].state === obj.state) {
-      return true;
+      return i;
     }
   }
-  return false;
+  return -1;
+}
+
+function cityInList(obj, list) {
+  if (getCityIndex(obj, list) >= 0) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function getCitiesToRender() {
@@ -25,10 +33,42 @@ function getCitiesToRender() {
   };
 }
 
+function Publisher(props) {
+  const numBooks = props.titles.length;
+  let titles = "";
+  for (let i = 0; i < numBooks; i++) {
+    if (i < numBooks - 1) {
+      titles += props.titles[i] + "; ";
+    } else {
+      titles += props.titles[i];
+    }
+  }
+
+  return (
+    <div className="publisher">
+      <div className="publisherName">
+        <i>{props.name}</i>: {titles}
+      </div>
+    </div>
+  );
+}
+
 function CityCircle(props) {
   const fireAlert = () => {
     alert("foo");
   };
+
+  const i = getCityIndex(props, publisherCities.cities);
+  const cityData = publisherCities.cities[i];
+  const numPublishers = cityData.publishers.length;
+  let numBooks = 0;
+  for (let i = 0; i < numPublishers; i++) {
+    numBooks += cityData.publishers[i].titles.length;
+  }
+
+  const publishers = cityData.publishers.map((p) => {
+    return <Publisher key={p.name} name={p.name} titles={p.titles} />;
+  });
 
   return (
     <g>
@@ -46,9 +86,18 @@ function CityCircle(props) {
           {props.name}, {props.state}{" "}
         </title>
       </circle>
-      <foreignObject x={props.cx} y={props.cy} height="200" width="100">
-        <div xmlns="http://www.w3.org/1999/xhtml">
-          {props.name}, {getStateAbbrev(props.state)}
+      <foreignObject x={props.cx} y={props.cy - 50} height="100%" width="100%">
+        <div className="pubCityInfo" xmlns="http://www.w3.org/1999/xhtml">
+          <div>
+            <b>
+              {props.name}, {getStateAbbrev(props.state)}
+            </b>
+          </div>
+          <div className="pubSummary">
+            {numBooks} book/s read from {numPublishers} publisher/s located
+            here.
+          </div>
+          <div className="publishers">{publishers}</div>
         </div>
       </foreignObject>
     </g>
