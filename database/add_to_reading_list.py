@@ -8,17 +8,29 @@ from typing import Optional, TypeVar
 
 from sqlalchemy import create_engine
 from sqlalchemy.engine.base import Engine
-
 from src.data_types import FormatEnum, GenderEnum, GenreEnum, SubgenreEnum
-from src.database import (DimensionValueNotFoundError, get_author,
-                          get_author_id, get_author_list_id, get_book_id,
-                          get_bookstore_id, get_cities, get_city_id,
-                          get_language_id, get_publisher_id, get_website_id,
-                          insert_author, insert_author_list, insert_book,
-                          insert_bookstore, insert_city, insert_language,
-                          insert_publisher, insert_reading_list,
-                          insert_website)
-
+from src.database import (
+    DimensionValueNotFoundError,
+    get_author,
+    get_author_id,
+    get_author_list_id,
+    get_book_id,
+    get_bookstore_id,
+    get_cities,
+    get_city_id,
+    get_language_id,
+    get_publisher_id,
+    get_website_id,
+    insert_author,
+    insert_author_list,
+    insert_book,
+    insert_bookstore,
+    insert_city,
+    insert_language,
+    insert_publisher,
+    insert_reading_list,
+    insert_website,
+)
 
 VALID_READING_LANGUAGES = [
     "English",
@@ -375,7 +387,9 @@ def prompt_rating() -> int:
 if __name__ == "__main__":
 
     parser = ArgumentParser()
-    parser.add_argument("--path", "-p", type=str, help="the database file")
+    parser.add_argument(
+        "--path", "-p", type=str, help="the database file", default="data/production.db"
+    )
     args = parser.parse_args()
 
     engine = create_engine("sqlite:///" + args.path)
