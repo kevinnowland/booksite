@@ -1,0 +1,13 @@
+div.barChart {
+  width: 100%;
+
+  text-align: center;
+}
+
+svg.barChart {
+  display: block;
+  margin: auto;
+  padding-bottom: 50px;
+
+  border-style: solid;
+}

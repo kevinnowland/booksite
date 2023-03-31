@@ -132,7 +132,6 @@ function Map() {
     .translate([width / 2, height / 2]);
   const path = d3.geoPath().projection(projection);
   const citiesToRender = getCitiesToRender(projection);
-  console.log(citiesToRender);
 
   const renderStates = () => {
     return states.features.map((d) => {
@@ -183,7 +182,7 @@ function Map() {
       <svg height={height} width={width} className="map">
         <g className="UsaStates">{renderStates()}</g>
         <g className="UsaCities">{renderCities()}</g>
-        <g classNAme="usaCityInfo">{renderCityInfo()}</g>
+        <g className="usaCityInfo">{renderCityInfo()}</g>
       </svg>
     </div>
   );
