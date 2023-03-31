@@ -44,13 +44,12 @@ function HorizontalBarChart() {
   const rects = barData.map((i, _) => <rect key={i} fill="#f28c28" />);
 
   useEffect(() => {
-    // x-axis
-    const gXAxis = d3.select(xAxisRef.current);
+    var gXAxis = d3.select(xAxisRef.current);
     const xScale = d3.scaleLinear().domain([0, maxBooks]).range([0, width]);
     const xAxis = d3.axisBottom(xScale);
     gXAxis.call(xAxis);
 
-    const gYAxis = d3.select(yAxisRef.current);
+    var gYAxis = d3.select(yAxisRef.current);
     const yScale = d3
       .scaleBand()
       .range([0, height])
@@ -59,7 +58,7 @@ function HorizontalBarChart() {
     const yAxis = d3.axisLeft(yScale);
     gYAxis.call(yAxis);
 
-    const gBars = d3.select(barsRef.current);
+    var gBars = d3.select(barsRef.current);
     gBars
       .selectAll("rect")
       .data(barData)
@@ -80,15 +79,25 @@ function HorizontalBarChart() {
           className="barChart"
           transform={`translate(${margin.left}, ${margin.top})`}
         >
+          <g className="bars" ref={barsRef}>
+            {rects}
+          </g>
           <g
             className="xAxis"
             transform={`translate(0, ${height})`}
             ref={xAxisRef}
-          />
-          <g className="yAxis" ref={yAxisRef} />
-          <g className="bars" ref={barsRef}>
-            {rects}
+          >
+            <text
+              className="xTitle"
+              //textAnchor="middle"
+              transform={`translate(${width / 2}, 50)`}
+              fill="black"
+              fontSize="20px"
+            >
+              published books read
+            </text>{" "}
           </g>
+          <g className="yAxis" ref={yAxisRef} />
         </g>
       </svg>
     </div>
