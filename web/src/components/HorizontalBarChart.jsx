@@ -1,27 +1,47 @@
 import React, { useRef, useEffect } from "react";
 import "../assets/HorizontalBarChart.css";
+import publisherCities from "../data/publisher_cities_list.json";
 import * as d3 from "d3";
+import { getCityStateAbbrev } from "../common/utils";
 
-const barArray = [
-  ["New York City", 10],
-  ["Columbus", 7],
-  ["Austin", 1],
-  ["Philadelphia", 1],
-  ["Portland", 1],
-];
+function countTitles(city) {
+  return city.publishers.reduce((acc, pub) => acc + pub.titles.length, 0);
+}
+
+function compareCities(a, b) {
+  const diff = b[1] - a[1];
+  if (diff !== 0) {
+    return diff;
+  } else {
+    return a[0].localeCompare(b[0]);
+  }
+}
+
+function getBarData() {
+  var data = publisherCities.cities.map((c) => [
+    getCityStateAbbrev(c.name, c.state),
+    countTitles(c),
+  ]);
+
+  data.sort(compareCities);
+
+  return data;
+}
 
 function HorizontalBarChart() {
   const xAxisRef = useRef();
   const yAxisRef = useRef();
   const barsRef = useRef();
 
+  const barData = getBarData();
+
   const margin = { top: 40, right: 60, bottom: 60, left: 120 };
   const width = 800 - margin.left - margin.right;
   const height = 600 - margin.top - margin.bottom;
 
-  const maxBooks = barArray[0][1];
-  const cities = barArray.map((d) => d[0]);
-  const rects = barArray.map((i, _) => <rect key={i} fill="#f28c28" />);
+  const maxBooks = barData[0][1];
+  const cities = barData.map((d) => d[0]);
+  const rects = barData.map((i, _) => <rect key={i} fill="#f28c28" />);
 
   useEffect(() => {
     // x-axis
@@ -42,7 +62,7 @@ function HorizontalBarChart() {
     const gBars = d3.select(barsRef.current);
     gBars
       .selectAll("rect")
-      .data(barArray)
+      .data(barData)
       .attr("x", xScale(0))
       .attr("y", (d) => yScale(d[0]))
       .attr("width", (d) => xScale(d[1]))

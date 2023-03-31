@@ -4,7 +4,7 @@ import cities from "../data/usa_cities.json";
 import states from "../data/usa_states_small.json";
 import publisherCities from "../data/publisher_cities_list.json";
 import "../assets/Map.css";
-import { getStateAbbrev } from "../common/utils";
+import { getCityStateAbbrev } from "../common/utils";
 
 function getCityIndex(obj, list) {
   for (let i = 0; i < list.length; i++) {
@@ -95,9 +95,7 @@ function CityInfo(props) {
           onMouseOut={handleMouseOut}
         >
           <div>
-            <b>
-              {props.name}, {getStateAbbrev(props.state)}
-            </b>
+            <b>{getCityStateAbbrev(props.name, props.state)}</b>
           </div>
           <div className="pubSummary">
             {numBooks} book/s read from {numPublishers} publisher/s located

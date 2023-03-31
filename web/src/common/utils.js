@@ -65,3 +65,12 @@ export function getStateAbbrev(s) {
     return abbrev;
   }
 }
+
+export function getCityStateAbbrev(city, state) {
+  const stateAbbrev = getStateAbbrev(state);
+  if (state === "") {
+    return city;
+  } else {
+    return city + ", " + stateAbbrev;
+  }
+}
