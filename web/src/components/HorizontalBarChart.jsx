@@ -17,6 +17,10 @@ function compareCities(a, b) {
   }
 }
 
+function Rect() {
+  return <rect fill="#f28c28" />;
+}
+
 function getBarData() {
   var data = publisherCities.cities.map((c) => [
     getCityStateAbbrev(c.name, c.state),
@@ -41,7 +45,7 @@ function HorizontalBarChart() {
 
   const maxBooks = barData[0][1];
   const cities = barData.map((d) => d[0]);
-  const rects = barData.map((i, _) => <rect key={i} fill="#f28c28" />);
+  const rects = barData.map((i, _) => <Rect key={i} />);
 
   useEffect(() => {
     var gXAxis = d3.select(xAxisRef.current);
