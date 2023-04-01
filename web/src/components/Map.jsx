@@ -48,7 +48,7 @@ function Publisher(props) {
   return (
     <div className="publisher">
       <div className="publisherName">
-        <i>{props.name}</i>: {titles}
+        <u>{props.name}</u>: {titles}
       </div>
     </div>
   );
