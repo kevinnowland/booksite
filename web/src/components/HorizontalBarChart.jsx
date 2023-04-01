@@ -1,13 +1,15 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import "../assets/HorizontalBarChart.css";
 import publisherCities from "../data/publisher_cities_list.json";
 import * as d3 from "d3";
 import { getCityStateAbbrev } from "../common/utils";
 
+// TODO: unit test
 function countTitles(city) {
   return city.publishers.reduce((acc, pub) => acc + pub.titles.length, 0);
 }
 
+// TODO: unit test
 function compareCities(a, b) {
   const diff = b[1] - a[1];
   if (diff !== 0) {
@@ -17,8 +19,33 @@ function compareCities(a, b) {
   }
 }
 
-function Rect() {
-  return <rect fill="#f28c28" />;
+function Rect(props) {
+  const [fillColor, setFillColor] = useState("#f28c28");
+  const [opacity, setOpacity] = useState(0);
+
+  const handleMouseOver = () => {
+    setFillColor("#ffa836");
+    setOpacity(1);
+  };
+  const handleMouseOut = () => {
+    setFillColor("#f28c28");
+    setOpacity(0);
+  };
+
+  return (
+    <g>
+      <rect
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
+        fill={fillColor}
+      />
+      <foreignObject x="0" y="0" height="50px" width="100px" opacity={opacity}>
+        <div xmlns="http://www.w3.org/1999/xhtml" className="tooltip">
+          {props.numBooks}
+        </div>
+      </foreignObject>
+    </g>
+  );
 }
 
 function getBarData() {
@@ -45,7 +72,7 @@ function HorizontalBarChart() {
 
   const maxBooks = barData[0][1];
   const cities = barData.map((d) => d[0]);
-  const rects = barData.map((i, _) => <Rect key={i} />);
+  const rects = barData.map((d, i) => <Rect key={i} numBooks={d[1]} />);
 
   useEffect(() => {
     var gXAxis = d3.select(xAxisRef.current);

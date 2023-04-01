@@ -9,3 +9,11 @@ svg.barChart {
   margin: auto;
   padding-bottom: 50px;
 }
+
+div.tooltip {
+  background: white;
+  width: 50px;
+  height: 25px;
+  border-style: solid;
+  border-radius: 5px;
+}
