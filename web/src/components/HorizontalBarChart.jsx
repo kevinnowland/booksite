@@ -1,8 +1,9 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import "../assets/HorizontalBarChart.css";
 import publisherCities from "../data/publisher_cities_list.json";
 import * as d3 from "d3";
 import { getCityStateAbbrev } from "../common/utils";
+import _ from "lodash";
 
 // TODO: unit test
 function countTitles(city) {
@@ -22,6 +23,7 @@ function compareCities(a, b) {
 function Rect(props) {
   const [fillColor, setFillColor] = useState("#f28c28");
   const [opacity, setOpacity] = useState(0);
+  const [mousePos, setMousePos] = useState({ x: null, y: null });
 
   const handleMouseOver = () => {
     setFillColor("#ffa836");
@@ -31,19 +33,33 @@ function Rect(props) {
     setFillColor("#f28c28");
     setOpacity(0);
   };
+  const handleMouseMove = useCallback(
+    _.throttle((e) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    }, 16),
+    []
+  );
 
   return (
     <g>
       <rect
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
+        onMouseMove={handleMouseMove}
         fill={fillColor}
         x={props.x}
         y={props.y}
-        width={props.width}
-        height={props.height}
+        width={props.barWidth}
+        height={props.barHeight}
       />
-      <foreignObject x="0" y="0" height="50px" width="100px" opacity={opacity}>
+      <foreignObject
+        x={mousePos.x - props.svgWidth}
+        y={mousePos.y - 70}
+        height="50px"
+        width="100px"
+        opacity={opacity}
+        pointerEvents="None"
+      >
         <div xmlns="http://www.w3.org/1999/xhtml" className="tooltip">
           {props.numBooks}
         </div>
@@ -92,8 +108,10 @@ function HorizontalBarChart() {
         numBooks={d[1]}
         x={xScale(0)}
         y={yScale(d[0])}
-        width={xScale(d[1])}
-        height={yScale.bandwidth()}
+        barWidth={xScale(d[1])}
+        barHeight={yScale.bandwidth()}
+        svgWidth={width}
+        svgHeight={height}
       />
     );
   });
