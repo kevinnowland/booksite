@@ -99,11 +99,8 @@ function HorizontalBarChart() {
   });
 
   useEffect(() => {
-    var gXAxis = d3.select(xAxisRef.current);
-    gXAxis.call(xAxis);
-
-    var gYAxis = d3.select(yAxisRef.current);
-    gYAxis.call(yAxis);
+    d3.select(xAxisRef.current).call(xAxis);
+    d3.select(yAxisRef.current).call(yAxis);
   });
 
   return (
