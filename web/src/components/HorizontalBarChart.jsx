@@ -33,6 +33,8 @@ function Rect(props) {
     setFillColor("#f28c28");
     setOpacity(0);
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleMouseMove = useCallback(
     _.throttle((e) => {
       setMousePos({ x: e.clientX, y: e.clientY });
