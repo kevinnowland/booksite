@@ -38,6 +38,10 @@ function Rect(props) {
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
         fill={fillColor}
+        x={props.x}
+        y={props.y}
+        width={props.width}
+        height={props.height}
       />
       <foreignObject x="0" y="0" height="50px" width="100px" opacity={opacity}>
         <div xmlns="http://www.w3.org/1999/xhtml" className="tooltip">
@@ -60,43 +64,46 @@ function getBarData() {
 }
 
 function HorizontalBarChart() {
+  // refs for d3 to use
   const xAxisRef = useRef();
   const yAxisRef = useRef();
-  const barsRef = useRef();
 
-  const barData = getBarData();
-
+  // svg heights
   const margin = { top: 40, right: 60, bottom: 60, left: 120 };
   const width = 800 - margin.left - margin.right;
   const height = 600 - margin.top - margin.bottom;
 
+  // data
+  const barData = getBarData();
   const maxBooks = barData[0][1];
   const cities = barData.map((d) => d[0]);
-  const rects = barData.map((d, i) => <Rect key={i} numBooks={d[1]} />);
+
+  // d3 functions
+  const xScale = d3.scaleLinear().domain([0, maxBooks]).range([0, width]);
+  const xAxis = d3.axisBottom(xScale);
+  const yScale = d3.scaleBand().range([0, height]).domain(cities).padding(0.1);
+  const yAxis = d3.axisLeft(yScale);
+
+  // some elements
+  const rects = barData.map((d, i) => {
+    return (
+      <Rect
+        key={i}
+        numBooks={d[1]}
+        x={xScale(0)}
+        y={yScale(d[0])}
+        width={xScale(d[1])}
+        height={yScale.bandwidth()}
+      />
+    );
+  });
 
   useEffect(() => {
     var gXAxis = d3.select(xAxisRef.current);
-    const xScale = d3.scaleLinear().domain([0, maxBooks]).range([0, width]);
-    const xAxis = d3.axisBottom(xScale);
     gXAxis.call(xAxis);
 
     var gYAxis = d3.select(yAxisRef.current);
-    const yScale = d3
-      .scaleBand()
-      .range([0, height])
-      .domain(cities)
-      .padding(0.1);
-    const yAxis = d3.axisLeft(yScale);
     gYAxis.call(yAxis);
-
-    var gBars = d3.select(barsRef.current);
-    gBars
-      .selectAll("rect")
-      .data(barData)
-      .attr("x", xScale(0))
-      .attr("y", (d) => yScale(d[0]))
-      .attr("width", (d) => xScale(d[1]))
-      .attr("height", yScale.bandwidth());
   });
 
   return (
@@ -110,9 +117,7 @@ function HorizontalBarChart() {
           className="barChart"
           transform={`translate(${margin.left}, ${margin.top})`}
         >
-          <g className="bars" ref={barsRef}>
-            {rects}
-          </g>
+          <g className="bars">{rects}</g>
           <g
             className="xAxis"
             transform={`translate(0, ${height})`}
