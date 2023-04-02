@@ -26,23 +26,7 @@ function rescaleData(data, total) {
   return newData;
 }
 
-function Partition(props) {
-  return (
-    <rect
-      x={props.x}
-      y={props.y}
-      width={props.width}
-      height={props.height}
-      fill="orange"
-    />
-  );
-}
-
-function PartitionChart() {
-  const width = 800;
-  const height = 75;
-
-  const data = rescaleData(mockData, width);
+function getPartitionData(data) {
   let partitionData = [];
   let sum = 0;
   for (let i = 0; i < data.length; i++) {
@@ -61,8 +45,31 @@ function PartitionChart() {
     sum += width;
   }
 
+  return partitionData;
+}
+
+function Partition(props) {
+  return (
+    <rect
+      x={props.x}
+      y={props.y}
+      width={props.width}
+      height={props.height}
+      fill={`hsl(30, 89%, 30%)`}
+    />
+  );
+}
+
+function PartitionChart() {
+  const width = 800;
+  const height = 75;
+
+  const rescaled = rescaleData(mockData, width);
+  const partitionData = getPartitionData(rescaled);
   const partitions = partitionData.map((d) => {
-    return <Partition x={d.x} y={0} width={d.width} height={height} />;
+    return (
+      <Partition key={d.label} x={d.x} y={0} width={d.width} height={height} />
+    );
   });
 
   // TODO: change to g and remove svg
