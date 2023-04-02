@@ -37,7 +37,10 @@ function Rect(props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleMouseMove = useCallback(
     _.throttle((e) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      setMousePos({
+        x: e.nativeEvent.offsetX - 100,
+        y: e.nativeEvent.offsetY - 60,
+      });
     }, 16),
     []
   );
@@ -56,8 +59,8 @@ function Rect(props) {
         height={props.barHeight}
       />
       <foreignObject
-        x={mousePos.x - props.svgWidth}
-        y={mousePos.y - 70}
+        x={mousePos.x}
+        y={mousePos.y}
         height="50px"
         width="100px"
         opacity={opacity}
