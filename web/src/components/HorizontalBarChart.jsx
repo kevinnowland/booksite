@@ -45,7 +45,6 @@ function Rect(props) {
     []
   );
 
-  // TODO: fix x and y in foreign object..
   return (
     <g>
       <rect
