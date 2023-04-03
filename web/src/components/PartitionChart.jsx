@@ -71,7 +71,7 @@ function Partition(props) {
   const [opacity, setOpacity] = useState(0);
 
   const handleMouseOver = () => {
-    setLightness(10);
+    setLightness(props.lightness + 7);
     setOpacity(1);
   };
   const handleMouseOut = () => {
