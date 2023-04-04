@@ -90,7 +90,7 @@ function Partition(props) {
         height={props.height}
         fill={`hsl(${props.hue}, ${props.saturation}%, ${lightness}%)`}
       />
-      <text x="10" y={props.height * 2 - 20} opacity={opacity}>
+      <text x="10" y={props.height + 50} opacity={opacity}>
         {props.label} - {props.value}
       </text>
     </g>
@@ -115,7 +115,7 @@ function PartitionChart(props) {
         x={d.x}
         y={30}
         width={d.width}
-        height={props.height / 2}
+        height={props.barHeight}
         hue={props.hue}
         saturation={props.saturation}
         lightness={d.lightness}
@@ -124,27 +124,32 @@ function PartitionChart(props) {
   });
 
   return (
-    <g className="partitionChart" width={props.width} height={props.height}>
+    <g
+      className="partitionChart"
+      width={props.width}
+      height={props.barHeight + 50}
+    >
       <text className="title" x="10" y="20" fill="black" fontSize="20px">
-        Books read by original language
+        {props.title}
       </text>
       {partitions}
     </g>
   );
 }
 
-export function SamplePartitionChart(props) {
+export function SamplePartitionChart() {
   return (
     <div className="sample">
-      <svg className="sample" width="800" height="140">
+      <svg className="sample" width="800" height="280">
         <PartitionChart
           data={mockData}
           width={800}
-          height={140}
+          barHeight={60}
           hue={30}
           saturation={89}
           maxLightness={55}
           minLightness={27.5}
+          title="Mock data"
         />
       </svg>
     </div>
