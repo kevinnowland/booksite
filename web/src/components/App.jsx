@@ -3,7 +3,7 @@ import ReadingList from "./ReadingList";
 import Map from "./Map";
 import Introduction from "./Introduction";
 import HorizontalBarChart from "./HorizontalBarChart";
-import PartitionChart from "./PartitionChart";
+import { SamplePartitionChart } from "./PartitionChart";
 
 import reading_list from "../data/reading_list";
 
@@ -25,7 +25,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <PartitionChart />
+        <SamplePartitionChart />
         <HorizontalBarChart />
         <Map />
         <ReadingList readingList={this.state.readingList} />

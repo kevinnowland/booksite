@@ -97,11 +97,11 @@ function Partition(props) {
   );
 }
 
-function PartitionChart() {
+function PartitionChart(props) {
   const width = 800;
   const height = 140;
 
-  const rescaled = rescaleData(mockData, width);
+  const rescaled = rescaleData(props.data, width);
   const maxVal = getMax(rescaled, 2);
   const minVal = getMin(rescaled, 2);
   const lightnessScale = scaleLinear()
@@ -126,14 +126,21 @@ function PartitionChart() {
     );
   });
 
-  // TODO: change to g and remove svg
   return (
-    <div className="partitionChart">
-      <svg className="partitionChart" width={width} height={height}>
-        <text className="title" x="10" y="20" fill="black" fontSize="20px">
-          Books read by original language
-        </text>
-        {partitions}
+    <g className="partitionChart" width={width} height={height}>
+      <text className="title" x="10" y="20" fill="black" fontSize="20px">
+        Books read by original language
+      </text>
+      {partitions}
+    </g>
+  );
+}
+
+export function SamplePartitionChart(props) {
+  return (
+    <div className="sample">
+      <svg className="sample" width="800" height="140">
+        <PartitionChart data={mockData} />
       </svg>
     </div>
   );
