@@ -2,6 +2,7 @@ import React from "react";
 import _ from "lodash";
 import "../assets/ReadingList.css";
 import Entry, { starRating } from "./Entry";
+import { capitalizeWords, formatGenre } from "../common/utils";
 
 function pushOrSet(m, k, entry) {
   if (m.has(k)) {
@@ -184,23 +185,6 @@ function sortEntriesByLanguage(entries) {
   ]);
 }
 
-function splitWords(str) {
-  return str.split(/(\s+)/);
-}
-
-function capitalizeWords(str) {
-  const words = splitWords(str);
-  const capitals = words.map(
-    (word) => word[0].toUpperCase() + word.substring(1)
-  );
-  return capitals.join("");
-}
-
-function formatGenre(genre) {
-  const lower = genre.toLowerCase().replace("_", " ");
-  return capitalizeWords(lower);
-}
-
 function sortGenreMap(genreMap) {
   const sortedGenreMap = sortMapKeysEntryLength(genreMap, false);
   return sortMapEntries(sortedGenreMap);
@@ -297,7 +281,7 @@ function KeyEntry(props) {
   );
 }
 
-function Key(props) {
+function Key() {
   return (
     <div className="key">
       <KeyEntry value="Completed" color="#D6FFD6" />

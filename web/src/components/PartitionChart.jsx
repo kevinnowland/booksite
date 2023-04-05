@@ -3,15 +3,6 @@ import "../assets/PartitionChart.css";
 import { scaleLinear } from "d3";
 import _ from "lodash";
 
-const mockData = [
-  ["English", 10],
-  ["French", 5],
-  ["German", 3],
-  ["Chinese", 1],
-  ["Czech", 1],
-  ["Russian", 1],
-];
-
 function getTotal(data, index) {
   return data.reduce((acc, d) => acc + d[index], 0);
 }
@@ -134,25 +125,6 @@ function PartitionChart(props) {
       </text>
       {partitions}
     </g>
-  );
-}
-
-export function SamplePartitionChart() {
-  return (
-    <div className="sample">
-      <svg className="sample" width="800" height="280">
-        <PartitionChart
-          data={mockData}
-          width={800}
-          barHeight={60}
-          hue={30}
-          saturation={89}
-          maxLightness={55}
-          minLightness={27.5}
-          title="Mock data"
-        />
-      </svg>
-    </div>
   );
 }
 

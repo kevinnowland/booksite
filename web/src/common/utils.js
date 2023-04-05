@@ -74,3 +74,20 @@ export function getCityStateAbbrev(city, state) {
     return city + ", " + stateAbbrev;
   }
 }
+
+function splitWords(str) {
+  return str.split(/(\s+)/);
+}
+
+export function capitalizeWords(str) {
+  const words = splitWords(str);
+  const capitals = words.map(
+    (word) => word[0].toUpperCase() + word.substring(1)
+  );
+  return capitals.join("");
+}
+
+export function formatGenre(genre) {
+  const lower = genre.toLowerCase().replace("_", " ");
+  return capitalizeWords(lower);
+}
