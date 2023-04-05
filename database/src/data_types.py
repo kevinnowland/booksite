@@ -126,3 +126,17 @@ class PublisherCity(CamelModel):
 
 class PublisherCityList(CamelModel):
     cities: list[PublisherCity]
+
+
+class Subgenre(CamelModel):
+    subgenre: str
+    count: int
+
+
+class Genre(CamelModel):
+    genre: str
+    subgenres: list[Subgenre]
+
+
+class GenreCounts(CamelModel):
+    genres: list[Genre]

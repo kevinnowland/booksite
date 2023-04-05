@@ -4,7 +4,11 @@
 from argparse import ArgumentParser
 
 from sqlalchemy import create_engine
-from src.database import export_publisher_cities, export_reading_list
+from src.database import (
+    export_genre_counts,
+    export_publisher_cities,
+    export_reading_list,
+)
 
 if __name__ == "__main__":
 
@@ -30,3 +34,4 @@ if __name__ == "__main__":
     export_publisher_cities(
         engine, args.output_directory + "/publisher_cities_list.json"
     )
+    export_genre_counts(engine, args.output_directory + "/genre_counts.json")

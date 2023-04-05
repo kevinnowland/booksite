@@ -27,6 +27,8 @@ from .data_types import (
     City,
     FormatEnum,
     GenderEnum,
+    Genre,
+    GenreCounts,
     Publisher,
     PublisherCity,
     PublisherCityList,
@@ -35,6 +37,7 @@ from .data_types import (
     PurchaseLocationTypeEnum,
     ReadingList,
     ReadingListEntry,
+    Subgenre,
     SubgenreEnum,
     Website,
 )
@@ -709,3 +712,45 @@ def export_publisher_cities(engine: Engine, output_file: str):
 
     with open(output_file, "w") as f:
         f.write(publisher_cities.json(by_alias=True))
+
+
+class RawGenreCount(TypedDict):
+    genre: str
+    subgenre: str
+    count: int
+
+
+def _get_raw_genre_counts(engine: Engine) -> list[RawGenreCount]:
+    """execute sql query to get counts by genre"""
+    with open("sql/misc/get_genre_counts.sql", "r") as f:
+        sql = f.read()
+
+    rows = engine.execute(sql).all()  # type: ignore
+    return [
+        {
+            "genre": row[0],
+            "subgenre": row[1],
+            "count": int(row[2]),
+        }
+        for row in rows
+    ]
+
+
+def _parse_raw_genre_counts(raw: list[RawGenreCount]) -> GenreCounts:
+    genres: dict[str, Genre] = {}
+    for r in raw:
+        sg = Subgenre(subgenre=r["subgenre"], count=r["count"])
+        if g := genres.get(r["genre"]):
+            g.subgenres.append(sg)
+        else:
+            genres[r["genre"]] = Genre(genre=r["genre"], subgenres=[sg])
+
+    return GenreCounts(genres=list(genres.values()))
+
+
+def export_genre_counts(engine: Engine, output_file: str):
+    raw_genre_counts = _get_raw_genre_counts(engine)
+    genre_counts = _parse_raw_genre_counts(raw_genre_counts)
+
+    with open(output_file, "w") as f:
+        f.write(genre_counts.json(by_alias=True))
