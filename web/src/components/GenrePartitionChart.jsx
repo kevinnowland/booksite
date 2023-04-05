@@ -48,12 +48,7 @@ function GenrePartitionChart() {
   const subgenreBarHeight = 45;
   const subgenreBarWidth = 400;
 
-  const genrePartitionData = getPartitionData(
-    genres,
-    genreBarWidth,
-    27.5,
-    55.5
-  );
+  const genrePartitionData = getPartitionData(genres, genreBarWidth, 5, 22.5);
   const fictionPartitionData = getPartitionData(
     parsed.get("Fiction"),
     subgenreBarWidth,
@@ -144,8 +139,8 @@ function GenrePartitionChart() {
             data={genrePartitionData}
             width={genreBarWidth}
             barHeight={genreBarHeight}
-            hue={0}
-            saturation={89}
+            hue={30}
+            saturation={100}
             title="genre"
           />
         </g>
