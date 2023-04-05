@@ -1,7 +1,7 @@
 import React from "react";
 import "../assets/GenrePartitionChart.css";
 import genreCounts from "../data/genre_counts";
-import PartitionChart from "./PartitionChart";
+import PartitionChart, { getPartitionData } from "./PartitionChart";
 import { formatGenre } from "../common/utils";
 
 function compareCounts(a, b) {
@@ -46,42 +46,50 @@ function GenrePartitionChart() {
   const barHeight = 45;
   const barWidth = 400;
 
+  const genrePartitionData = getPartitionData(genres, barWidth, 27.5, 55.5);
+  const fictionPartitionData = getPartitionData(
+    parsed.get("Fiction"),
+    barWidth,
+    27.5,
+    55
+  );
+  const nonfictionPartitionData = getPartitionData(
+    parsed.get("Non Fiction"),
+    barWidth,
+    10,
+    25
+  );
+
   return (
     <div className="genre">
       <svg className="genre" width={width} height={height}>
         <g transform={`translate(${width / 2 - barWidth / 2}, 0)`}>
           <PartitionChart
-            data={genres}
+            data={genrePartitionData}
             width={barWidth}
             barHeight={barHeight}
             hue={30}
             saturation={89}
-            maxLightness={55}
-            minLightness={27.5}
             title="genre"
           />
         </g>
         <g transform={`translate(0,${height - 100})`}>
           <PartitionChart
-            data={parsed.get("Fiction")}
+            data={fictionPartitionData}
             width={barWidth}
             barHeight={barHeight}
             hue={240}
             saturation={89}
-            maxLightness={55}
-            minLightness={27.5}
             title="fiction"
           />
         </g>
         <g transform={`translate(${width - barWidth},${height - 100})`}>
           <PartitionChart
-            data={parsed.get("Non Fiction")}
+            data={nonfictionPartitionData}
             width={barWidth}
             barHeight={barHeight}
             hue={115}
             saturation={89}
-            maxLightness={25}
-            minLightness={10}
             title="non-fiction"
           />
         </g>

@@ -1,7 +1,6 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import "../assets/PartitionChart.css";
 import { scaleLinear } from "d3";
-import _ from "lodash";
 
 function getTotal(data, index) {
   return data.reduce((acc, d) => acc + d[index], 0);
@@ -16,6 +15,9 @@ function getMin(data, index) {
 }
 
 // data must have format [[str, int],...]
+// returns [[str, int, int],...] with new entry the
+// rescaled version of the second entry
+// TODO: use better data structure..
 function rescaleData(data, total) {
   const rawTotal = getTotal(data, 1);
   var newData = data.map((d) => [d[0], d[1], total * (d[1] / rawTotal)]);
@@ -28,16 +30,27 @@ function rescaleData(data, total) {
   return newData;
 }
 
+// requires this to be the rescaled data structure
+function getLightnessScale(data, minLight, maxLight) {
+  const maxVal = getMax(data, 2);
+  const minVal = getMin(data, 2);
+  return scaleLinear().domain([minVal, maxVal]).range([minLight, maxLight]);
+}
+
 // assumes data is sorted with max first
-function getPartitionData(data, lightnessScale) {
+// data in format [[string, int], ... ]
+export function getPartitionData(data, width, minLight, maxLight) {
+  const rescaled = rescaleData(data, width);
+  const lightnessScale = getLightnessScale(rescaled, minLight, maxLight);
+
   let partitionData = [];
   let sum = 0;
-  for (let i = 0; i < data.length; i++) {
+  for (let i = 0; i < rescaled.length; i++) {
     let width;
-    if (i !== 0 && i !== data.length) {
-      width = data[i][2] - 2;
+    if (i !== 0 && i !== rescaled.length) {
+      width = rescaled[i][2] - 2;
     } else {
-      width = data[i][2] - 1;
+      width = rescaled[i][2] - 1;
     }
 
     if (i !== 0) {
@@ -45,11 +58,11 @@ function getPartitionData(data, lightnessScale) {
     }
 
     partitionData.push({
-      label: data[i][0],
-      value: data[i][1],
+      label: rescaled[i][0],
+      value: rescaled[i][1],
       width: width,
       x: sum,
-      lightness: lightnessScale(data[i][2]),
+      lightness: lightnessScale(rescaled[i][2]),
     });
     sum += width;
   }
@@ -89,15 +102,14 @@ function Partition(props) {
 }
 
 function PartitionChart(props) {
-  const rescaled = rescaleData(props.data, props.width);
-  const maxVal = getMax(rescaled, 2);
-  const minVal = getMin(rescaled, 2);
-  const lightnessScale = scaleLinear()
-    .domain([minVal, maxVal])
-    .range([props.minLightness, props.maxLightness]);
-  const partitionData = getPartitionData(rescaled, lightnessScale);
+  const data = props.data;
+  const width = props.width;
+  const barHeight = props.barHeight;
+  const hue = props.hue;
+  const saturation = props.saturation;
+  const title = props.title;
 
-  const partitions = partitionData.map((d) => {
+  const partitions = data.map((d) => {
     return (
       <Partition
         key={d.label}
@@ -106,22 +118,18 @@ function PartitionChart(props) {
         x={d.x}
         y={30}
         width={d.width}
-        height={props.barHeight}
-        hue={props.hue}
-        saturation={props.saturation}
+        height={barHeight}
+        hue={hue}
+        saturation={saturation}
         lightness={d.lightness}
       />
     );
   });
 
   return (
-    <g
-      className="partitionChart"
-      width={props.width}
-      height={props.barHeight + 50}
-    >
+    <g className="partitionChart" width={width} height={barHeight + 50}>
       <text className="title" x="10" y="20" fill="black" fontSize="20px">
-        {props.title}
+        {title}
       </text>
       {partitions}
     </g>
