@@ -42,57 +42,134 @@ function GenrePartitionChart() {
   const parsed = parseGenreData(genreCounts);
   const genres = aggregateCounts(parsed);
   const height = 300;
-  const width = 1000;
-  const barHeight = 45;
-  const barWidth = 400;
+  const width = 900;
+  const genreBarHeight = 45;
+  const genreBarWidth = 400;
+  const subgenreBarHeight = 45;
+  const subgenreBarWidth = 400;
 
-  const genrePartitionData = getPartitionData(genres, barWidth, 27.5, 55.5);
+  const genrePartitionData = getPartitionData(
+    genres,
+    genreBarWidth,
+    27.5,
+    55.5
+  );
   const fictionPartitionData = getPartitionData(
     parsed.get("Fiction"),
-    barWidth,
+    subgenreBarWidth,
     27.5,
     55
   );
   const nonfictionPartitionData = getPartitionData(
     parsed.get("Non Fiction"),
-    barWidth,
+    subgenreBarWidth,
     10,
     25
+  );
+
+  // get x and y coordinates needed for lines
+  const genreLeftX = (width - genreBarWidth) / 2;
+  const subgenreTranslateY = height - 100;
+  const subgenreTranslateX = width - subgenreBarWidth;
+
+  const partitionY = 30;
+  const genreBarBottomY = partitionY + genreBarHeight;
+
+  const subgenreBarTopY = partitionY + subgenreTranslateY;
+
+  // genre points
+  const genreFictionBottomLeft = { x: genreLeftX, y: genreBarBottomY };
+  const genreFictionBottomRight = {
+    x: genreLeftX + genrePartitionData[0].width,
+    y: genreBarBottomY,
+  };
+  const genreNonfictionBottomLeft = {
+    x: genreLeftX + genrePartitionData[1].x,
+    y: genreBarBottomY,
+  };
+  const genreNonfictionBottomRight = {
+    x: genreLeftX + genrePartitionData[1].x + genrePartitionData[1].width,
+    y: genreBarBottomY,
+  };
+
+  // subgenre points
+  const fictionTopLeft = {
+    x: 0,
+    y: subgenreBarTopY,
+  };
+  const fictionTopRight = {
+    x: subgenreBarWidth,
+    y: subgenreBarTopY,
+  };
+
+  const nonfictionTopLeft = {
+    x: subgenreTranslateX,
+    y: subgenreBarTopY,
+  };
+  const nonfictionTopRight = {
+    x: subgenreTranslateX + subgenreBarWidth,
+    y: subgenreBarTopY,
+  };
+
+  const lines = (
+    <g>
+      <path
+        d={`M${genreFictionBottomLeft.x} ${genreFictionBottomLeft.y} L${fictionTopLeft.x} ${fictionTopLeft.y}`}
+        stroke="lightgrey"
+        strokeWidth="1"
+      />
+      <path
+        d={`M${genreFictionBottomRight.x} ${genreFictionBottomRight.y} L${fictionTopRight.x} ${fictionTopRight.y}`}
+        stroke="lightgrey"
+        strokeWidth="1"
+      />
+      <path
+        d={`M${genreNonfictionBottomLeft.x} ${genreNonfictionBottomLeft.y} L${nonfictionTopLeft.x} ${nonfictionTopLeft.y}`}
+        stroke="lightgrey"
+        strokeWidth="1"
+      />
+      <path
+        d={`M${genreNonfictionBottomRight.x} ${genreNonfictionBottomRight.y} L${nonfictionTopRight.x} ${nonfictionTopRight.y}`}
+        stroke="lightgrey"
+        strokeWidth="1"
+      />
+    </g>
   );
 
   return (
     <div className="genre">
       <svg className="genre" width={width} height={height}>
-        <g transform={`translate(${width / 2 - barWidth / 2}, 0)`}>
+        <g transform={`translate(${genreLeftX}, 0)`}>
           <PartitionChart
             data={genrePartitionData}
-            width={barWidth}
-            barHeight={barHeight}
+            width={genreBarWidth}
+            barHeight={genreBarHeight}
             hue={30}
             saturation={89}
             title="genre"
           />
         </g>
-        <g transform={`translate(0,${height - 100})`}>
+        <g transform={`translate(0,${subgenreTranslateY})`}>
           <PartitionChart
             data={fictionPartitionData}
-            width={barWidth}
-            barHeight={barHeight}
+            width={subgenreBarWidth}
+            barHeight={subgenreBarHeight}
             hue={240}
             saturation={89}
             title="fiction"
           />
         </g>
-        <g transform={`translate(${width - barWidth},${height - 100})`}>
+        <g transform={`translate(${subgenreTranslateX},${subgenreTranslateY})`}>
           <PartitionChart
             data={nonfictionPartitionData}
-            width={barWidth}
-            barHeight={barHeight}
+            width={subgenreBarWidth}
+            barHeight={subgenreBarHeight}
             hue={115}
             saturation={89}
             title="non-fiction"
           />
         </g>
+        {lines}
       </svg>
     </div>
   );

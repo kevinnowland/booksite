@@ -128,7 +128,13 @@ function PartitionChart(props) {
 
   return (
     <g className="partitionChart" width={width} height={barHeight + 50}>
-      <text className="title" x="10" y="20" fill="black" fontSize="20px">
+      <text
+        className="title"
+        x={0.15 * width}
+        y="20"
+        fill="black"
+        fontSize="20px"
+      >
         {title}
       </text>
       {partitions}
