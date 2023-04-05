@@ -144,7 +144,7 @@ function GenrePartitionChart() {
             data={genrePartitionData}
             width={genreBarWidth}
             barHeight={genreBarHeight}
-            hue={30}
+            hue={0}
             saturation={89}
             title="genre"
           />
