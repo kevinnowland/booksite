@@ -3,7 +3,6 @@ import "../assets/GenrePartitionChart.css";
 import genreCounts from "../data/genre_counts";
 import PartitionChart from "./PartitionChart";
 import { formatGenre } from "../common/utils";
-import _ from "lodash";
 
 function compareCounts(a, b) {
   const diff = b[1] - a[1];
@@ -42,43 +41,47 @@ function aggregateCounts(genreData) {
 function GenrePartitionChart() {
   const parsed = parseGenreData(genreCounts);
   const genres = aggregateCounts(parsed);
+  const height = 300;
+  const width = 1000;
+  const barHeight = 45;
+  const barWidth = 400;
 
   return (
     <div className="genre">
-      <svg className="genre" width="1200" height="600">
-        <g transform="translate(0, 0)">
+      <svg className="genre" width={width} height={height}>
+        <g transform={`translate(${width / 2 - barWidth / 2}, 0)`}>
           <PartitionChart
             data={genres}
-            width={600}
-            barHeight={60}
+            width={barWidth}
+            barHeight={barHeight}
             hue={30}
             saturation={89}
             maxLightness={55}
             minLightness={27.5}
-            title="fiction"
+            title="genre"
           />
         </g>
-        <g transform="translate(0,200)">
+        <g transform={`translate(0,${height - 100})`}>
           <PartitionChart
             data={parsed.get("Fiction")}
-            width={600}
-            barHeight={60}
-            hue={30}
+            width={barWidth}
+            barHeight={barHeight}
+            hue={240}
             saturation={89}
             maxLightness={55}
             minLightness={27.5}
             title="fiction"
           />
         </g>
-        <g transform="translate(0,400)">
+        <g transform={`translate(${width - barWidth},${height - 100})`}>
           <PartitionChart
             data={parsed.get("Non Fiction")}
-            width={600}
-            barHeight={60}
-            hue={30}
+            width={barWidth}
+            barHeight={barHeight}
+            hue={115}
             saturation={89}
-            maxLightness={55}
-            minLightness={27.5}
+            maxLightness={25}
+            minLightness={10}
             title="non-fiction"
           />
         </g>
