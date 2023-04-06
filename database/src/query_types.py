@@ -24,6 +24,12 @@ class RawGenreCount(TypedDict):
     count: int
 
 
+class RawLanguageCount(TypedDict):
+    language: str
+    original_language: str
+    count: int
+
+
 class City(CamelModel):
     country: str
     region: str
@@ -112,3 +118,17 @@ class Genre(CamelModel):
 
 class GenreCounts(CamelModel):
     genres: list[Genre]
+
+
+class OriginalLanguage(CamelModel):
+    original_language: str
+    count: int
+
+
+class Language(CamelModel):
+    language: str
+    original_languages: list[OriginalLanguage]
+
+
+class LanguageCounts(CamelModel):
+    languages: list[Language]

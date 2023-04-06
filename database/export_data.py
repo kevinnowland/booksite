@@ -6,6 +6,7 @@ from argparse import ArgumentParser
 from sqlalchemy import create_engine
 from src.queries import (
     export_genre_counts,
+    export_language_counts,
     export_publisher_cities,
     export_reading_list,
 )
@@ -38,4 +39,7 @@ if __name__ == "__main__":
     )
     export_genre_counts(
         engine=engine, output_file=args.output_directory + "/genre_counts.json"
+    )
+    export_language_counts(
+        engine=engine, output_file=args.output_directory + "/language_counts.json"
     )

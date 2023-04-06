@@ -13,12 +13,16 @@ from .query_types import (
     Genre,
     GenreCounts,
     IntPublisherCity,
+    Language,
+    LanguageCounts,
+    OriginalLanguage,
     Publisher,
     PublisherCity,
     PublisherCityList,
     PublisherTitles,
     Purchase,
     RawGenreCount,
+    RawLanguageCount,
     RawPublisherCity,
     ReadingList,
     ReadingListEntry,
@@ -277,9 +281,44 @@ def _parse_raw_genre_counts(raw: list[RawGenreCount]) -> GenreCounts:
     return GenreCounts(genres=list(genres.values()))
 
 
+def _get_raw_language_counts(engine: Engine) -> list[RawLanguageCount]:
+    """execute sql query to get counts by language"""
+    with open("sql/misc/get_genre_counts.sql", "r") as f:
+        sql = f.read()
+
+    rows = engine.execute(sql).all()  # type: ignore
+    return [
+        {
+            "language": row[0],
+            "original_language": row[1],
+            "count": int(row[2]),
+        }
+        for row in rows
+    ]
+
+
+def _parse_raw_language_counts(raw: list[RawLanguageCount]) -> LanguageCounts:
+    languages: dict[str, Language] = {}
+    for r in raw:
+        ol = OriginalLanguage(
+            original_language=r["original_language"], count=r["count"]
+        )
+        if la := languages.get(r["language"]):
+            la.original_languages.append(ol)
+        else:
+            languages[r["language"]] = Language(
+                language=r["language"], original_languages=[ol]
+            )
+
+    return LanguageCounts(languages=list(languages.values()))
+
+
 export_publisher_cities = partial(
     _export, get_raw=_get_raw_publisher_cities, parse_raw=_parse_publisher_cities
 )
 export_genre_counts = partial(
     _export, get_raw=_get_raw_genre_counts, parse_raw=_parse_raw_genre_counts
+)
+export_language_counts = partial(
+    _export, get_raw=_get_raw_language_counts, parse_raw=_parse_raw_language_counts
 )
