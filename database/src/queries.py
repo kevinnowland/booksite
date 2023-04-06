@@ -283,7 +283,7 @@ def _parse_raw_genre_counts(raw: list[RawGenreCount]) -> GenreCounts:
 
 def _get_raw_language_counts(engine: Engine) -> list[RawLanguageCount]:
     """execute sql query to get counts by language"""
-    with open("sql/misc/get_genre_counts.sql", "r") as f:
+    with open("sql/misc/get_language_counts.sql", "r") as f:
         sql = f.read()
 
     rows = engine.execute(sql).all()  # type: ignore

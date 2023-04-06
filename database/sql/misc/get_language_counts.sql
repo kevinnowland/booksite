@@ -15,4 +15,5 @@ WHERE
   AND l2.language_id > 0
 GROUP BY
   l1.language
+  ,l2.language
 ;
