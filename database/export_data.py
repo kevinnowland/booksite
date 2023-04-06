@@ -30,8 +30,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     engine = create_engine("sqlite:///" + args.path)
-    export_reading_list(engine, args.output_directory + "/reading_list.json")
-    export_publisher_cities(
-        engine, args.output_directory + "/publisher_cities_list.json"
+    export_reading_list(
+        engine=engine, output_file=args.output_directory + "/reading_list.json"
     )
-    export_genre_counts(engine, args.output_directory + "/genre_counts.json")
+    export_publisher_cities(
+        engine=engine, output_file=args.output_directory + "/publisher_cities_list.json"
+    )
+    export_genre_counts(
+        engine=engine, output_file=args.output_directory + "/genre_counts.json"
+    )

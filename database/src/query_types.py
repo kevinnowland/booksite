@@ -1,4 +1,5 @@
-from typing import TypedDict
+from datetime import date
+from typing import Optional, TypedDict, Union
 
 from .data_types import CamelModel
 

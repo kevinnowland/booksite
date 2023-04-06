@@ -1,6 +1,4 @@
-from datetime import date
 from enum import Enum
-from typing import Optional, Union
 
 from humps import camelize
 from pydantic import BaseModel

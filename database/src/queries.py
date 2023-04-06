@@ -1,8 +1,9 @@
-from typing import Any, Optional
+from functools import partial
+from typing import Any, Callable, Optional, TypeVar
 
 from sqlalchemy.engine.base import Engine
 
-from .data_types import GenderEnum, PurchaseLocationTypeEnum
+from .data_types import CamelModel, GenderEnum, PurchaseLocationTypeEnum
 from .database import _get_dim_values
 from .query_types import (
     Author,
@@ -24,6 +25,21 @@ from .query_types import (
     Subgenre,
     Website,
 )
+
+Raw = TypeVar("Raw")
+
+
+def _export(
+    get_raw: Callable[[Engine], Raw],
+    parse_raw: Callable[[Raw], CamelModel],
+    engine: Engine,
+    output_file: str,
+):
+    raw = get_raw(engine)
+    parsed = parse_raw(raw)
+
+    with open(output_file, "w") as f:
+        f.write(parsed.json(by_alias=True))
 
 
 def _get_reading_list(engine: Engine) -> list[dict[str, Any]]:
@@ -233,14 +249,6 @@ def _parse_publisher_cities(
     )
 
 
-def export_publisher_cities(engine: Engine, output_file: str):
-    raw_publisher_cities = _get_raw_publisher_cities(engine)
-    publisher_cities = _parse_publisher_cities(raw_publisher_cities)
-
-    with open(output_file, "w") as f:
-        f.write(publisher_cities.json(by_alias=True))
-
-
 def _get_raw_genre_counts(engine: Engine) -> list[RawGenreCount]:
     """execute sql query to get counts by genre"""
     with open("sql/misc/get_genre_counts.sql", "r") as f:
@@ -269,9 +277,9 @@ def _parse_raw_genre_counts(raw: list[RawGenreCount]) -> GenreCounts:
     return GenreCounts(genres=list(genres.values()))
 
 
-def export_genre_counts(engine: Engine, output_file: str):
-    raw_genre_counts = _get_raw_genre_counts(engine)
-    genre_counts = _parse_raw_genre_counts(raw_genre_counts)
-
-    with open(output_file, "w") as f:
-        f.write(genre_counts.json(by_alias=True))
+export_publisher_cities = partial(
+    _export, get_raw=_get_raw_publisher_cities, parse_raw=_parse_publisher_cities
+)
+export_genre_counts = partial(
+    _export, get_raw=_get_raw_genre_counts, parse_raw=_parse_raw_genre_counts
+)
