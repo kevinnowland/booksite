@@ -91,3 +91,38 @@ export function formatGenre(genre) {
   const lower = genre.toLowerCase().replace("_", " ");
   return capitalizeWords(lower);
 }
+
+function compareCounts(a, b) {
+  const diff = b[1] - a[1];
+  if (diff !== 0) {
+    return diff;
+  } else {
+    return b[0].localeCompare(a[0]);
+  }
+}
+
+export function parseGenreData(genreData) {
+  var counts = new Map();
+
+  for (let g of genreData.genres) {
+    let genreKey = formatGenre(g.genre);
+    counts.set(
+      genreKey,
+      g.subgenres
+        .map((sg) => [formatGenre(sg.subgenre), sg.count])
+        .sort(compareCounts)
+    );
+  }
+
+  return counts;
+}
+
+// data looks like a map[string][[string, int]]
+export function aggregateCounts(data) {
+  var counts = [];
+  for (let [k, v] of data) {
+    let count = v.reduce((acc, l) => acc + l[1], 0);
+    counts.push([k, count]);
+  }
+  return counts.sort(compareCounts);
+}

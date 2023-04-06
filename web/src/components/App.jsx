@@ -3,9 +3,12 @@ import ReadingList from "./ReadingList";
 import Map from "./Map";
 import Introduction from "./Introduction";
 import HorizontalBarChart from "./HorizontalBarChart";
-import GenrePartitionChart from "./GenrePartitionChart";
+import TriplePartitionChart from "./TriplePartitionChart";
+
+import { parseGenreData } from "../common/utils";
 
 import reading_list from "../data/reading_list";
+import genreCounts from "../data/genre_counts";
 
 class App extends React.Component {
   constructor(props) {
@@ -25,7 +28,15 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <GenrePartitionChart />
+        <TriplePartitionChart
+          className="genre"
+          data={parseGenreData(genreCounts)}
+          keyOne="Fiction"
+          keyTwo="Non Fiction"
+          rootTitle="genre"
+          keyOneTitle="fiction"
+          keyTwoTitle="non fiction"
+        />
         <HorizontalBarChart />
         <Map />
         <ReadingList readingList={this.state.readingList} />
