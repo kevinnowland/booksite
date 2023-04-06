@@ -5,10 +5,11 @@ import Introduction from "./Introduction";
 import HorizontalBarChart from "./HorizontalBarChart";
 import TriplePartitionChart from "./TriplePartitionChart";
 
-import { parseGenreData } from "../common/utils";
+import { parseGenreCounts, parseLanguageCounts } from "../common/utils";
 
 import reading_list from "../data/reading_list";
 import genreCounts from "../data/genre_counts";
+import languageCounts from "../data/language_counts";
 
 class App extends React.Component {
   constructor(props) {
@@ -29,8 +30,17 @@ class App extends React.Component {
     return (
       <div>
         <TriplePartitionChart
+          className="language"
+          data={parseLanguageCounts(languageCounts)}
+          keyOne="English"
+          keyTwo="French"
+          rootTitle="language read"
+          keyOneTitle="english"
+          keyTwoTitle="french"
+        />
+        <TriplePartitionChart
           className="genre"
-          data={parseGenreData(genreCounts)}
+          data={parseGenreCounts(genreCounts)}
           keyOne="Fiction"
           keyTwo="Non Fiction"
           rootTitle="genre"

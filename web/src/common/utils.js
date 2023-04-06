@@ -101,10 +101,10 @@ function compareCounts(a, b) {
   }
 }
 
-export function parseGenreData(genreData) {
+export function parseGenreCounts(genreCounts) {
   var counts = new Map();
 
-  for (let g of genreData.genres) {
+  for (let g of genreCounts.genres) {
     let genreKey = formatGenre(g.genre);
     counts.set(
       genreKey,
@@ -114,6 +114,23 @@ export function parseGenreData(genreData) {
     );
   }
 
+  return counts;
+}
+
+export function parseLanguageCounts(languageCounts) {
+  var counts = new Map();
+
+  for (let la of languageCounts.languages) {
+    let langKey = capitalizeWords(la.language);
+    counts.set(
+      langKey,
+      la.originalLanguages
+        .map((ol) => [capitalizeWords(ol.originalLanguage), ol.count])
+        .sort(compareCounts)
+    );
+  }
+
+  console.log(counts);
   return counts;
 }
 
