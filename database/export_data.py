@@ -4,7 +4,7 @@
 from argparse import ArgumentParser
 
 from sqlalchemy import create_engine
-from src.database import (
+from src.queries import (
     export_genre_counts,
     export_publisher_cities,
     export_reading_list,

@@ -179,6 +179,7 @@ def prompt_city_id(engine: Engine) -> int:
             country = info["country"]
         except ValueError:
             animated_print(f"will continue asking for info about {city}")
+            raise DimensionValueNotFoundError
     except DimensionValueNotFoundError:
         region = animated_input("region/state/province:")
         country = animated_input("country:")
@@ -376,6 +377,7 @@ def prompt_rating() -> int:
             rating = int(raw_rating)
         except ValueError:
             print("rating must be an integer")
+            continue
 
         if rating < 0 or rating > 5:
             print("rating must be 0-5")
