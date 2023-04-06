@@ -37,6 +37,19 @@ class App extends React.Component {
           rootTitle="language read"
           keyOneTitle="english"
           keyTwoTitle="french"
+          rootColor={{ hue: 30, saturation: 100, minLight: 5, maxLight: 22.5 }}
+          keyOneColor={{
+            hue: 240,
+            saturation: 89,
+            minLight: 27.5,
+            maxLight: 55,
+          }}
+          keyTwoColor={{
+            hue: 115,
+            saturation: 89,
+            minLight: 10,
+            maxLight: 25,
+          }}
         />
         <TriplePartitionChart
           className="genre"
@@ -46,6 +59,19 @@ class App extends React.Component {
           rootTitle="genre"
           keyOneTitle="fiction"
           keyTwoTitle="non fiction"
+          rootColor={{ hue: 30, saturation: 100, minLight: 5, maxLight: 22.5 }}
+          keyOneColor={{
+            hue: 240,
+            saturation: 89,
+            minLight: 27.5,
+            maxLight: 55,
+          }}
+          keyTwoColor={{
+            hue: 115,
+            saturation: 89,
+            minLight: 10,
+            maxLight: 25,
+          }}
         />
         <HorizontalBarChart />
         <Map />

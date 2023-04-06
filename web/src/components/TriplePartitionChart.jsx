@@ -10,6 +10,9 @@ function TriplePartitionChart(props) {
   const rootTitle = props.rootTitle;
   const keyOneTitle = props.keyOneTitle;
   const keyTwoTitle = props.keyTwoTitle;
+  const rootColor = props.rootColor;
+  const keyOneColor = props.keyOneColor;
+  const keyTwoColor = props.keyTwoColor;
 
   const aggs = aggregateCounts(data);
   const height = 300;
@@ -19,18 +22,23 @@ function TriplePartitionChart(props) {
   const childBarHeight = 45;
   const childBarWidth = 400;
 
-  const rootPartitionData = getPartitionData(aggs, rootBarWidth, 5, 22.5);
+  const rootPartitionData = getPartitionData(
+    aggs,
+    rootBarWidth,
+    rootColor.minLight,
+    rootColor.maxLight
+  );
   const keyOnePartitionData = getPartitionData(
     data.get(keyOne),
     childBarWidth,
-    27.5,
-    55
+    keyOneColor.minLight,
+    keyOneColor.maxLight
   );
   const keyTwoPartitionData = getPartitionData(
     data.get(keyTwo),
     childBarWidth,
-    10,
-    25
+    keyTwoColor.minLight,
+    keyTwoColor.maxLight
   );
 
   // get x and y coordinates needed for lines
@@ -111,8 +119,8 @@ function TriplePartitionChart(props) {
             data={rootPartitionData}
             width={rootBarWidth}
             barHeight={rootBarHeight}
-            hue={30}
-            saturation={100}
+            hue={rootColor.hue}
+            saturation={rootColor.saturation}
             title={rootTitle}
           />
         </g>
@@ -122,8 +130,8 @@ function TriplePartitionChart(props) {
             data={keyOnePartitionData}
             width={childBarWidth}
             barHeight={childBarHeight}
-            hue={240}
-            saturation={89}
+            hue={keyOneColor.hue}
+            saturation={keyOneColor.saturation}
             title={keyOneTitle}
           />
         </g>
@@ -133,8 +141,8 @@ function TriplePartitionChart(props) {
             data={keyTwoPartitionData}
             width={childBarWidth}
             barHeight={childBarHeight}
-            hue={115}
-            saturation={89}
+            hue={keyTwoColor.hue}
+            saturation={keyTwoColor.saturation}
             title={keyTwoTitle}
           />
         </g>
