@@ -36,7 +36,8 @@ class App extends React.Component {
           data={publisherCounts}
           width={300}
           circlesPerRow={10}
-          seed={13}
+          colorShift={135}
+          colorFrequency={87}
         />
         <TriplePartitionChart
           className="language"

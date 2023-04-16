@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "../assets/DotChart.css";
-import { mulberry32 } from "../common/utils";
 
 function CircleSequence(props) {
   // props
@@ -60,7 +59,9 @@ function DotChart(props) {
   const data = props.data;
   const title = props.title;
   const circlesPerRow = props.circlesPerRow;
-  const seed = props.seed !== undefined ? props.seed : 47;
+  const colorShift = props.colorShift !== undefined ? props.colorShift : 47;
+  const colorFrequency =
+    props.colorFrequency !== undefined ? props.colorFrequency : 47;
 
   // state
   const [publisher, setPublisher] = useState(<span>&nbsp;</span>);
@@ -70,7 +71,9 @@ function DotChart(props) {
   const nCircles = data.publishers.reduce((acc, d) => acc + d.count, 0);
   const nRows = Math.floor(nCircles / circlesPerRow) + 1;
   const height = 2 * radius * nRows;
-  const prng = mulberry32(seed);
+  const hue = (i) => {
+    return (colorShift + i * colorFrequency) % 360;
+  };
 
   // handlers
   const handleMouseOver = (p, n) => {
@@ -91,7 +94,7 @@ function DotChart(props) {
       fill = `hsl(0, 0%, 50%)`;
       hoverFill = `hsl(0, 0%, 60%)`;
     } else {
-      let c = Math.floor(prng() * 360);
+      let c = hue(i);
       fill = `hsl(${c}, 70%, 50%)`;
       hoverFill = `hsl(${c}, 70%, 60%)`;
     }
