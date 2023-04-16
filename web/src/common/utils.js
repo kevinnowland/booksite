@@ -130,7 +130,6 @@ export function parseLanguageCounts(languageCounts) {
     );
   }
 
-  console.log(counts);
   return counts;
 }
 
