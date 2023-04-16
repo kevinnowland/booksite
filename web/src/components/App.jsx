@@ -4,6 +4,7 @@ import Map from "./Map";
 import Introduction from "./Introduction";
 import HorizontalBarChart from "./HorizontalBarChart";
 import TriplePartitionChart from "./TriplePartitionChart";
+import DotChart from "./DotChart";
 
 import { parseGenreCounts, parseLanguageCounts } from "../common/utils";
 
@@ -29,6 +30,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
+        <DotChart />
         <TriplePartitionChart
           className="language"
           data={parseLanguageCounts(languageCounts)}
