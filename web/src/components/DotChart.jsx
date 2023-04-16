@@ -4,7 +4,7 @@ import { mulberry32 } from "../common/utils";
 
 function CircleSequence(props) {
   // props
-  const n = props.n;
+  const count = props.count;
   const shift = props.shift;
   const circlesPerRow = props.circlesPerRow;
   const r = props.r;
@@ -22,7 +22,7 @@ function CircleSequence(props) {
   };
 
   let coords = [];
-  for (let i = shift; i < n + shift; i++) {
+  for (let i = shift; i < count + shift; i++) {
     let row = Math.floor(i / circlesPerRow);
     let col = i % circlesPerRow;
     coords.push({
@@ -67,7 +67,7 @@ function DotChart(props) {
 
   // calculated
   const radius = width / (2 * circlesPerRow);
-  const nCircles = data.publishers.reduce((acc, d) => acc + d.n, 0);
+  const nCircles = data.publishers.reduce((acc, d) => acc + d.count, 0);
   const nRows = Math.floor(nCircles / circlesPerRow) + 1;
   const height = 2 * radius * nRows;
   const prng = mulberry32(seed);
@@ -82,7 +82,7 @@ function DotChart(props) {
 
   let shifts = [0];
   for (let i = 0; i < data.publishers.length - 1; i++) {
-    shifts.push(shifts[i] + data.publishers[i].n);
+    shifts.push(shifts[i] + data.publishers[i].count);
   }
   const circles = data.publishers.map((d, i) => {
     let fill;
@@ -98,13 +98,13 @@ function DotChart(props) {
     return (
       <g
         key={i}
-        onMouseOver={() => handleMouseOver(d.name, d.n)}
+        onMouseOver={() => handleMouseOver(d.name, d.count)}
         onMouseOut={handleMouseOut}
       >
         <CircleSequence
           r={radius}
           circlesPerRow={circlesPerRow}
-          n={d.n}
+          count={d.count}
           shift={shifts[i]}
           fill={fill}
           hoverFill={hoverFill}
