@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../assets/DotChart.css";
-import { getColor } from "../common/colors";
+import { mulberry32 } from "../common/utils";
 
 function CircleSequence(props) {
   const n = props.n;
@@ -32,24 +32,33 @@ function DotChart(props) {
   const data = props.data;
   const title = props.title;
   const circlesPerRow = props.circlesPerRow;
+  const seed = props.seed !== undefined ? props.seed : 47;
 
   // calculated
   const radius = width / (2 * circlesPerRow);
   const nCircles = data.publishers.reduce((acc, d) => acc + d.n, 0);
   const nRows = Math.floor(nCircles / circlesPerRow) + 1;
   const height = 2 * radius * nRows;
+  const prng = mulberry32(seed);
 
-  // use getColor
   let shifts = [0];
   for (let i = 0; i < data.publishers.length - 1; i++) {
     shifts.push(shifts[i] + data.publishers[i].n);
   }
   const circles = data.publishers.map((d, i) => {
+    let fill;
+    if (!d.isIndependent) {
+      fill = "grey";
+    } else {
+      //fill = getColor(i);
+      let c = Math.floor(prng() * 360);
+      fill = `hsl(${c}, 70%, 50%)`;
+    }
     return (
       <CircleSequence
         key={i}
         r={radius}
-        fill={d.isIndependent ? getColor(i) : "grey"}
+        fill={fill}
         circlesPerRow={circlesPerRow}
         n={d.n}
         shift={shifts[i]}

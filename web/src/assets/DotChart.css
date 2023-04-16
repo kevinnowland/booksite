@@ -7,6 +7,4 @@ div.dotChart {
 svg.dotChart {
   display: block;
   margin: auto;
-
-  border-style: solid;
 }
