@@ -8,3 +8,7 @@ svg.dotChart {
   display: block;
   margin: auto;
 }
+
+div.title {
+  font-size: 1.2em;
+}

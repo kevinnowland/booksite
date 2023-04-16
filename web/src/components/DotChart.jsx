@@ -3,11 +3,23 @@ import "../assets/DotChart.css";
 import { mulberry32 } from "../common/utils";
 
 function CircleSequence(props) {
+  // props
   const n = props.n;
   const shift = props.shift;
-  const fill = props.fill;
   const circlesPerRow = props.circlesPerRow;
   const r = props.r;
+  const fill = props.fill;
+  const hoverFill = props.hoverFill;
+
+  // state
+  const [isHover, setIsHover] = useState(false);
+
+  const handleMouseOver = () => {
+    setIsHover(true);
+  };
+  const handleMouseOut = () => {
+    setIsHover(false);
+  };
 
   let coords = [];
   for (let i = shift; i < n + shift; i++) {
@@ -20,10 +32,26 @@ function CircleSequence(props) {
   }
 
   const circles = coords.map((d, i) => {
-    return <circle key={i} cx={d.cx} cy={d.cy} r={r} fill={fill} />;
+    return (
+      <circle
+        key={i}
+        cx={d.cx}
+        cy={d.cy}
+        r={r}
+        fill={isHover ? hoverFill : fill}
+      />
+    );
   });
 
-  return <g className="circleSequence">{circles}</g>;
+  return (
+    <g
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
+      className="circleSequence"
+    >
+      {circles}
+    </g>
+  );
 }
 
 function DotChart(props) {
@@ -34,6 +62,9 @@ function DotChart(props) {
   const circlesPerRow = props.circlesPerRow;
   const seed = props.seed !== undefined ? props.seed : 47;
 
+  // state
+  const [publisher, setPublisher] = useState(<span>&nbsp;</span>);
+
   // calculated
   const radius = width / (2 * circlesPerRow);
   const nCircles = data.publishers.reduce((acc, d) => acc + d.n, 0);
@@ -41,28 +72,44 @@ function DotChart(props) {
   const height = 2 * radius * nRows;
   const prng = mulberry32(seed);
 
+  // handlers
+  const handleMouseOver = (p, n) => {
+    setPublisher(`${p} - ${n}`);
+  };
+  const handleMouseOut = () => {
+    setPublisher(<span>&nbsp;</span>);
+  };
+
   let shifts = [0];
   for (let i = 0; i < data.publishers.length - 1; i++) {
     shifts.push(shifts[i] + data.publishers[i].n);
   }
   const circles = data.publishers.map((d, i) => {
     let fill;
+    let hoverFill;
     if (!d.isIndependent) {
-      fill = "grey";
+      fill = `hsl(0, 0%, 50%)`;
+      hoverFill = `hsl(0, 0%, 60%)`;
     } else {
-      //fill = getColor(i);
       let c = Math.floor(prng() * 360);
       fill = `hsl(${c}, 70%, 50%)`;
+      hoverFill = `hsl(${c}, 70%, 60%)`;
     }
     return (
-      <CircleSequence
+      <g
         key={i}
-        r={radius}
-        fill={fill}
-        circlesPerRow={circlesPerRow}
-        n={d.n}
-        shift={shifts[i]}
-      />
+        onMouseOver={() => handleMouseOver(d.name, d.n)}
+        onMouseOut={handleMouseOut}
+      >
+        <CircleSequence
+          r={radius}
+          circlesPerRow={circlesPerRow}
+          n={d.n}
+          shift={shifts[i]}
+          fill={fill}
+          hoverFill={hoverFill}
+        />
+      </g>
     );
   });
 
@@ -72,7 +119,7 @@ function DotChart(props) {
       <svg className="dotChart" height={height} width={width}>
         <g className="circles">{circles}</g>
       </svg>
-      <div className="publisher">{"Some publisher"}</div>
+      <div className="publisher">{publisher}</div>
     </div>
   );
 }
