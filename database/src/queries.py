@@ -19,11 +19,13 @@ from .query_types import (
     Publisher,
     PublisherCity,
     PublisherCityList,
+    PublisherCounts,
     PublisherTitles,
     Purchase,
     RawGenreCount,
     RawLanguageCount,
     RawPublisherCity,
+    RawPublisherCount,
     ReadingList,
     ReadingListEntry,
     Subgenre,
@@ -313,6 +315,25 @@ def _parse_raw_language_counts(raw: list[RawLanguageCount]) -> LanguageCounts:
     return LanguageCounts(languages=list(languages.values()))
 
 
+def _get_raw_publisher_counts(engine: Engine) -> list[RawPublisherCount]:
+    with open("sql/misc/get_publisher_counts.sql", "r") as f:
+        sql = f.read()
+
+    rows = engine.execute(sql).all()  # type: ignore
+    return [
+        RawPublisherCount(
+            name=row[0],
+            is_independent=bool(row[1]),
+            count=int(row[2]),
+        )
+        for row in rows
+    ]
+
+
+def _parse_raw_publisher_counts(raw: list[RawPublisherCount]) -> PublisherCounts:
+    return PublisherCounts(publishers=raw)
+
+
 export_publisher_cities = partial(
     _export, get_raw=_get_raw_publisher_cities, parse_raw=_parse_publisher_cities
 )
@@ -321,4 +342,7 @@ export_genre_counts = partial(
 )
 export_language_counts = partial(
     _export, get_raw=_get_raw_language_counts, parse_raw=_parse_raw_language_counts
+)
+export_publisher_counts = partial(
+    _export, get_raw=_get_raw_publisher_counts, parse_raw=_parse_raw_publisher_counts
 )

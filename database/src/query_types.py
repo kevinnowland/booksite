@@ -132,3 +132,13 @@ class Language(CamelModel):
 
 class LanguageCounts(CamelModel):
     languages: list[Language]
+
+
+class RawPublisherCount(CamelModel):
+    name: str
+    is_independent: bool
+    count: int
+
+
+class PublisherCounts(CamelModel):
+    publishers: list[RawPublisherCount]

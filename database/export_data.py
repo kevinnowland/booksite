@@ -8,6 +8,7 @@ from src.queries import (
     export_genre_counts,
     export_language_counts,
     export_publisher_cities,
+    export_publisher_counts,
     export_reading_list,
 )
 
@@ -42,4 +43,7 @@ if __name__ == "__main__":
     )
     export_language_counts(
         engine=engine, output_file=args.output_directory + "/language_counts.json"
+    )
+    export_publisher_counts(
+        engine=engine, output_file=args.output_directory + "/publisher_counts.json"
     )
