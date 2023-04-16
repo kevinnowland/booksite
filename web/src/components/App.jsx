@@ -12,6 +12,43 @@ import reading_list from "../data/reading_list";
 import genreCounts from "../data/genre_counts";
 import languageCounts from "../data/language_counts";
 
+// should be sorted non-indie first then indie
+// then sorted big n to small n
+const sampleData = {
+  publishers: [
+    {
+      name: "one",
+      n: 5,
+      isIndependent: false,
+    },
+    {
+      name: "two",
+      n: 2,
+      isIndependent: true,
+    },
+    {
+      name: "three",
+      n: 1,
+      isIndependent: true,
+    },
+    {
+      name: "four",
+      n: 1,
+      isIndependent: true,
+    },
+    {
+      name: "five",
+      n: 1,
+      isIndependent: true,
+    },
+    {
+      name: "size",
+      n: 1,
+      isIndependent: true,
+    },
+  ],
+};
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +67,12 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <DotChart />
+        <DotChart
+          title={"Major vs Indie Publishers"}
+          data={sampleData}
+          width={300}
+          circlesPerRow={5}
+        />
         <TriplePartitionChart
           className="language"
           data={parseLanguageCounts(languageCounts)}
