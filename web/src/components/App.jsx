@@ -18,49 +18,49 @@ class App extends React.Component {
     super(props);
     this.state = {
       readingList: readingList,
-      introMarkdown: "",
+      markdown: {},
     };
   }
 
   async componentDidMount() {
-    const res = await fetch(process.env.PUBLIC_URL + "/introduction.md");
-    const text = await res.text();
-    this.setState({ introMarkdown: text });
+    const files = [
+      { key: "intro", file: "./introduction.md" },
+      { key: "indie", file: "./publishers_indie.md" },
+      { key: "geography", file: "./publishers_geography.md" },
+      { key: "genre", file: "./genre.md" },
+      { key: "language", file: "./language.md" },
+      { key: "outro", file: "./outro.md" },
+    ];
+
+    for (let f of files) {
+      let res = await fetch(process.env.PUBLIC_URL + f.file);
+      let text = await res.text();
+      this.setState((prevState) => ({
+        markdown: {
+          ...prevState.markdown,
+          [f.key]: text,
+        },
+      }));
+    }
   }
 
   render() {
     return (
       <div>
+        <Markdown markdown={this.state.markdown.intro} />
         <DotChart
           title={"Major vs Indie Publishers"}
           data={publisherCounts}
-          width={300}
-          circlesPerRow={10}
+          width={800}
+          circlesPerRow={12}
           colorShift={135}
           colorFrequency={87}
         />
-        <TriplePartitionChart
-          className="language"
-          data={parseLanguageCounts(languageCounts)}
-          keyOne="English"
-          keyTwo="French"
-          rootTitle="language read"
-          keyOneTitle="english"
-          keyTwoTitle="french"
-          rootColor={{ hue: 30, saturation: 100, minLight: 5, maxLight: 22.5 }}
-          keyOneColor={{
-            hue: 240,
-            saturation: 89,
-            minLight: 27.5,
-            maxLight: 55,
-          }}
-          keyTwoColor={{
-            hue: 115,
-            saturation: 89,
-            minLight: 10,
-            maxLight: 25,
-          }}
-        />
+        <Markdown markdown={this.state.markdown.indie} />
+        <Map />
+        <Markdown markdown={this.state.markdown.geography} />
+        <HorizontalBarChart />
+        <Markdown markdown={this.state.markdown.genre} />
         <TriplePartitionChart
           className="genre"
           data={parseGenreCounts(genreCounts)}
@@ -83,10 +83,31 @@ class App extends React.Component {
             maxLight: 25,
           }}
         />
-        <HorizontalBarChart />
-        <Map />
+        <Markdown markdown={this.state.markdown.language} />
+        <TriplePartitionChart
+          className="language"
+          data={parseLanguageCounts(languageCounts)}
+          keyOne="English"
+          keyTwo="French"
+          rootTitle="language read"
+          keyOneTitle="english"
+          keyTwoTitle="french"
+          rootColor={{ hue: 30, saturation: 100, minLight: 5, maxLight: 22.5 }}
+          keyOneColor={{
+            hue: 240,
+            saturation: 89,
+            minLight: 27.5,
+            maxLight: 55,
+          }}
+          keyTwoColor={{
+            hue: 115,
+            saturation: 89,
+            minLight: 10,
+            maxLight: 25,
+          }}
+        />
+        <Markdown markdown={this.state.markdown.outro} />
         <ReadingList readingList={this.state.readingList} />
-        <Markdown markdown={this.state.introMarkdown} />
         <div>
           {" "}
           <p> Shapefiles from census bureau data </p>{" "}
