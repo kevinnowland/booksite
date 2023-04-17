@@ -8,16 +8,16 @@ import DotChart from "./DotChart";
 
 import { parseGenreCounts, parseLanguageCounts } from "../common/utils";
 
-import reading_list from "../data/reading_list";
-import genreCounts from "../data/genre_counts";
-import languageCounts from "../data/language_counts";
-import publisherCounts from "../data/publisher_counts";
+import readingList from "../data/readingList";
+import genreCounts from "../data/genreCounts";
+import languageCounts from "../data/languageCounts";
+import publisherCounts from "../data/publisherCounts";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      readingList: reading_list,
+      readingList: readingList,
       introMarkdown: "",
     };
   }

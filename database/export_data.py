@@ -33,17 +33,17 @@ if __name__ == "__main__":
 
     engine = create_engine("sqlite:///" + args.path)
     export_reading_list(
-        engine=engine, output_file=args.output_directory + "/reading_list.json"
+        engine=engine, output_file=args.output_directory + "/readingList.json"
     )
     export_publisher_cities(
-        engine=engine, output_file=args.output_directory + "/publisher_cities_list.json"
+        engine=engine, output_file=args.output_directory + "/publisherCities.json"
     )
     export_genre_counts(
-        engine=engine, output_file=args.output_directory + "/genre_counts.json"
+        engine=engine, output_file=args.output_directory + "/genreCounts.json"
     )
     export_language_counts(
-        engine=engine, output_file=args.output_directory + "/language_counts.json"
+        engine=engine, output_file=args.output_directory + "/languageCounts.json"
     )
     export_publisher_counts(
-        engine=engine, output_file=args.output_directory + "/publisher_counts.json"
+        engine=engine, output_file=args.output_directory + "/publisherCounts.json"
     )

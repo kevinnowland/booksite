@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import "../assets/HorizontalBarChart.css";
-import publisherCities from "../data/publisher_cities_list.json";
+import publisherCities from "../data/publisherCities.json";
 import * as d3 from "d3";
 import { getCityStateAbbrev } from "../common/utils";
 import _ from "lodash";

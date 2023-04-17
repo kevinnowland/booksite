@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import * as d3 from "d3";
-import cities from "../data/usa_cities.json";
-import states from "../data/usa_states_small.json";
-import publisherCities from "../data/publisher_cities_list.json";
+import cities from "../data/usaCities.json";
+import states from "../data/usaStatesSmall.json";
+import publisherCities from "../data/publisherCities.json";
 import "../assets/Map.css";
 import { getCityStateAbbrev } from "../common/utils";
 
