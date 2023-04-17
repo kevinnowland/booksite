@@ -1,7 +1,7 @@
 import React from "react";
 import ReadingList from "./ReadingList";
 import Map from "./Map";
-import Introduction from "./Introduction";
+import Markdown from "./Markdown";
 import HorizontalBarChart from "./HorizontalBarChart";
 import TriplePartitionChart from "./TriplePartitionChart";
 import DotChart from "./DotChart";
@@ -86,7 +86,7 @@ class App extends React.Component {
         <HorizontalBarChart />
         <Map />
         <ReadingList readingList={this.state.readingList} />
-        <Introduction markdown={this.state.introMarkdown} />
+        <Markdown markdown={this.state.introMarkdown} />
         <div>
           {" "}
           <p> Shapefiles from census bureau data </p>{" "}
