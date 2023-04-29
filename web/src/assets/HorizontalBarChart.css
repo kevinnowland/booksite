@@ -1,7 +1,7 @@
 div.barChart {
   width: 100%;
   text-align: center;
-  font-family: "Cutive Mono", "Abhaya Libre";
+  font-family: "Inconsolata";
 }
 
 svg.barChart {
@@ -16,9 +16,9 @@ div.tooltip {
   height: 20px;
   border-style: solid;
   border-radius: 5px;
-  font-family: "Cutive Mono", "Abhaya Libre";
+  font-family: "Inconsolata";
 }
 
 text {
-  font-family: "Cutive Mono", "Abhaya Libre";
+  font-family: "Inconsolata";
 }

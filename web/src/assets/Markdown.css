@@ -1,5 +1,5 @@
 div.markdown {
-  font-family: "Cutive Mono", "Abhaya Libre";
+  font-family: "Inconsolata";
 
   width: 80%;
 
@@ -7,4 +7,5 @@ div.markdown {
   margin-left: 10%;
 
   font-size: 1.33em;
+  text-align: justify;
 }
