@@ -69,7 +69,12 @@ function DotChart(props) {
   // calculated
   const radius = width / (2 * circlesPerRow);
   const nCircles = data.publishers.reduce((acc, d) => acc + d.count, 0);
-  const nRows = Math.floor(nCircles / circlesPerRow) + 1;
+  let nRows;
+  if (nCircles % circlesPerRow === 0) {
+    nRows = Math.floor(nCircles / circlesPerRow);
+  } else {
+    nRows = Math.floor(nCircles / circlesPerRow) + 1;
+  }
   const height = 2 * radius * nRows;
   const hue = (i) => {
     return (colorShift + i * colorFrequency) % 360;
