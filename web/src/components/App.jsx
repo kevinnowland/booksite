@@ -182,11 +182,10 @@ class App extends React.Component {
             <p> Shapefiles from census bureau data </p>{" "}
           </div>
         </div>
-        <ReadingList
-          readingList={readingList}
-          style={{ display: this.state.showList ? "block" : "none" }}
-        />
-      </div> // main
+        <div style={{ display: this.state.showList ? "block" : "none" }}>
+          <ReadingList readingList={readingList} />
+        </div>
+      </div>
     );
   }
 }
