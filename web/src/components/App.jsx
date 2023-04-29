@@ -177,7 +177,7 @@ class App extends React.Component {
             }}
           />
           <Markdown markdown={this.state.markdown.outro} />
-          <div>
+          <div className="disclaimer">
             {" "}
             <p> Shapefiles from census bureau data </p>{" "}
           </div>

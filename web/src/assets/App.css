@@ -24,3 +24,9 @@ div.separator {
 div.button {
   cursor: pointer;
 }
+
+div.disclaimer {
+  font-family: "Inconsolata";
+  font-size: 0.75em;
+  text-align: center;
+}
