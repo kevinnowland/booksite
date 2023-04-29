@@ -1,4 +1,4 @@
-> __Okay, wrap it up...__
+> __Okay, wrap it up, you're repeating visulations already...__
 
 Sure.
 
@@ -10,13 +10,13 @@ a score will be terribly subjective and I can see myself getting harsher or easi
 with time. If my goal is to read more widely, this should in some sense be challenging
 and I don't want to conclude "oh, well, I guess I on average give major publishers
 better scores, might as well not read independently published books".
-This is again, not the point and so presenting these aggregations is not in
+This is not the point and so presenting these aggregations is not in
 my interest.
 
 I also did not make a timeline of books by year, which appeals to me visually, but
 I have not really made it a point to try to read widely by time period. Since I 
-mostly prefer to read highly contemporary work, this timeline will mostly 
-represent how much I've read in a given year, perhaps phase shifted by a 24 months
+prefer to read contemporary work, this timeline will mostly 
+represent how much I've read in a given year, perhaps shifted by 24 months
 or something since I prefer to grab paperbacks. In the future this might interest
 me either from a coding or broadening horizons perspecitive, but for now,
 no timeline.
