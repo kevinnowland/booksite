@@ -15,8 +15,8 @@ here and which will be discussed more in depth later.
 
 Initially I just wanted to record what I had read so that I could better
 remember it. I like the idea of being able to, in five years, if I'm still
-keeping records somewhere, going back and remembering what a I had read and roughly
-what order.
+keeping records somewhere, going back and remembering what a I had read and in
+roughly what order.
 
 > __But a website?__
 

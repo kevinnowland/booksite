@@ -2,9 +2,8 @@
 
 Since publishing geography only says so much, another way to branch
 out is by language. As mentioned above, I try to keep some balance of
-reading between my native English and learned French. But even beyond that,
-works in translation help us to push beyond what we are most familiar with. 
-(Ugh, terrible sentence, that. Trite.)
+reading between my native English and learned French. Translations are another
+imperfect window to expand my experiences.
 
 Even books that incorporate more than one language tend to have one language
 dominate, so that's what's marked down for both the language the
