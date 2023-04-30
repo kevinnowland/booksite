@@ -24,17 +24,10 @@ li.entry.notCompleted {
 li.entry div.entryHeader {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
 }
 
 li.entry div.ratingHeader {
   text-align: center;
-
-  width: 20%;
-}
-
-li.entry div.bookHeader {
-  width: 79%;
 }
 
 li.entry div.bookHeader div.title {
@@ -59,7 +52,6 @@ li.entry div.entryExtra ul.dashed {
 
 li.entry div.publisher {
   text-align: left;
-  width: 19%;
   padding-left: 3%;
   padding-right: 3%;
 }

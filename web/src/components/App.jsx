@@ -101,7 +101,7 @@ class App extends React.Component {
   }
 
   render() {
-    const useMaxWidth = widthInPixels(100) < 500;
+    const isMobile = widthInPixels(100) < 500;
 
     return (
       <div className="app">
@@ -117,25 +117,25 @@ class App extends React.Component {
           <DotChart
             title={"Major vs Indie Publishers"}
             data={publisherCounts}
-            width={useMaxWidth ? widthInPixels(80) : widthInPixels(55)}
+            width={isMobile ? widthInPixels(80) : widthInPixels(55)}
             circlesPerRow={12}
             colorShift={135}
             colorFrequency={87}
           />
           <Markdown markdown={this.state.markdown.indie} />
           <Map
-            showCityInfo={!useMaxWidth}
-            width={useMaxWidth ? widthInPixels(80) : widthInPixels(70)}
+            showCityInfo={!isMobile}
+            width={isMobile ? widthInPixels(80) : widthInPixels(70)}
           />
           <Markdown markdown={this.state.markdown.geography} />
           <HorizontalBarChart
-            width={useMaxWidth ? widthInPixels(80) : widthInPixels(45)}
+            width={isMobile ? widthInPixels(80) : widthInPixels(45)}
           />
           <Markdown markdown={this.state.markdown.genre} />
           <TriplePartitionChart
             className="genre"
-            width={useMaxWidth ? widthInPixels(80) : widthInPixels(55)}
-            incolumn={useMaxWidth}
+            width={isMobile ? widthInPixels(80) : widthInPixels(55)}
+            incolumn={isMobile}
             data={parseGenreCounts(genreCounts)}
             keyOne="Fiction"
             keyTwo="Non Fiction"
@@ -164,8 +164,8 @@ class App extends React.Component {
           <Markdown markdown={this.state.markdown.language} />
           <TriplePartitionChart
             className="language"
-            width={useMaxWidth ? widthInPixels(80) : widthInPixels(55)}
-            incolumn={useMaxWidth}
+            width={isMobile ? widthInPixels(80) : widthInPixels(55)}
+            incolumn={isMobile}
             data={parseLanguageCounts(languageCounts)}
             keyOne="English"
             keyTwo="French"
@@ -198,7 +198,7 @@ class App extends React.Component {
           </div>
         </div>
         <div style={{ display: this.state.showList ? "block" : "none" }}>
-          <ReadingList readingList={readingList} />
+          <ReadingList readingList={readingList} incolumn={isMobile} />
         </div>
       </div>
     );

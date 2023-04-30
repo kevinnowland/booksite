@@ -295,13 +295,22 @@ class SortedEntries extends React.Component {
     const k = this.props.k;
     const v = this.props.v;
     const n = this.props.n;
+    const incolumn = this.props.incolumn;
 
     const headerClassName = "sortedEntryHeader level" + n.toString();
     const entryHeader = <div className={headerClassName}>{k}</div>;
 
     if (v instanceof Map) {
       const sortedEntries = [...v.entries()].map((e) => {
-        return <SortedEntries key={e[0]} k={e[0]} v={e[1]} n={n + 1} />;
+        return (
+          <SortedEntries
+            key={e[0]}
+            k={e[0]}
+            v={e[1]}
+            n={n + 1}
+            incolumn={incolumn}
+          />
+        );
       });
       return (
         <div className="sortedEntries">
@@ -312,7 +321,7 @@ class SortedEntries extends React.Component {
     }
 
     const entries = v.map((entry) => (
-      <Entry key={entry.readingListId} entry={entry} />
+      <Entry key={entry.readingListId} entry={entry} incolumn={incolumn} />
     ));
     return (
       <div className="sortedEntries">
@@ -346,6 +355,8 @@ class ReadingList extends React.Component {
   }
 
   render() {
+    const incolumn = this.props.incolumn;
+
     const sortValues = [
       "date read",
       "publisher",
@@ -395,7 +406,7 @@ class ReadingList extends React.Component {
           {buttons}
         </div>
         <Key />
-        <SortedEntries k="top" v={entryMap} n={0} />
+        <SortedEntries k="top" v={entryMap} n={0} incolumn={incolumn} />
       </div>
     );
   }

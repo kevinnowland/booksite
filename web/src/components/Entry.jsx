@@ -15,8 +15,16 @@ function getAuthors(authors) {
 
 function BookHeader(props) {
   const book = props.book;
+  const incolumn = props.incolumn;
+
+  const style = {
+    width: incolumn ? `100%` : `79%`,
+    textAlign: incolumn ? `center` : `left`,
+    paddingBottom: incolumn ? `10px` : null,
+  };
+
   return (
-    <div className="bookHeader">
+    <div className="bookHeader" style={style}>
       <div className="title">{book.title}</div>
       <div className="authors">{getAuthors(book.authors)}</div>
     </div>
@@ -43,10 +51,12 @@ function dateText(date_string) {
 }
 
 function RatingHeader(props) {
+  const incolumn = props.incolumn;
   const rating = props.entry.rating;
+
   const stoppedReadingDate = props.entry.stoppedReadingDate;
   return (
-    <div className="ratingHeader">
+    <div className="ratingHeader" style={{ width: incolumn ? `100%` : `20%` }}>
       <div className="rating">{starRating(rating)}</div>
       <div className="stoppedReadingDate">{dateText(stoppedReadingDate)}</div>
     </div>
@@ -71,6 +81,8 @@ function getCity(city) {
 
 function Publisher(props) {
   const publisher = props.publisher;
+  const incolumn = props.incolumn;
+
   const name = publisher.name;
   const parentName = publisher.parentName;
   const city = getCity(publisher.city);
@@ -97,8 +109,14 @@ function Publisher(props) {
     );
   }
 
+  const style = {
+    width: incolumn ? `100%` : `19%`,
+    textAlign: incolumn ? `center` : `justify`,
+    paddingBottom: incolumn ? `10px` : null,
+  };
+
   return (
-    <div className="publisher">
+    <div className="publisher" style={style}>
       <div className="title">
         <u>Publisher Info</u>
       </div>
@@ -110,6 +128,7 @@ function Publisher(props) {
 function Language(props) {
   const language = props.language;
   const originalLanguage = props.originalLanguage;
+  const incolumn = props.incolumn;
 
   var languageText;
 
@@ -128,8 +147,15 @@ function Language(props) {
       </div>
     );
   }
+
+  const style = {
+    width: incolumn ? `100%` : `19%`,
+    textAlign: incolumn ? `center` : `justify`,
+    paddingBottom: incolumn ? `10px` : null,
+  };
+
   return (
-    <div className="language">
+    <div className="language" style={style}>
       <div className="title">
         <u>Language Info</u>
       </div>
@@ -141,6 +167,7 @@ function Language(props) {
 function Purchase(props) {
   const locationType = props.purchase.locationType;
   const location = props.purchase.location;
+  const incolumn = props.incolumn;
 
   var info = "";
 
@@ -182,8 +209,14 @@ function Purchase(props) {
     );
   }
 
+  const style = {
+    width: incolumn ? `100%` : `19%`,
+    textAlign: incolumn ? `center` : `justify`,
+    paddingBottom: incolumn ? `10px` : null,
+  };
+
   return (
-    <div className="purchase">
+    <div className="purchase" style={style}>
       <div className="title">
         <u>Purchase Info</u>
       </div>
@@ -200,6 +233,7 @@ function Genre(props) {
   const genre = props.genre;
   const subgenre = props.subgenre;
   const format = props.format;
+  const incolumn = props.incolumn;
 
   var genreInfo = "";
   var formatInfo = "";
@@ -286,8 +320,14 @@ function Genre(props) {
     }
   }
 
+  const style = {
+    width: incolumn ? `100%` : `19%`,
+    textAlign: incolumn ? `center` : `justify`,
+    paddingBottom: incolumn ? `10px` : null,
+  };
+
   return (
-    <div className="genre">
+    <div className="genre" style={style}>
       <div className="title">
         <u>Genre</u>
       </div>
@@ -329,7 +369,9 @@ class Entry extends React.Component {
   }
 
   render() {
+    const incolumn = this.props.incolumn;
     const entry = this.props.entry;
+
     const book = entry.book;
     const language = book.language;
     const originalLanguage = book.originalLanguage;
@@ -349,18 +391,28 @@ class Entry extends React.Component {
       <li className={this.getClassName()}>
         <div className="entry" onClick={this.handleClick}>
           <div className="entryHeader">
-            <BookHeader book={entry.book} />
-            <RatingHeader entry={entry} />
+            <BookHeader book={entry.book} incolumn={incolumn} />
+            <RatingHeader entry={entry} incolumn={incolumn} />
           </div>
           <div className="entryExtra" style={style}>
-            <Publisher publisher={publisher} publishedYear={publishedYear} />
-            <Genre genre={genre} subgenre={subgenre} format={format} />
+            <Publisher
+              publisher={publisher}
+              publishedYear={publishedYear}
+              incolumn={incolumn}
+            />
+            <Genre
+              genre={genre}
+              subgenre={subgenre}
+              format={format}
+              incolumn={incolumn}
+            />
             <Language
               language={language}
               originalLanguage={originalLanguage}
               translator={translator}
+              incolumn={incolumn}
             />
-            <Purchase purchase={entry.purchase} />
+            <Purchase purchase={entry.purchase} incolumn={incolumn} />
           </div>
         </div>
       </li>
