@@ -84,15 +84,17 @@ function getBarData() {
   return data;
 }
 
-function HorizontalBarChart() {
+function HorizontalBarChart(props) {
+  const rawWidth = props.width;
+  const rawHeight = rawWidth * 0.75;
   // refs for d3 to use
   const xAxisRef = useRef();
   const yAxisRef = useRef();
 
   // svg heights
   const margin = { top: 40, right: 60, bottom: 60, left: 120 };
-  const width = 800 - margin.left - margin.right;
-  const height = 600 - margin.top - margin.bottom;
+  const width = rawWidth - margin.left - margin.right;
+  const height = rawHeight - margin.top - margin.bottom;
 
   // data
   const barData = getBarData();

@@ -4,6 +4,7 @@ import PartitionChart, { getPartitionData } from "./PartitionChart";
 import { aggregateCounts } from "../common/utils";
 
 function TriplePartitionChart(props) {
+  const width = props.width;
   const data = props.data;
   const keyOne = props.keyOne;
   const keyTwo = props.keyTwo;
@@ -15,12 +16,11 @@ function TriplePartitionChart(props) {
   const keyTwoColor = props.keyTwoColor;
 
   const aggs = aggregateCounts(data);
-  const height = 300;
-  const width = 900;
+  const height = width / 3;
   const rootBarHeight = 45;
-  const rootBarWidth = 400;
+  const rootBarWidth = width * 0.4;
   const childBarHeight = 45;
-  const childBarWidth = 400;
+  const childBarWidth = width * 0.4;
 
   const rootPartitionData = getPartitionData(
     aggs,

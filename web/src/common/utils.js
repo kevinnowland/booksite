@@ -1,3 +1,5 @@
+import { Dimensions, PixelRatio } from "react-native";
+
 const stateAbbrevs = new Map([
   ["Alabama", "AL"],
   ["Alaska", "AK"],
@@ -141,4 +143,9 @@ export function aggregateCounts(data) {
     counts.push([k, count]);
   }
   return counts.sort(compareCounts);
+}
+
+export function widthInPixels(widthPercent) {
+  const screenWidth = Dimensions.get("window").width;
+  return PixelRatio.roundToNearestPixel((screenWidth * widthPercent) / 100);
 }

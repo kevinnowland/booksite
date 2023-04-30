@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ReadingList from "./ReadingList";
 import Map from "./Map";
 import Markdown from "./Markdown";
@@ -6,7 +6,11 @@ import HorizontalBarChart from "./HorizontalBarChart";
 import TriplePartitionChart from "./TriplePartitionChart";
 import DotChart from "./DotChart";
 
-import { parseGenreCounts, parseLanguageCounts } from "../common/utils";
+import {
+  parseGenreCounts,
+  parseLanguageCounts,
+  widthInPixels,
+} from "../common/utils";
 
 import readingList from "../data/readingList";
 import genreCounts from "../data/genreCounts";
@@ -111,18 +115,19 @@ class App extends React.Component {
           <DotChart
             title={"Major vs Indie Publishers"}
             data={publisherCounts}
-            width={800}
+            width={widthInPixels(45)}
             circlesPerRow={12}
             colorShift={135}
             colorFrequency={87}
           />
           <Markdown markdown={this.state.markdown.indie} />
-          <Map />
+          <Map width={widthInPixels(70)} />
           <Markdown markdown={this.state.markdown.geography} />
-          <HorizontalBarChart />
+          <HorizontalBarChart width={widthInPixels(45)} />
           <Markdown markdown={this.state.markdown.genre} />
           <TriplePartitionChart
             className="genre"
+            width={widthInPixels(55)}
             data={parseGenreCounts(genreCounts)}
             keyOne="Fiction"
             keyTwo="Non Fiction"
@@ -151,6 +156,7 @@ class App extends React.Component {
           <Markdown markdown={this.state.markdown.language} />
           <TriplePartitionChart
             className="language"
+            width={widthInPixels(55)}
             data={parseLanguageCounts(languageCounts)}
             keyOne="English"
             keyTwo="French"

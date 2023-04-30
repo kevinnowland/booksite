@@ -121,12 +121,14 @@ function CityCircle(props) {
   );
 }
 
-function Map() {
-  const width = 1500;
-  const height = 800;
+function Map(props) {
+  //const width = 1500;
+  //const height = 800;
+  const width = props.width;
+  const height = width * 0.55;
   const projection = d3
     .geoAlbersUsa()
-    .scale(1500)
+    .scale(width)
     .translate([width / 2, height / 2]);
   const path = d3.geoPath().projection(projection);
   const citiesToRender = getCitiesToRender(projection);
