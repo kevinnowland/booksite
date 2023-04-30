@@ -18,9 +18,9 @@ function TriplePartitionChart(props) {
 
   const aggs = aggregateCounts(data);
   const rootBarHeight = 45;
-  const rootBarWidth = width * 0.4;
+  const rootBarWidth = incolumn ? width * 0.9 : width * 0.4;
   const childBarHeight = 45;
-  const childBarWidth = width * 0.4;
+  const childBarWidth = incolumn ? width * 0.9 : width * 0.4;
   const height = incolumn ? rootBarHeight * 8 : width / 3;
 
   const rootPartitionData = getPartitionData(
