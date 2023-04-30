@@ -101,6 +101,8 @@ class App extends React.Component {
   }
 
   render() {
+    const useMaxWidth = widthInPixels(100) < 500;
+
     return (
       <div className="app">
         <Nav
@@ -115,19 +117,21 @@ class App extends React.Component {
           <DotChart
             title={"Major vs Indie Publishers"}
             data={publisherCounts}
-            width={widthInPixels(45)}
+            width={useMaxWidth ? widthInPixels(80) : widthInPixels(55)}
             circlesPerRow={12}
             colorShift={135}
             colorFrequency={87}
           />
           <Markdown markdown={this.state.markdown.indie} />
-          <Map width={widthInPixels(70)} />
+          <Map width={useMaxWidth ? widthInPixels(80) : widthInPixels(70)} />
           <Markdown markdown={this.state.markdown.geography} />
-          <HorizontalBarChart width={widthInPixels(45)} />
+          <HorizontalBarChart
+            width={useMaxWidth ? widthInPixels(80) : widthInPixels(45)}
+          />
           <Markdown markdown={this.state.markdown.genre} />
           <TriplePartitionChart
             className="genre"
-            width={widthInPixels(55)}
+            width={useMaxWidth ? widthInPixels(80) : widthInPixels(55)}
             data={parseGenreCounts(genreCounts)}
             keyOne="Fiction"
             keyTwo="Non Fiction"
@@ -156,7 +160,7 @@ class App extends React.Component {
           <Markdown markdown={this.state.markdown.language} />
           <TriplePartitionChart
             className="language"
-            width={widthInPixels(55)}
+            width={useMaxWidth ? widthInPixels(80) : widthInPixels(55)}
             data={parseLanguageCounts(languageCounts)}
             keyOne="English"
             keyTwo="French"
