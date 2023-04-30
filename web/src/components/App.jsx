@@ -132,6 +132,7 @@ class App extends React.Component {
           <TriplePartitionChart
             className="genre"
             width={useMaxWidth ? widthInPixels(80) : widthInPixels(55)}
+            incolumn={useMaxWidth}
             data={parseGenreCounts(genreCounts)}
             keyOne="Fiction"
             keyTwo="Non Fiction"
@@ -161,6 +162,7 @@ class App extends React.Component {
           <TriplePartitionChart
             className="language"
             width={useMaxWidth ? widthInPixels(80) : widthInPixels(55)}
+            incolumn={useMaxWidth}
             data={parseLanguageCounts(languageCounts)}
             keyOne="English"
             keyTwo="French"

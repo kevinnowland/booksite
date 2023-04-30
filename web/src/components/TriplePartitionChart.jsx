@@ -14,13 +14,14 @@ function TriplePartitionChart(props) {
   const rootColor = props.rootColor;
   const keyOneColor = props.keyOneColor;
   const keyTwoColor = props.keyTwoColor;
+  const incolumn = props.incolumn;
 
   const aggs = aggregateCounts(data);
-  const height = width / 3;
   const rootBarHeight = 45;
   const rootBarWidth = width * 0.4;
   const childBarHeight = 45;
   const childBarWidth = width * 0.4;
+  const height = incolumn ? rootBarHeight * 8 : width / 3;
 
   const rootPartitionData = getPartitionData(
     aggs,
@@ -43,7 +44,7 @@ function TriplePartitionChart(props) {
 
   // get x and y coordinates needed for lines
   const rootLeftX = (width - rootBarWidth) / 2;
-  const childTranslateY = height - 100;
+  const childTranslateY = Math.max(height - 100, rootBarHeight + 20);
   const childTranslateX = width - childBarWidth;
 
   const partitionY = 30;
@@ -124,7 +125,13 @@ function TriplePartitionChart(props) {
             title={rootTitle}
           />
         </g>
-        <g transform={`translate(0,${childTranslateY})`}>
+        <g
+          transform={
+            incolumn
+              ? `translate(${rootLeftX}, ${0.5 * childTranslateY})`
+              : `translate(0,${childTranslateY})`
+          }
+        >
           <PartitionChart
             className="keyOne"
             data={keyOnePartitionData}
@@ -135,7 +142,13 @@ function TriplePartitionChart(props) {
             title={keyOneTitle}
           />
         </g>
-        <g transform={`translate(${childTranslateX},${childTranslateY})`}>
+        <g
+          transform={
+            incolumn
+              ? `translate(${rootLeftX}, ${childTranslateY})`
+              : `translate(${childTranslateX},${childTranslateY})`
+          }
+        >
           <PartitionChart
             className="keyTwo"
             data={keyTwoPartitionData}
@@ -146,7 +159,7 @@ function TriplePartitionChart(props) {
             title={keyTwoTitle}
           />
         </g>
-        {lines}
+        {incolumn ? null : lines}
       </svg>
     </div>
   );
