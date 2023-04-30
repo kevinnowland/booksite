@@ -55,18 +55,20 @@ function Publisher(props) {
 }
 
 function CityInfo(props) {
+  const publishers = props.publishers;
+
   const [isHidden, setIsHidden] = useState(true);
 
   const handleMouseOver = () => setIsHidden(false);
   const handleMouseOut = () => setIsHidden(true);
 
-  const numPublishers = props.publishers.length;
+  const numPublishers = publishers.length;
   let numBooks = 0;
   for (let i = 0; i < numPublishers; i++) {
-    numBooks += props.publishers[i].titles.length;
+    numBooks += publishers[i].titles.length;
   }
 
-  const publishers = props.publishers.map((p) => {
+  const cityPublishers = publishers.map((p) => {
     return <Publisher key={p.name} name={p.name} titles={p.titles} />;
   });
 
@@ -101,7 +103,7 @@ function CityInfo(props) {
             {numBooks} book/s read from {numPublishers} publisher/s located
             here.
           </div>
-          <div className="publishers">{publishers}</div>
+          <div className="publishers">{cityPublishers}</div>
         </div>
       </foreignObject>
     </g>
@@ -122,9 +124,9 @@ function CityCircle(props) {
 }
 
 function Map(props) {
-  //const width = 1500;
-  //const height = 800;
   const width = props.width;
+  const showCityInfo = props.showCityInfo;
+
   const height = width * 0.55;
   const projection = d3
     .geoAlbersUsa()
@@ -182,7 +184,7 @@ function Map(props) {
       <svg height={height} width={width} className="map">
         <g className="UsaStates">{renderStates()}</g>
         <g className="UsaCities">{renderCities()}</g>
-        <g className="usaCityInfo">{renderCityInfo()}</g>
+        <g className="usaCityInfo">{showCityInfo ? renderCityInfo() : null}</g>
       </svg>
     </div>
   );

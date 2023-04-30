@@ -123,7 +123,10 @@ class App extends React.Component {
             colorFrequency={87}
           />
           <Markdown markdown={this.state.markdown.indie} />
-          <Map width={useMaxWidth ? widthInPixels(80) : widthInPixels(70)} />
+          <Map
+            showCityInfo={!useMaxWidth}
+            width={useMaxWidth ? widthInPixels(80) : widthInPixels(70)}
+          />
           <Markdown markdown={this.state.markdown.geography} />
           <HorizontalBarChart
             width={useMaxWidth ? widthInPixels(80) : widthInPixels(45)}
