@@ -30,4 +30,7 @@ npm run deploy
 
 This will deploy a version for github pages to that repo on the
 `gh-pages` branch. This can be selected as the deployed branch
-by going to `Settings >> pages` and choosing the branch.
+by going to `Settings > Pages` and choosing the branch.
+
+Will apparently always need to update dns on that same settings page
+to point to `kevinnowland.com`
