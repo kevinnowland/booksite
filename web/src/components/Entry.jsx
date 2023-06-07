@@ -44,7 +44,7 @@ export function starRating(rating) {
 }
 
 function dateText(date_string) {
-  const d = new Date(date_string);
+  const d = new Date(date_string.replace(/-/g, "/"));
   const options = { day: "numeric", month: "short", year: "numeric" };
   const dateString = d.toLocaleDateString("en-US", options);
   return dateString;

@@ -33,7 +33,7 @@ function sortRawEntries(entries) {
 
 // TODO: add unit test
 function getYear(dateString) {
-  const date = new Date(dateString);
+  const date = new Date(dateString.replace(/-/g, "/"));
   return date.getFullYear().toString();
 }
 
