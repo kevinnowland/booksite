@@ -410,7 +410,7 @@ if __name__ == "__main__":
         was_gift = False
 
         print("\n", end="")
-        if confirm_prompt("was the book a a gift?"):
+        if confirm_prompt("was the book a gift?"):
             was_gift = True
         else:
             if confirm_prompt("was the book purchased online?"):
