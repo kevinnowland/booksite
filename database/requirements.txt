@@ -1,4 +1,0 @@
-pydantic
-pyhumps
-sqlalchemy
-sqlite3
