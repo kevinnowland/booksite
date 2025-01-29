@@ -1,3 +1,3 @@
-# Kevin Nowland
+# Booksite
 
-This is the start of my site
+This repo is where I'll put reading stuff.
